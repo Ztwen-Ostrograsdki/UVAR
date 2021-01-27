@@ -97,6 +97,17 @@ button.bg-linear-official-50:hover{
     color: #9dc15b !important
 }
 
+.btn-official{
+    background-color: #9dc15b !important;
+    border-top: thin solid white !important;
+    padding: 10px 8px !important;
+    color: white !important;
+}
+
+.btn-official:hover{
+    color: black !important;
+}
+
 .border-official{
     border: thin solid #9dc15b !important
 }

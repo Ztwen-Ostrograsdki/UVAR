@@ -3,33 +3,17 @@
 	<div class="w-100 p-0 m-0">
         <admin-dashboard></admin-dashboard>
 
-        <div class="w-100 mx-auto p-0 m-0 my-2 mt-lg-5">
-            <div>
-                
+        <div class="w-90 mx-auto p-0 m-0 my-2 mt-lg-5">
+            <div class="mx-auto w-100">
+               <div class="px-3 d-flex justify-content-start">
+                   <router-link class="btn-official" :to="{name: 'membersListing'}">Les membres</router-link>
+                   <router-link class="btn-official mx-1" :to="{name: 'membersListing'}">Les actions</router-link>
+                   <router-link class="btn-official" :to="{name: 'membersListing'}">Les produits</router-link>
+                   <router-link class="btn-official mx-1" :to="{name: 'membersListing'}">Les transactions</router-link>
+               </div> 
             </div>
-            <div class="w-95 mx-auto">
-                <table class="table table-official text-white">
-                    <thead>
-                        <th>No</th>
-                        <th>ID Ref.</th>
-                        <th>Nom et prénoms</th>
-                        <th>Actions</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>12</td>
-                            <td>25485445</td>
-                            <td>HOUNDEKINDO</td>
-                            <td>Delete</td>
-                        </tr>
-                        <tr>
-                            <td>12</td>
-                            <td>25485445</td>
-                            <td>HOUNDEKINDO</td>
-                            <td>Delete</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="w-100 mx-auto">
+                <router-view></router-view>
             </div>
         </div>
         

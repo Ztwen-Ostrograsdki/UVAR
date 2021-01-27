@@ -2,6 +2,7 @@
 <div class="row mx-auto w-90 mt-3 profils administration">
 	<div class="col-md-12">
         <member-options :options="options"></member-options>
+        <router-link title="Recharger la page par defaut" class="fa fa-recycle mx-1" :to="{name: 'adminDefault'}"></router-link>
         <span class="fa fa-navicon cursor text-white-50" title="Masquer le profil" @click="resetOptions()"></span>
         <span class="fa fa-close cursor text-white-50" title="Masquer le profil" @click="resetTables()" v-if="tables"></span>
         <span class="fa fa-chevron-up cursor text-white-50" title="Afficher le profil" @click="resetTables()" v-if="!tables"></span>

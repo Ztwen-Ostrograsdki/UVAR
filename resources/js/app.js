@@ -25,6 +25,8 @@ let home_footer = Vue.component('home-footer', require('./components/Home/HomeFo
 //ADMINISTRATION
 let dashboard_admin = Vue.component('admin-dashboard', require('./components/Admin/Dashboard.vue').default)
 let main_admin = Vue.component('main-admin', require('./components/Admin/Main.vue').default)
+let admin_default = Vue.component('admin-default', require('./components/Admin/Default.vue').default)
+let members_listing_tables = Vue.component('listing-tables', require('./components/Admin/ListingTables.vue').default)
 
 
 
@@ -81,8 +83,13 @@ const routes = [
 		children: [
 				{
 					path: '/',
-					component: main_admin,
-					name: 'adminWelcome',
+					component: admin_default,
+					name: 'adminDefault',
+				},
+				{
+					path: '/Uvar/administration/tag/membres',
+					component: members_listing_tables,
+					name: 'membersListing',
 				},
 		]
 	},

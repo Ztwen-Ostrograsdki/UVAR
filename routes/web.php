@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MembersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,8 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'Uvar'], function() {
     Route::resource('administration', AdminController::class);
+
+    Route::resource('administration/tag/membres', MembersController::class);
 });
 
 

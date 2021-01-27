@@ -32,12 +32,12 @@
                         <li class="nav-item dropdown">
                             <router-link class="nav-link dropdown-toggle"  id="dropdown-a" data-toggle="dropdown" to="/Uvar/administration">Administration</router-link>
                             <div class="dropdown-menu" aria-labelledby="dropdown-a">
-                                <router-link class="dropdown-item" to="/Uvar/administration">Acceui</router-link>
+                                <router-link class="dropdown-item" to="/Uvar/administration">Acceuil</router-link>
                                 <a class="dropdown-item" href="#">Gestion des actions </a>
                                 <a class="dropdown-item" href="#">Gestion des produits </a>
                                 <a class="dropdown-item" href="#">Les formations </a>
                                 <a class="dropdown-item" href="#">Les affiliations </a>
-                                <a class="dropdown-item" href="#">Les membres </a>
+                                <router-link class="dropdown-item" :to="{name: 'membersListing'}">Les membres</router-link>
                             </div>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>

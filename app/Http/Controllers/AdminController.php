@@ -45,7 +45,7 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        //
+        // return view('members.index');
     }
 
     /**
@@ -81,4 +81,6 @@ class AdminController extends Controller
     {
         //
     }
+
+
 }
