@@ -18,16 +18,12 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->unique();
             $table->string('email')->unique();
-            $table->string('editor')->nullable();
-            $table->string('country')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
             $table->enum('role', ['user', 'master', 'admin', 'member', 'teacher'])->default('user');
-            $table->enum('sexe', ['female', 'male'])->default('male');
-
         });
     }
 

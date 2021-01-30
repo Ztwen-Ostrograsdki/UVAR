@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\MembersController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,15 +25,22 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'Uvar'], function() {
     Route::resource('administration', AdminController::class);
-
     Route::resource('administration/tag/membres', MembersController::class);
+    Route::resource('administration/tag/utilisateur', UsersController::class);
+    Route::get('administration/users&get&data/now', [UsersController::class, 'getUsers']);
+    Route::get('administration/members&get&data/now', [MembersController::class, 'getMembers']);
 });
+
+
+Route::get('/test/mail', [MailController::class, 'index'])->name('mail');
+
 
 
 Route::get('/profil', function () {
     return view('layouts.home');
 });
 
+Route::post('login/uvar&user&get&auth', [LoginController::class, 'login']);
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

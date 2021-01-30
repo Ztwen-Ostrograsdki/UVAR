@@ -160,7 +160,9 @@
         },
 		
         created(){
-           
+           this.$store.dispatch('getUsers')
+           this.$store.dispatch('getMembers')
+
         },
         methods :{
             resetAction(){
@@ -194,37 +196,11 @@
         },
 
         computed: mapState([
-            
+            'users', 'members'
         ])
 	}
 </script>
 
 <style>
-    .cursor{
-        cursor: pointer;
-    }
-    .cursor:hover{
-        transform: scale(1.1);
-    }
-
-    .pricing-table h2{
-        font-size: 1.2rem;
-    }
-    .profils p{
-        padding: 0;
-        margin: 0;
-        font-size: 0.8rem;     
-    }
-
-    div.pricing-table-sign-up a{
-        font-size: 0.7rem;
-    }
-
-    .pricing-table-sign-up a{
-        border-top: thin solid white !important;
-    }
-
-    .administration .fa.cursor{
-        color: white !important;
-    }    
+    
 </style>

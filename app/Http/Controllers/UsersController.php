@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Auth\RegisterController;
+use App\Mail\Gmail;
+use App\Models\User;
+use App\Traits\Storers\UsersStorers;
+use App\Traits\Validators\TraitUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
-class AdminController extends Controller
+class UsersController extends Controller
 {
+    use TraitUsers;
+    use UsersStorers;
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +22,15 @@ class AdminController extends Controller
      */
     public function index()
     {
-       return view('admin.index');
+        return view('users.index');
+    }
+
+
+    public function getUsers()
+    {
+        $users = User::all();
+
+        return response()->json(['users' => $users]);
     }
 
     /**
@@ -34,7 +51,22 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        return response()->json([$request->all()]);
+        $validator = $this->validator($request->all());
+        if ($validator->fails()) {
+            return response()->json(['invalids' => $validator->errors()]);
+        }
+        else{
+            // $user = $this->__createUser($request->all());
+            $user = true;
+            $details = ['name' => $request['name']];
+            $email = $request['email'];
+            if ($user) {
+                
+                // Mail::to($email)->send(new Gmail());
+                return response()->json(['success' => "Votre inscription s'est bien déroulée! Veuillez à présent confirmer votre inscrition"]);
+            }
+        }
+        
     }
 
     /**
@@ -45,7 +77,7 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        // return view('members.index');
+        //
     }
 
     /**
@@ -81,6 +113,4 @@ class AdminController extends Controller
     {
         //
     }
-
-
 }

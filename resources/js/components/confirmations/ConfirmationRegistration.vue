@@ -5,7 +5,7 @@
                 <div class="w-100 mx-auto bg-linear-official-180">
                     <div class="mx-auto w-100 p-1 pb-2" style="">
                         <div class="w-100 p-2 my-1 mx-auto">
-                            <h5 class="text-center mx-auto text-warning w-75">Confirmation d'inscription de membre</h5>
+                            <h5 class="text-center mx-auto text-warning w-75">Confirmation d'inscription utilisateur</h5>
                             <hr class="m-0 p-0 bg-white mb-2 w-100">
                             <div class="mx-auto w-100" v-if="!refresh.status">
                                 <p class="w-100 mx-auto text-center">
@@ -15,11 +15,11 @@
                                     <br>
                                     <span class=""> </span>
                                 </p>
-                                <div class="w-100 mx-auto mt-2">
-                                    <h5 class="mx-auto w-100 text-center text-white-50">Voulez-vous confirmer votre inscription?</h5>
+                                <div class="w-100 mx-auto mt-0">
+                                    <h5 class="mx-auto w-100 text-center text-white-50">Nous vous avons envoyé un mail; veuillez vérifier votre boîte de reception</h5>
                                     <div class="mx-auto w-100 d-flex justify-content-center">
-                                        <button class="btn btn-danger mx-1" data-dismiss="modal" >Plus tard</button>
-                                        <button class="btn btn-primary mx-1" @click="refreshStatus(true)">Confirmé</button>
+                                        <button class="btn btn-danger mx-1" data-dismiss="modal" >J'ai pas reçu de mail</button>
+                                        <button class="btn btn-primary mx-1" @click="refreshStatus(true)">D'accord</button>
                                     </div>
                                 </div>
                             </div>

@@ -26,15 +26,17 @@ let home_footer = Vue.component('home-footer', require('./components/Home/HomeFo
 let dashboard_admin = Vue.component('admin-dashboard', require('./components/Admin/Dashboard.vue').default)
 let main_admin = Vue.component('main-admin', require('./components/Admin/Main.vue').default)
 let admin_default = Vue.component('admin-default', require('./components/Admin/Default.vue').default)
-let members_listing_tables = Vue.component('listing-tables', require('./components/Admin/ListingTables.vue').default)
 
 
+//USERS
+let users_listing = Vue.component('users-listing', require('./components/users/Listing.vue').default)
 
 
 
 //MEMBERS
 let members = Vue.component('member-options', require('./components/Members/ProfilOptions.vue').default)
 let members_profil = Vue.component('members-profil', require('./components/Members/MainMemberProfil.vue').default)
+let members_listing = Vue.component('members-listing', require('./components/Members/Listing.vue').default)
 
 
 //CAROUSSELS
@@ -43,8 +45,9 @@ let horizontal_home_caroussel = Vue.component('horizontal-home-caroussel', requi
 
 
 //Formulars
+let registration = Vue.component('registration', require('./components/Formulars/Registration.vue').default)
+let loginer = Vue.component('loginer', require('./components/Formulars/Loginer.vue').default)
 let registred = Vue.component('registred', require('./components/Formulars/RegistredComponent.vue').default)
-let exemple = Vue.component('exemple', require('./components/ExampleComponent.vue').default)
 let formulars = Vue.component('formulars', require('./components/Home/Formulars.vue').default)
 
 //CONFIRMATIONS
@@ -87,8 +90,13 @@ const routes = [
 					name: 'adminDefault',
 				},
 				{
+					path: '/Uvar/administration/tag/utilisateur',
+					component: users_listing,
+					name: 'usersListing',
+				},
+				{
 					path: '/Uvar/administration/tag/membres',
-					component: members_listing_tables,
+					component: members_listing,
 					name: 'membersListing',
 				},
 		]

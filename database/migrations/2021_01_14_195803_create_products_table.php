@@ -13,6 +13,7 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
+        // Schema::dropIfExists('products');
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
@@ -20,7 +21,7 @@ class CreateProductsTable extends Migration
             $table->string('name')->unique();
             $table->unsignedBigInteger('total');
             $table->float('price')->nullable();
-            $table->string('poster')->nullable();
+            $table->unsignedBigInteger('poster')->nullable();
             $table->string('editor')->nullable();
             $table->foreign('poster')
                   ->references('id')

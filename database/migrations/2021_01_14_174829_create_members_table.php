@@ -13,13 +13,15 @@ class CreateMembersTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('members');
         $levels = ['beginner', 'level-1', 'level-2', 'level-3', 'level-4'];
         Schema::create('members', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('IDENTIFY')->unique();
-            $table->string('pseudo')->unique();
+            $table->string('name')->unique();
+            $table->string('email')->unique();
+            $table->string('pseudo')->nullable();
             $table->string('phone')->unique();
-            $table->string('level')->nullable();
             $table->string('country')->nullable();
             $table->enum('sexe', ['female', 'male'])->default('male');
             $table->timestamps();

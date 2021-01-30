@@ -22,7 +22,7 @@ class Actionables extends Migration
                   ->on('actions')                
                   ->onDelete('cascade')                
                   ->onUpdate('cascade');         
-            $table->morphs('action'); 
+            $table->morphs('actionnable'); 
         });
     }
 

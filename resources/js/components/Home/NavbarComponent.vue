@@ -37,6 +37,7 @@
                                 <a class="dropdown-item" href="#">Gestion des produits </a>
                                 <a class="dropdown-item" href="#">Les formations </a>
                                 <a class="dropdown-item" href="#">Les affiliations </a>
+                                <router-link class="dropdown-item" :to="{name: 'usersListing'}">Les utilisateurs</router-link>
                                 <router-link class="dropdown-item" :to="{name: 'membersListing'}">Les membres</router-link>
                             </div>
                         </li>

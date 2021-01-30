@@ -13,19 +13,20 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
+      Schema::dropIfExists('categories');
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
             $table->softDeletes();
             $table->string('name')->unique();
-            $table->string('creator')->nullable();
-            $table->string('editor')->nullable();
+            $table->unsignedBigInteger('creator')->nullable();
+            $table->unsignedBigInteger('editor')->nullable();
             $table->foreign('creator')
                   ->references('id')
                   ->on('members')
                   ->onDelete('restrict')
                   ->onUpdate('restrict');
-            $table->foreign('creator')
+            $table->foreign('editor')
                   ->references('id')
                   ->on('members')
                   ->onDelete('restrict')

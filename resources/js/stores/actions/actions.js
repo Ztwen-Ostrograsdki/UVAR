@@ -1,25 +1,15 @@
-import auth_actions from './authActions.js'
+import auth_a from './auth.js'
+import users_a from './user.js'
+import members_a from './member.js'
 
 
 const default_actions = {
-	getCounter: (state) => {
-        axios.get('/admin/director/master/get&counter&for&all&data&with&authorization')
-			.then(response => {
-				state.commit('GET_DATA_LENGTH', response.data)
-			})
-            
-	},
-	getTOOLS: (state) => {
-        axios.get('/admin/director/master/get&all&data&tools&with&authorization')
-			.then(response => {
-				state.commit('GET_TOOLS', response.data)
-			})      
-	},
+	
 	
 }
 
 const actions = {
-	
+	...users_a, ...default_actions, ...members_a, ...auth_a
 }
 
 export default actions

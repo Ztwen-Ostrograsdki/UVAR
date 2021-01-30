@@ -22,7 +22,7 @@ class Shoppables extends Migration
                   ->on('users')                
                   ->onDelete('cascade')                
                   ->onUpdate('cascade');         
-            $table->morphs('user'); 
+            $table->morphs('shoppable'); 
         });
     }
 

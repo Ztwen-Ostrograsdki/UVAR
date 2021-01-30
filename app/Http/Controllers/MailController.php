@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Gmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
-class AdminController extends Controller
+class MailController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +15,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-       return view('admin.index');
+        // $mail  = Mail::to('fadyljohaness00@gmail.com')->send(new Gmail());
+        // dd($mail);
     }
 
     /**
@@ -34,7 +37,7 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        return response()->json([$request->all()]);
+        //
     }
 
     /**
@@ -45,7 +48,7 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        // return view('members.index');
+        //
     }
 
     /**
@@ -81,6 +84,4 @@ class AdminController extends Controller
     {
         //
     }
-
-
 }

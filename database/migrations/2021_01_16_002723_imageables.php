@@ -22,7 +22,7 @@ class Imageables extends Migration
                   ->on('images')                
                   ->onDelete('cascade')                
                   ->onUpdate('cascade');         
-            $table->morphs('image'); 
+            $table->morphs('imageable'); 
         });
     }
 
