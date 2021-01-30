@@ -7,7 +7,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue').default;
-
+import Swal from 'sweetalert2'
 import VueRouter from 'vue-router'
 import store from './stores/store.js'
 // import routes from './routes/routers.js'
@@ -45,10 +45,15 @@ let horizontal_home_caroussel = Vue.component('horizontal-home-caroussel', requi
 
 
 //Formulars
-let registration = Vue.component('registration', require('./components/Formulars/Registration.vue').default)
-let loginer = Vue.component('loginer', require('./components/Formulars/Loginer.vue').default)
-let registred = Vue.component('registred', require('./components/Formulars/RegistredComponent.vue').default)
+let edit_member_data = Vue.component('edit-member-data', require('./components/Formulars/Members/EditData.vue').default)
+let affiliation = Vue.component('affiliation', require('./components/Formulars/Members/Affiliations.vue').default)
+let registration = Vue.component('registration', require('./components/Formulars/Users/Registration.vue').default)
+let loginer = Vue.component('loginer', require('./components/Formulars/Connexions/Loginer.vue').default)
+let registred = Vue.component('registred', require('./components/Formulars/Users/RegistredComponent.vue').default)
 let formulars = Vue.component('formulars', require('./components/Home/Formulars.vue').default)
+
+
+
 
 //CONFIRMATIONS
 

@@ -1,7 +1,7 @@
 <template>
 	<div class="w-100 p-0 m-0">
 		<transition name="scalefade" appear>
-        <div class="members-options  position-absolute border bg-linear-official-180 border-white" style="width: 250px; top: 20px; left:16px; z-index: 100; " v-if="options">
+        <div class="members-options  position-absolute border bg-linear-official-180 border-white" style="width: 250px; top: 30px; left:16px; z-index: 100; " v-if="options">
             <div class="w-100 border" style="">
                 <a class="w-100 link-float d-inline-block border m-0 py-1" href="#">
                     <i class="fa fa-sliders fa-sm fa-fw mr-2"></i>
@@ -14,7 +14,7 @@
                             <i class="fas fa-cogs fa-sm fa-fw mr-2"></i>
                             Editer mon profil
                         </a>
-                        <a class="w-100 my-1 d-inline-block link-float" href="" style="border-radius: 30px;">
+                        <a class="w-100 my-1 d-inline-block link-float" data-toggle="modal" data-target="#affiliations" href="" style="border-radius: 30px;">
                             <i class="fa fa-line-chart fa-sm fa-fw mr-2"></i>
                             Affilier un membre
                         </a>

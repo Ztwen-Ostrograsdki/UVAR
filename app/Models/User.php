@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Action;
 use App\Models\Image;
+use App\Models\Member;
 use App\Models\Product;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -58,7 +59,7 @@ class User extends Authenticatable
 
     public function member()
     {
-        return $this->belongsTo(Product::class, 'imageables'); 
+        return $this->belongsTo(Member::class); 
     }
 
     public function images()

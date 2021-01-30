@@ -3,7 +3,7 @@
         <form role="form" class="form-horizontal">
             <div class="form-group">
                 <div class="col-sm-12">
-                    <input autocomplete="name"  class="form-control" :class="userInvalids.name !== undefined || invalids.name !== undefined ? 'is-invalid' : '' " v-model="newUser.name" name="name" id="name" placeholder="Votre nom et prenoms" type="text">
+                    <input autocomplete="name"  class="form-control" :class="userInvalids.name !== undefined || invalids.name !== undefined ? 'is-invalid' : '' " v-model="newUser.name" name="name" placeholder="Votre nom et prenoms" type="text">
                     <i class="m-0 p-0 mt-1 text-danger" v-if="userInvalids.name !== undefined">{{ userInvalids.name }}</i>
                     <i class="m-0 p-0 mt-1 text-danger" v-if="userInvalids.name == undefined && invalids.name !== undefined">{{ invalids.name[0] }}</i>
                 </div>
@@ -17,14 +17,14 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-12">
-                    <input autocomplete="new-password" class="form-control" :class="userInvalids.password !== undefined || invalids.password !== undefined ? 'is-invalid' : '' " v-model="newUser.password" id="password" name="password" placeholder="Votre mot de passe" type="password">
+                    <input autocomplete="new-password" class="form-control" :class="userInvalids.password !== undefined || invalids.password !== undefined ? 'is-invalid' : '' " v-model="newUser.password" name="password" placeholder="Votre mot de passe" type="password">
                     <i class="m-0 p-0 mt-1 text-danger" v-if="userInvalids.password !== undefined">{{ userInvalids.password }}</i>
                     <i class="m-0 p-0 mt-1 text-danger" v-if="userInvalids.password == undefined && invalids.password !== undefined">{{ invalids.password[0] }}</i>
                 </div>
             </div>
             <div class="form-group" v-if="newUser.password !== ''">
                 <div class="col-sm-12">
-                    <input autocomplete="new-password" class="form-control" :class="userInvalids.confirm_password !== undefined || invalids.password !== undefined ? 'is-invalid' : '' " v-model="newUser.confirm_password" name="password_confirm" id="password_confirm" placeholder="Confirmez votre mot de passe" type="password">
+                    <input autocomplete="new-password" class="form-control" :class="userInvalids.confirm_password !== undefined || invalids.password !== undefined ? 'is-invalid' : '' " v-model="newUser.confirm_password" name="password_confirm" placeholder="Confirmez votre mot de passe" type="password">
                     <i class="m-0 p-0 mt-1 text-danger" v-if="userInvalids.confirm_password !== undefined">{{ userInvalids.confirm_password }}</i>
                     <i class="m-0 p-0 mt-1 text-danger" v-if="userInvalids.confirm_password == undefined && invalids.password !== undefined">{{ invalids.password[0] }}</i>
                 </div>

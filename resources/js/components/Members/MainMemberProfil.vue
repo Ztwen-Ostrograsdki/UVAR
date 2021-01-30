@@ -2,8 +2,8 @@
 <div class="row mx-auto w-90 my-3 profils">
 	<div class="col-md-12">
         <member-options :options="options"></member-options>
-        <span class="fa fa-navicon cursor text-white-50" title="Masquer le profil" @click="resetOptions()"></span>
-        <span class="fa fa-close cursor text-white-50" title="Masquer le profil" @click="resetProfil()" v-if="profil"></span>
+        <span class="fa fa-navicon cursor text-white-50 fa-2x" @click="resetOptions()"></span>
+        <span class="fa fa-close cursor text-white-50 fa-2x" title="Masquer le profil" @click="resetProfil()" v-if="profil"></span>
         <span class="fa fa-chevron-up cursor text-white-50" title="Afficher le profil" @click="resetProfil()" v-if="!profil"></span>
         <div class="tab-content">
             <transition name="justefade" appear> 
@@ -27,12 +27,8 @@
                                 <hr class="m-0 p-0">
                                 <table class="table table-borderless text-white-50">
                                     <tr>
-                                        <td>Nom:</td>
+                                        <td>Nom et Prénoms:</td>
                                         <td> {{ 'GASSOUYA' }} </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Prénoms:</td>
-                                        <td>{{ 'Mc Donald' }}</td>
                                     </tr>
                                     <tr>
                                         <td>Sexe:</td>
@@ -53,6 +49,10 @@
                                         <td> {{ 'HAG2547545' }} </td>
                                     </tr>
                                     <tr>
+                                        <td>Pays:</td>
+                                        <td>{{ 'Bénin' }}</td>
+                                    </tr>
+                                    <tr>
                                         <td>No Tél:</td>
                                         <td>{{ '98 85 25 22' }}</td>
                                     </tr>
@@ -71,16 +71,14 @@
                     <div class="col-md-3">
                         <transition>
                             <div class="w-100 mx-auto d-flex justify-content-between my-0" v-if="!amount">
-                                <div class="pricing-table-sign-up w-95">
+                                <div class="pricing-table-sign-up w-95" @click="resetAmount()">
                                     <a href="#" class="hover-btn-new w-100 border border-white"><span>Mon solde</span></a>
                                 </div>
-                                <span class="fa fa-chevron-up cursor text-white-50" @click="resetAmount()"></span>
                             </div>
                         </transition>
                         <transition name="bodyfade" appear>
                             <div class="pricing-table pricing-table-highlighted my-0" v-if="amount">
-                                <span class="fa fa-close cursor text-white-50 float-right m-2" @click="resetAmount()"></span>
-                                <div class="pricing-table-header grd1">
+                                <div class="pricing-table-header grd1" @click="resetAmount()">
                                     <h2>Mon solde</h2>
                                     <h3 class="m-0 p-0">225 550 000 FCFA</h3>
                                     <hr class="m-0 p-0 bg-secondary w-50 mx-auto my-1">
@@ -103,16 +101,14 @@
                     <div class="col-md-3">
                         <transition>
                             <div class="w-100 mx-auto d-flex justify-content-between my-0" v-if="!actions">
-                                <div class="pricing-table-sign-up w-95">
+                                <div class="pricing-table-sign-up w-95" @click="resetAction()">
                                     <a href="#" class="hover-btn-new w-100 border border-white"><span>Mes actions</span></a>
                                 </div>
-                                <span class="fa fa-chevron-up cursor text-white-50" @click="resetAction()"></span>
                             </div>
                         </transition>
                         <transition name="bodyfade" appear>
                             <div class="pricing-table pricing-table-highlighted my-0" v-if="actions">
-                                <span class="fa fa-close cursor text-white-50 float-right m-2" @click="resetAction()"></span>
-                                <div class="pricing-table-header grd1">
+                                <div class="pricing-table-header grd1" @click="resetAction()">
                                     <h2>Mes actions</h2>
                                     <h3 class="m-0 p-0">2 550 000 FCFA</h3>
                                     <hr class="m-0 p-0 bg-secondary w-50 mx-auto my-1">
@@ -133,16 +129,14 @@
                     <div class="col-md-3">
                         <transition>
                             <div class="w-100 mx-auto d-flex justify-content-between my-0" v-if="shop == false">
-                                <div class="pricing-table-sign-up w-95">
+                                <div class="pricing-table-sign-up w-95" @click="resetShop()">
                                     <a href="#" class="hover-btn-new w-100 border border-white"><span>Faire du shopping</span></a>
                                 </div>
-                                <span class="fa fa-chevron-up cursor text-white-50" @click="resetShop()"></span>
                             </div>
                         </transition>
                         <transition name="bodyfade" appear>
                             <div class="pricing-table pricing-table-highlighted my-0" v-if="shop == true">
-                                <span class="fa fa-close cursor text-white-50 float-right m-2" @click="resetShop()"></span>
-                                <div class="pricing-table-header grd1 border border-white">
+                                <div class="pricing-table-header grd1 border border-white" @click="resetShop()">
                                     <h2>Mes achats</h2>
                                     <h3 class="m-0 p-0">2 550 000 FCFA</h3>
                                     <hr class="m-0 p-0 bg-secondary w-50 mx-auto my-1">
@@ -163,16 +157,14 @@
                     <div class="col-md-3">
                         <transition>
                             <div class="w-100 mx-auto d-flex justify-content-between my-0" v-if="!referies">
-                                <div class="pricing-table-sign-up w-95">
+                                <div class="pricing-table-sign-up w-95" @click="resetReferies()">
                                     <a href="#" class="hover-btn-new w-100 border border-white"><span>Mes affiliés</span></a>
                                 </div>
-                                <span class="fa fa-chevron-up cursor text-white-50" @click="resetReferies()"></span>
                             </div>
                         </transition>
                         <transition name="bodyfade" appear>
                             <div class="pricing-table pricing-table-highlighted my-0" v-if="referies">
-                                <span class="fa fa-close cursor text-white-50 float-right m-2" @click="resetReferies()"></span>
-                                <div class="pricing-table-header grd1">
+                                <div class="pricing-table-header grd1" @click="resetReferies()">
                                     <h2>Mes affiliiés</h2>
                                     <h3 class="m-0 p-0">500</h3>
                                     <h5 class="text-warning font-italic m-0 p-0">Master Level member</h5>
@@ -184,7 +176,7 @@
                                     <p><i class="fa fa-user"></i> <strong>Récent:</strong>Mc Junior</p>
                                 </div>
                                 <div class="pricing-table-sign-up">
-                                    <a href="#" class="hover-btn-new border border-white"><span>Affilier +</span></a>
+                                    <a href="#" data-toggle="modal" data-target="#affiliations" class="hover-btn-new border border-white"><span>Affilier +</span></a>
                                 </div>
                             </div>
                         </transition>

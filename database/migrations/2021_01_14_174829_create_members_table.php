@@ -17,6 +17,7 @@ class CreateMembersTable extends Migration
         $levels = ['beginner', 'level-1', 'level-2', 'level-3', 'level-4'];
         Schema::create('members', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->boolean('authorized')->default(false);
             $table->string('IDENTIFY')->unique();
             $table->string('name')->unique();
             $table->string('email')->unique();

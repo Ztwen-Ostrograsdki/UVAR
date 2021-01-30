@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AffiliationsController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\MembersController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,9 @@ Route::get('/profil', function () {
 });
 
 Route::post('login/uvar&user&get&auth', [LoginController::class, 'login']);
+Route::post('/Uvar/membre/affiliation/ID={id}', [AffiliationsController::class, 'affiliate']);
+
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

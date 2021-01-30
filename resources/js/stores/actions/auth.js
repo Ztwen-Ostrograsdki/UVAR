@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2'
 const auth_actions = {
 	logout: (state) => {
         axios.post('/admin/director/master/logout&user')
@@ -14,7 +15,12 @@ const auth_actions = {
 				
 			}
 			else if (response.data.success !== undefined) {
-				
+				Swal.fire({
+				  icon: 'success',
+				  title: 'Connexion réussie',
+				  showConfirmButton: false,
+				  timer: 2000
+				})
 			}
 		})
 		.catch(err => {

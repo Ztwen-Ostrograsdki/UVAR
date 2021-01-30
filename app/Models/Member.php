@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Account;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\User;
@@ -62,6 +63,11 @@ class Member extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function account()
+    {
+        return $this->hasOne(Account::class);
     }
 
 

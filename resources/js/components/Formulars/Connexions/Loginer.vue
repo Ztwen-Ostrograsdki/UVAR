@@ -3,13 +3,13 @@
 	    <form role="form" class="form-horizontal" method="post">
 	        <div class="form-group">
                 <div class="col-sm-12">
-                    <input autocomplete="log-email" class="form-control" :class="invalids !== [] && invalids !== {} ? 'is-invalid' : '' " v-model="email" name="email" id="login_email" placeholder="Votre addresse email" type="email">
+                    <input autocomplete="email" class="form-control" :class="invalids !== [] && invalids !== {} ? 'is-invalid' : '' " v-model="email" name="email" placeholder="Votre addresse email" type="email">
                     <i class="m-0 p-0 mt-1 text-danger" v-if="invalids.email !== undefined">{{ invalids.email[0] }}</i>
                 </div>
             </div>
 	        <div class="form-group">
                 <div class="col-sm-12">
-                    <input autocomplete="log-password" class="form-control" :class="invalids !== [] && invalids !== {} ? 'is-invalid' : '' " v-model="password" id="login_password" name="password" placeholder="Votre mot de passe" type="password">
+                    <input  class="form-control" :class="invalids !== [] && invalids !== {} ? 'is-invalid' : '' " v-model="password" autocomplete="current-password" name="password" placeholder="Votre mot de passe" type="password">
                     <i class="m-0 p-0 mt-1 text-danger" v-if="invalids['password'] !== undefined">{{ invalids.password[0] }}</i>
                 </div>
             </div>
@@ -48,6 +48,8 @@
 
 		methods: {
 			login(){
+				let inputs = $('input')
+				console.log(inputs)
 				this.$store.dispatch('login', {email: this.email, password: this.password})
 			}
 		},
