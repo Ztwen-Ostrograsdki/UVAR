@@ -36,7 +36,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except(['logout', 'getConnected']);
     }
 
     public function login(Request $request)
@@ -54,15 +54,11 @@ class LoginController extends Controller
         if ($this->attemptLogin($request)) {
             $this->sendLoginResponse($request);
             
-            // $user = auth()->user();
-            // $admin = false;
-            // $roles = $user->getRoles();
-            
-            // if (in_array('admin', $roles) || in_array('superAdmin', $roles)) {
-            //     $admin = true;
-            // }
+            $user = auth()->user();
 
-            return response()->json(['success' => 'connexion réussie']);
+            if ($user) {
+                return response()->json(['success' => $user]);
+            }
         }
         else{
 
@@ -84,6 +80,42 @@ class LoginController extends Controller
         
     
     }
+
+    public function getConnected()
+    {
+        $user = auth()->user();
+        if ($user !== null) {
+            return response()->json(['success' => $user]);
+        }
+        else{
+            return response()->json(['disconnected' => true]);
+        }
+
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 204)
+            : redirect('/');
+    }
+
 
      /**
      * Validate the user login request.

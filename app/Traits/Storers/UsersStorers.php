@@ -1,6 +1,9 @@
 <?php
 namespace App\Traits\Storers;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 
 trait UsersStorers{
 
@@ -17,6 +20,7 @@ trait UsersStorers{
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'confirmation_token' => Hash::make(rand(10000000, 20000000)),
         ]);
     }
 

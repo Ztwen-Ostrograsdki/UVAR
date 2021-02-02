@@ -21,7 +21,13 @@
                 <tbody>
                     <tr v-for="(member, k) in members">
                         <td>{{ k + 1 > 10 ? k + 1 : '0' + (k + 1) }}</td>
-                        <td>{{ member.name }}</td>
+                        <td>
+                            <router-link :to="{name: 'membersProfil', params: {id: member.id}}"   class="card-link d-inline-block" >
+                                <span  class="w-100 d-inline-block link-profiler">
+                                    {{member.name}}
+                                </span>
+                            </router-link>
+                        </td>
                         <td>{{ member.IDENTIFY }}</td>
                         <td>{{ member.email }}</td>
                         <td>{{ member.phone }}</td>

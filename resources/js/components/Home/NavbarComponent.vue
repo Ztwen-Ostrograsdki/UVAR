@@ -26,10 +26,10 @@
                         <li class="nav-item active">
                             <router-link class="nav-link" to="/">Acceuil</router-link>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" v-if="connected">
                             <router-link class="nav-link" to="/profil">Mon profil</router-link>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown" v-if="connected">
                             <router-link class="nav-link dropdown-toggle"  id="dropdown-a" data-toggle="dropdown" to="/Uvar/administration">Administration</router-link>
                             <div class="dropdown-menu" aria-labelledby="dropdown-a">
                                 <router-link class="dropdown-item" to="/Uvar/administration">Acceuil</router-link>
@@ -45,21 +45,50 @@
                         <li class="nav-item"><a class="nav-link" href="#">A propos</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a class="hover-btn-new log rounded border py-1" href="#" data-toggle="modal" data-target="#login"><span>Se connecter</span></a></li>
+                        <li v-if="!connected">
+                            <a class="hover-btn-new log rounded border py-1" href="#" data-toggle="modal" data-target="#login">
+                                <span>Se connecter</span>
+                            </a>
+                        </li>
+                        <li v-if="connected">
+                            <a class="hover-btn-new log rounded border py-1" href="#" @click="logoutTask()">
+                                <span class="fa fa-user mr-1 text-success"></span>
+                                <span>{{ user.name }}</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+    <member-options :options="logoutShow"></member-options>
 	</div>
 
 </template>
 
 <script>
-    export default {
-        mounted() {
-            
-        }
+    import { mapState } from 'vuex'
+    export default{
+
+        data() {
+            return {
+                logoutShow: false,
+            }   
+        },
+        
+        created(){
+
+        },
+        
+        methods: {
+            logoutTask(){
+                return this.logoutShow = !this.logoutShow
+            }
+        },
+
+        computed: mapState([
+            'user', 'connected', 'member', 'login'
+        ])
     }
 
 </script>

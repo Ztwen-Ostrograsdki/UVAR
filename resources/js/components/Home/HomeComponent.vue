@@ -10,11 +10,11 @@
 	export default {
 		
         created(){
-           
+           this.$store.dispatch('getConnected')
         },
 
         computed: mapState([
-            
+            'login', 'user', 'connected', 'member'
         ])
 	}
 </script>

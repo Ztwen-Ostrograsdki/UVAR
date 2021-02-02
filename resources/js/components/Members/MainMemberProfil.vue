@@ -1,8 +1,6 @@
 <template>
 <div class="row mx-auto w-90 my-3 profils">
 	<div class="col-md-12">
-        <member-options :options="options"></member-options>
-        <span class="fa fa-navicon cursor text-white-50 fa-2x" @click="resetOptions()"></span>
         <span class="fa fa-close cursor text-white-50 fa-2x" title="Masquer le profil" @click="resetProfil()" v-if="profil"></span>
         <span class="fa fa-chevron-up cursor text-white-50" title="Afficher le profil" @click="resetProfil()" v-if="!profil"></span>
         <div class="tab-content">
@@ -66,7 +64,7 @@
                     </div>
                 </div>
             </transition>
-            <div class="tab-pane active fade show mt-3" id="tab1">
+            <div class="tab-pane active fade show mt-3" id="tab1" v-if="1==1">
                 <div class="row text-center">
                     <div class="col-md-3">
                         <transition>
@@ -194,7 +192,7 @@
         data() {
             return {
                 options : false,
-                profil : false,
+                profil : true,
                 actions : true,
                 amount : true,
                 shop : true,
@@ -204,7 +202,7 @@
         },
 		
         created(){
-           
+           this.$store.dispatch('getMember', this.$route.params.id)
         },
         methods :{
             resetAction(){
@@ -229,7 +227,7 @@
         },
 
         computed: mapState([
-            
+            'member', 'connected'
         ])
 	}
 </script>

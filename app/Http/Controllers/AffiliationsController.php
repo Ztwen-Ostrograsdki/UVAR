@@ -12,6 +12,11 @@ class AffiliationsController extends Controller
 
 	use Affiliator;
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function affiliate(Request $request)
     {
     	$req = $request->email;

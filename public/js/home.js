@@ -4,10 +4,15 @@ $(function(){
     let links = $('#navbars-host li.nav-item a.nav-link, #navbars-host li.nav-item .dropdown-menu a.dropdown-item')
     
     let link_active_before = $('#navbars-host li.nav-item a.nav-link.router-link-active.router-link-exact-active')
-    let activ = document.querySelector('#navbars-host li.nav-item a.nav-link.router-link-active.router-link-exact-active').parentNode
-    if(activ !== undefined){
-    	$('#navbars-host li.nav-item.active').removeClass('active')
-    	activ.classList.add('active')
+    let activ = document.querySelector('#navbars-host li.nav-item a.nav-link.router-link-active.router-link-exact-active')
+    
+
+    if(activ !== null){
+        let activate = document.querySelector('#navbars-host li.nav-item a.nav-link.router-link-active.router-link-exact-active').parentNode
+    	if (activate !== undefined) {
+            $('#navbars-host li.nav-item.active').removeClass('active')
+            activate.classList.add('active')
+        }
     }
     
     

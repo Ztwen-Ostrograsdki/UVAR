@@ -13,9 +13,8 @@
                 <form role="form" class="form-horizontal">
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <input autocomplete="email" class="form-control" :class="affiliationsInvalids.email !== undefined || invalids.email !== undefined ? 'is-invalid' : '' " v-model="newReferee.email" name="email" placeholder="Veuillez renseigner l'adresse mail de l'affiliant" type="email">
-                            <i class="m-0 p-0 mt-1 text-danger" v-if="affiliationsInvalids.email !== undefined">{{ affiliationsInvalids.email }}</i>
-                            <i class="m-0 p-0 mt-1 text-danger" v-if="affiliationsInvalids.email == undefined && invalids.email !== undefined">{{ invalids.email[0] }}</i>
+                            <input autocomplete="email" class="form-control" :class="affiliationsInvalids.status !== undefined ? 'is-invalid' : '' " v-model="newReferee.email" name="email" placeholder="Veuillez renseigner l'adresse mail de l'affiliant" type="email">
+                            <i class="m-0 p-0 mt-1 text-danger" v-if="affiliationsInvalids.status !== undefined">{{ affiliationsInvalids.msg }}</i>
                         </div>
                     </div>
                     <div class="row px-3">                           
@@ -61,11 +60,11 @@
                 let email = this.newReferee.email
                     
                 if (email !== '' && email !== undefined) {
-                    this.affiliationsInvalids.email = undefined
+                    this.$store.commit('RESET_AFFILIATION_INVALIDS', {status: false, msg: ""})
                     this.$store.dispatch('affiliate', this.newReferee)
                 }
                 else{
-                    this.affiliationsInvalids.email = "Veuillez resneigner l'adresse mail de l'utilisateur"
+                    this.$store.commit('RESET_AFFILIATION_INVALIDS', {status: true, msg: "Veuillez renseigner l'adresse mail de l'utilisateur"})
                 }
 
            }
@@ -73,7 +72,7 @@
         },
 
         computed: mapState([
-            'invalids', 'user', 'newReferee', 'newUserSucess', 'affiliationsInvalids'
+            'user', 'newReferee', 'affiliationsInvalids'
         ])
     }
 </script>

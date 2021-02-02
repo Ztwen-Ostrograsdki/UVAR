@@ -2,6 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Account;
+use App\Models\Action;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\ShoppingAction;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,6 +19,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(20)->create();
+        // \App\Models\Action::factory(100)->create();
+
 
      //    $users = \App\Models\User::all();
      //    $levels = ['beginner', 'level-1', 'level-2', 'level-3', 'level-4'];
@@ -23,7 +30,7 @@ class DatabaseSeeder extends Seeder
      //    foreach ($users as $user) {
      //    	$last = (\App\Models\Member::count());
      //    	if ($last <= 9) {
-     //    		$last = '0' + $last;
+     //    		$last = '0' . $last;
      //    	}
      //    	else{
      //    		$last = $last;
@@ -41,7 +48,29 @@ class DatabaseSeeder extends Seeder
      //            'sexe' => $sexe,
      //            'user_id' => $user->id
      //        ]);
+     //        $account = \App\Models\Account::create([
+     //            'solde' => (float)rand(1000, 1000000),
+     //            'author' => $member->id
+     //        ]);
+
+     //        $s_a = \App\Models\ShoppingAction::create([
+     //            'action_id' => rand(1, 86),
+     //            'member_id' => $member->id,
+     //            'total' => rand(1, 7),
+     //        ]);
+
+
      //    }
+     //     \App\Models\Category::factory(10)->create();
+        // \App\Models\Product::factory(30)->create();
+
+
+          // $categories = Category::all()->pluck('id')->toArray();
+          // $products = Product::all();
+          // foreach ($products as $p) {
+          //       $p->categories()->attach(array_slice($categories, 0, rand(1, 4))); 
+          // }
+
 
         
     }

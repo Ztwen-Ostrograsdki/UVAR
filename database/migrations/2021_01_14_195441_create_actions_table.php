@@ -15,13 +15,14 @@ class CreateActionsTable extends Migration
     {
         Schema::create('actions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('description')->nullable();
             $table->string('name');
             $table->boolean('bought')->default(false);
             $table->unsignedBigInteger('total')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->unsignedBigInteger('author')->nullable();
-            $table->foreign('author')
+            $table->unsignedBigInteger('actionnary')->nullable();
+            $table->foreign('actionnary')
                   ->references('id')
                   ->on('members')
                   ->onDelete('cascade')

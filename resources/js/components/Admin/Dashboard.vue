@@ -1,9 +1,7 @@
 <template>
 <div class="row mx-auto w-90 mt-3 profils administration">
-	<div class="col-md-12">
-        <member-options :options="options"></member-options>
+	<div class="col-md-12" v-if="$route.name !== 'membersProfil'">
         <router-link title="Recharger la page par defaut" class="fa fa-recycle mx-1" :to="{name: 'adminDefault'}"></router-link>
-        <span class="fa fa-navicon cursor text-white-50" title="Masquer le profil" @click="resetOptions()"></span>
         <span class="fa fa-close cursor text-white-50" title="Masquer le profil" @click="resetTables()" v-if="tables"></span>
         <span class="fa fa-chevron-up cursor text-white-50" title="Afficher le profil" @click="resetTables()" v-if="!tables"></span>
         <span class="fa float-right text-white fa-bell cursor fa-2x">
@@ -147,11 +145,11 @@
 	export default {
         data() {
             return {
-                usersTable : true,
-                membersTable : true,
-                actionsTable : true,
-                productsTable : true,
-                transactionsTable : true,
+                usersTable : false,
+                membersTable : false,
+                actionsTable : false,
+                productsTable : false,
+                transactionsTable : false,
                 teachersTable : false,
                 bonusTable : false,
                 options : false,
@@ -162,6 +160,9 @@
         created(){
            this.$store.dispatch('getUsers')
            this.$store.dispatch('getMembers')
+           this.$store.dispatch('getActions')
+           this.$store.dispatch('getProducts')
+           this.$store.dispatch('getCategories')
 
         },
         methods :{
@@ -196,7 +197,7 @@
         },
 
         computed: mapState([
-            'users', 'members'
+            'users', 'members', 'actions', 'products', 'categories', 'totalBoughtByAction'
         ])
 	}
 </script>

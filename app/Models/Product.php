@@ -22,7 +22,7 @@ class Product extends Model
 
     public function categories()
     {
-    	return $this->ManyToMany(Category::class);
+    	return $this->belongsToMany(Category::class);
     }
 
     public function images()

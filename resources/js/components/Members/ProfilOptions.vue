@@ -1,7 +1,7 @@
 <template>
 	<div class="w-100 p-0 m-0">
 		<transition name="scalefade" appear>
-        <div class="members-options  position-absolute border bg-linear-official-180 border-white" style="width: 250px; top: 30px; left:16px; z-index: 100; " v-if="options">
+        <div class="members-options  position-absolute border bg-linear-official-180 border-white" style="width: 250px; top: 70px; right:16px; z-index: 100; " v-if="options">
             <div class="w-100 border" style="">
                 <a class="w-100 link-float d-inline-block border m-0 py-1" href="#">
                     <i class="fa fa-sliders fa-sm fa-fw mr-2"></i>
@@ -38,11 +38,11 @@
                          <i class="fas fa-list fa-sm fa-fw mr-2"></i>
                         Autres actions
                     </a>
-                    <a class="w-100 py-1 pb-2 d-inline-block border-top link-float" href="">
+                    <a class="w-100 py-1 pb-2 d-inline-block border-top link-float" href="" @click="logout()">
                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
-                        Fermer mon compte
+                        Me déconnecter
                     </a>
-                    <form action=""  style="display: none;">
+                    <form id="logout-form" action="" method="POST" style="display: none;">
                     </form>
                 </div>
             </div> 
@@ -58,6 +58,11 @@
 		
         created(){
            
+        },
+        methods: {
+            logout(){
+                this.$store.dispatch('logout')
+            }
         },
 
         computed: mapState([

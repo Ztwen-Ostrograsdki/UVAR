@@ -19,9 +19,10 @@ class CreateProductsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->string('name')->unique();
+            $table->string('description')->nullable();
             $table->unsignedBigInteger('total');
             $table->float('price')->nullable();
-            $table->unsignedBigInteger('poster')->nullable();
+            $table->unsignedBigInteger('poster')->default(1)->nullable();
             $table->string('editor')->nullable();
             $table->foreign('poster')
                   ->references('id')

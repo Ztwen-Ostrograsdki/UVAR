@@ -1,5 +1,4 @@
 const user_s = {
-	user: {},
 	users: [],
     admin: false,
     newUser: {
@@ -11,7 +10,8 @@ const user_s = {
     newUserSucess: {
     	step: null,
     	status: false
-    }
+    },
+    invalidsUserRegister: {}
 }
 
 export default user_s

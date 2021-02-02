@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class MembersController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,6 +27,12 @@ class MembersController extends Controller
         $members = Member::all();
 
         return response()->json(['members' => $members]);
+    }
+
+    public function getMember(int $id)
+    {
+        $member = Member::withTrashed('deleted_at')->where('id', $id)->first();
+        return response()->json(['member' => $member]);
     }
 
     /**
@@ -53,7 +64,7 @@ class MembersController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('members.profil');
     }
 
     /**

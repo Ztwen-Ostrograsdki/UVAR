@@ -19,6 +19,7 @@ class CreateCategoriesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->string('name')->unique();
+            $table->string('description')->nullable();
             $table->unsignedBigInteger('creator')->nullable();
             $table->unsignedBigInteger('editor')->nullable();
             $table->foreign('creator')

@@ -3,14 +3,14 @@
 	    <form role="form" class="form-horizontal" method="post">
 	        <div class="form-group">
                 <div class="col-sm-12">
-                    <input autocomplete="email" class="form-control" :class="invalids !== [] && invalids !== {} ? 'is-invalid' : '' " v-model="email" name="email" placeholder="Votre addresse email" type="email">
-                    <i class="m-0 p-0 mt-1 text-danger" v-if="invalids.email !== undefined">{{ invalids.email[0] }}</i>
+                    <input autocomplete="email" class="form-control" :class="invalidsLogin !== [] && invalidsLogin !== {} ? 'is-invalid' : '' " v-model="email" name="email" placeholder="Votre addresse email" type="email">
+                    <i class="m-0 p-0 mt-1 text-danger" v-if="invalidsLogin.email !== undefined">{{ invalidsLogin.email[0] }}</i>
                 </div>
             </div>
 	        <div class="form-group">
                 <div class="col-sm-12">
-                    <input  class="form-control" :class="invalids !== [] && invalids !== {} ? 'is-invalid' : '' " v-model="password" autocomplete="current-password" name="password" placeholder="Votre mot de passe" type="password">
-                    <i class="m-0 p-0 mt-1 text-danger" v-if="invalids['password'] !== undefined">{{ invalids.password[0] }}</i>
+                    <input  class="form-control" :class="invalidsLogin !== [] && invalidsLogin !== {} ? 'is-invalid' : '' " v-model="password" autocomplete="current-password" name="password" placeholder="Votre mot de passe" type="password">
+                    <i class="m-0 p-0 mt-1 text-danger" v-if="invalidsLogin['password'] !== undefined">{{ invalidsLogin.password[0] }}</i>
                 </div>
             </div>
 	        <div class="row">
@@ -49,13 +49,13 @@
 		methods: {
 			login(){
 				let inputs = $('input')
-				console.log(inputs)
+				this.$store.commit('RESET_LOGIN_INVALIDS', [])
 				this.$store.dispatch('login', {email: this.email, password: this.password})
 			}
 		},
 
 		computed: mapState([
-            'invalids', 'newUserSucess', 'newUser', 'connected', 'member'
+            'invalidsLogin', 'newUserSucess', 'newUser', 'connected', 'member'
         ])
 	}
 </script>

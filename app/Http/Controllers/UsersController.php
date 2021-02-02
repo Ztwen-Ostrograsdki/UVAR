@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Mail\Gmail;
 use App\Models\User;
+use App\Notifications\RegisterUser;
 use App\Traits\Storers\UsersStorers;
 use App\Traits\Validators\TraitUsers;
 use Illuminate\Http\Request;
@@ -14,6 +15,11 @@ class UsersController extends Controller
 {
     use TraitUsers;
     use UsersStorers;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     /**
      * Display a listing of the resource.
@@ -56,13 +62,9 @@ class UsersController extends Controller
             return response()->json(['invalids' => $validator->errors()]);
         }
         else{
-            // $user = $this->__createUser($request->all());
-            $user = true;
-            $details = ['name' => $request['name']];
-            $email = $request['email'];
+            $user = $this->__createUser($request->all());
+            $user->notify(new RegisterUser());
             if ($user) {
-                
-                // Mail::to($email)->send(new Gmail());
                 return response()->json(['success' => "Votre inscription s'est bien déroulée! Veuillez à présent confirmer votre inscrition"]);
             }
         }

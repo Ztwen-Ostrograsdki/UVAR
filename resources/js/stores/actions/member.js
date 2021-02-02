@@ -6,6 +6,12 @@ const members_a = {
 				state.commit('GET_MEMBERS', {members: response.data.members})
 			})    
 	},
+	getMember: (state, id) => {
+		axios.get('/Uvar/administration/get&a&member/profil/id=' + id)
+			.then(response => {
+				state.commit('GET_MEMBER', {member: response.data.member})
+			})    
+	},
 
 	createMember: (state, data) => {
 		axios.post('/Uvar/administration', {
@@ -34,7 +40,7 @@ const members_a = {
 				})
 			}
 			else if (response.data.invalids !== undefined) {
-				state.commit('RESET_INVALIDS', response.data.invalids)
+				state.commit('RESET_AFFILIATION_INVALIDS', {status: true, msg: response.data.invalids})
 				Swal.fire({
 				  icon: 'error',
 				  title: 'AFFILIATION ECHOUEE',

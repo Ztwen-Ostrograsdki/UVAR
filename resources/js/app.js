@@ -39,6 +39,19 @@ let members_profil = Vue.component('members-profil', require('./components/Membe
 let members_listing = Vue.component('members-listing', require('./components/Members/Listing.vue').default)
 
 
+//ACTIONS
+let actions_listing = Vue.component('actions-listing', require('./components/Actions/Listing.vue').default)
+let action_profil = Vue.component('actions-profil', require('./components/Actions/Profil.vue').default)
+
+//PRODUCTS
+let products_listing = Vue.component('products-listing', require('./components/Products/Listing.vue').default)
+let product_profil = Vue.component('products-profil', require('./components/Products/Profil.vue').default)
+
+//CATEGORIES
+let categories_listing = Vue.component('categories-listing', require('./components/Category/Listing.vue').default)
+let categories_profil = Vue.component('categories-profil', require('./components/Category/Profil.vue').default)
+
+
 //CAROUSSELS
 let home_caroussel = Vue.component('home-caroussel', require('./components/Home/HomeCarousselComponent.vue').default)
 let horizontal_home_caroussel = Vue.component('horizontal-home-caroussel', require('./components/Home/HorizontalHomeCaroussel.vue').default)
@@ -78,11 +91,6 @@ const routes = [
 					component: welcomes,
 					name: 'welcomes',
 				},
-				{
-					path: '/profil',
-					component: members_profil,
-					name: 'members-profil',
-				},
 		]
 	},
 	{
@@ -103,6 +111,27 @@ const routes = [
 					path: '/Uvar/administration/tag/membres',
 					component: members_listing,
 					name: 'membersListing',
+
+				},
+				{
+					path: '/Uvar/administration/tag/membres/:id',
+					component: members_profil,
+					name: 'membersProfil',
+				},
+				{
+					path: '/Uvar/administration/tag/actions',
+					component: actions_listing,
+					name: 'actionsListing',
+				},
+				{
+					path: '/Uvar/administration/tag/produits',
+					component: products_listing,
+					name: 'productsListing',
+				},
+				{
+					path: '/Uvar/administration/tag/categories',
+					component: categories_listing,
+					name: 'categoriesListing',
 				},
 		]
 	},

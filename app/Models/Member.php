@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Account;
 use App\Models\Image;
 use App\Models\Product;
+use App\Models\ShoppingAction;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -53,6 +54,11 @@ class Member extends Model
     public function user()
     {
     	return $this->hasMany(User::class);
+    }
+
+    public function actions()
+    {
+        return $this->HasMany(ShoppingAction::class);
     }
 
 

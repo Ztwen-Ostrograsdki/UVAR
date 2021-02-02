@@ -14,13 +14,17 @@ const users_m = {
 	    	confirm_password: '',
     	}
     },
+    RESET_REGISTER_USERS_INVALIDS: (state, data) =>{
+        state.invalidsUserRegister = data
+    },
 
     RESET_NEW_USER_SUCCESS: (state, data) =>{
         state.newUserSucess = {
             status: data.status,
             step: data.step
         }
-    }
+    },
+    
     
 }
 
