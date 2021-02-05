@@ -65,6 +65,9 @@ let loginer = Vue.component('loginer', require('./components/Formulars/Connexion
 let registred = Vue.component('registred', require('./components/Formulars/Users/RegistredComponent.vue').default)
 let formulars = Vue.component('formulars', require('./components/Home/Formulars.vue').default)
 
+//NOTIFICATIONS
+let notifications = Vue.component('notifications', require('./components/Notifications/Listing.vue').default)
+
 
 
 
@@ -116,6 +119,11 @@ const routes = [
 				{
 					path: '/Uvar/administration/tag/membres/:id',
 					component: members_profil,
+					name: 'membersProfilOnAdmin',
+				},
+				{
+					path: '/Uvar/membres/:id',
+					component: members_profil,
 					name: 'membersProfil',
 				},
 				{
@@ -132,6 +140,11 @@ const routes = [
 					path: '/Uvar/administration/tag/categories',
 					component: categories_listing,
 					name: 'categoriesListing',
+				},
+				{
+					path: '/Uvar/administration/tag/notifications',
+					component: notifications,
+					name: 'notifications',
 				},
 		]
 	},

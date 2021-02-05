@@ -9,7 +9,7 @@ const members_a = {
 	getMember: (state, id) => {
 		axios.get('/Uvar/administration/get&a&member/profil/id=' + id)
 			.then(response => {
-				state.commit('GET_MEMBER', {member: response.data.member})
+				state.commit('GET_MEMBER', response.data)
 			})    
 	},
 
@@ -26,7 +26,7 @@ const members_a = {
 	},
 
 	affiliate: (state, data) =>{
-		axios.post('/Uvar/membre/affiliation/ID=' + 2, {
+		axios.post('/Uvar/membre/affiliation/ID=' +  data.member.IDENTIFY, {
 			email: data.email,
 		})
 		.then(response => {
@@ -34,20 +34,18 @@ const members_a = {
 			if (response.data.success !== undefined) {
 				Swal.fire({
 				  icon: 'success',
-				  title: 'Connexion réussie',
+				  title: "Votre demande d'affiliation a bien été effectué. Vous recevrerez un email de confirmation",
 				  showConfirmButton: false,
-				  timer: 2000
 				})
+				state.dispatch('getNotifications')
 			}
-			else if (response.data.invalids !== undefined) {
-				state.commit('RESET_AFFILIATION_INVALIDS', {status: true, msg: response.data.invalids})
+			else if (response.data.errors !== undefined) {
+				state.commit('RESET_AFFILIATION_INVALIDS', {status: true, msg: response.data.errors})
 				Swal.fire({
-				  icon: 'error',
+				  icon: 'warning',
 				  title: 'AFFILIATION ECHOUEE',
-				  text: "L'adresse ne correspond à aucun utilisateur. Rassurez-vous que l'utilisateur s'est déja enregistré",
+				  text: response.data.errors,
 				  showConfirmButton: false,
-				  timer: 3000,
-				  timerProgressBar: true,
 				})
 			}
 		})  

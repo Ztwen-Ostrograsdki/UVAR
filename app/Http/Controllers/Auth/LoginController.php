@@ -36,7 +36,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except(['logout', 'getConnected']);
+        $this->middleware('guest')->except(['logout', 'getConnected', 'getUserMember']);
     }
 
     public function login(Request $request)
@@ -55,9 +55,12 @@ class LoginController extends Controller
             $this->sendLoginResponse($request);
             
             $user = auth()->user();
-
+            $member = null;
             if ($user) {
-                return response()->json(['success' => $user]);
+                if ($user->member !== null) {
+                    $member = $user->member;
+                }
+                return response()->json(['success' => ['user' => $user, 'active_member' => $member]]);
             }
         }
         else{
@@ -92,6 +95,20 @@ class LoginController extends Controller
         }
 
     }
+
+    public function getUserMember()
+    {
+        $user = auth()->user();
+        if ($user) {
+            if ($user->member !== null) {
+                return response()->json(['user_member' => $user->member, 'active_member' => $user->member]);
+            }
+            else{
+                return response()->json(['user_member' => null, 'active_member' => null]);
+            }
+        }
+    }
+
 
     /**
      * Log the user out of the application.

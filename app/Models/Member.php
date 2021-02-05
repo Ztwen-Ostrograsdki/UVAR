@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Account;
+use App\Models\Action;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\ShoppingAction;
@@ -16,7 +17,7 @@ class Member extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['level', 'amount', 'country', 'sexe', 'AR-coin', 'phone', 'pseudo', 'IDENTIFY'];
+    protected $fillable = ['level', 'amount', 'referer', 'country', 'sexe', 'AR-coin', 'phone', 'pseudo', 'IDENTIFY'];
 
 
     /**
@@ -44,6 +45,7 @@ class Member extends Model
     public function referies()
     {
     	return Member::withTrashed('deleted_at')->where('referer', $this->id)->get();
+
     }
 
 
@@ -53,12 +55,34 @@ class Member extends Model
      */
     public function user()
     {
-    	return $this->hasMany(User::class);
+    	return $this->belongsTo(User::class);
     }
 
     public function actions()
     {
-        return $this->HasMany(ShoppingAction::class);
+        $actions = [];
+        $totalPrices = 0;
+        $totalActions = 0;
+        $shops = ShoppingAction::where('member_id', $this->id)->get();
+        $last = ShoppingAction::where('member_id', $this->id)->latest()->first();
+        $lastAct = Action::find($last->action_id);
+        if (true) {
+            foreach ($shops as $shop) {
+                $action = Action::find($shop->action_id);
+                $actions[$shop->action_id] = [
+                    'action' => $action,
+                    'total' => $shop->total
+                ];
+                $totalPrices += ($shop->total)*($action->price);
+                $totalActions += ($shop->total);
+            }
+
+            $actions['totalActions'] = $totalActions;
+            $actions['totalPrices'] = $totalPrices;
+            $actions['lastAction'] = ['total' => $last->total, 'action' => $lastAct];
+        }
+
+        return $actions;
     }
 
 
@@ -73,7 +97,37 @@ class Member extends Model
 
     public function account()
     {
-        return $this->hasOne(Account::class);
+        return Account::where('author', $this->id)->first();
+    }
+
+    public function shopping()
+    {
+        $products = $this->user->products;
+        $shoppings = [];
+        $totalPrices = 0;
+        $totalProducts = 0;
+
+        $last = Shopping::where('user_id', $this->user->id)->latest()->first();
+        $lastPr = Product::find($last->product_id);
+        if (true) {
+            foreach ($products as $product) {
+                $p = Product::find($product->product_id);
+                $total = array_sum(Shopping::where('user_id', $this->user->id)->where('product_id', $p->id)->pluck('total')->toArray());
+                $price = $total*$p->price;
+                $shoppings[$p->id] = [
+                    'total' => $total,
+                    'product' => $p
+                ];
+
+                $totalProducts += $total;
+                $totalPrices += $price;
+            }
+            $shoppings['totalProducts'] = $totalProducts;
+            $shoppings['totalPrices'] = $totalPrices;
+            $shoppings['lastProduct'] = ['total' => $last->total, 'product' => $lastPr];
+        }
+
+        return $shoppings;
     }
 
 

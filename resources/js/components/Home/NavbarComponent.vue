@@ -26,17 +26,17 @@
                         <li class="nav-item active">
                             <router-link class="nav-link" to="/">Acceuil</router-link>
                         </li>
-                        <li class="nav-item" v-if="connected">
-                            <router-link class="nav-link" to="/profil">Mon profil</router-link>
+                        <li class="nav-item" v-if="connected && active_member !== undefined && active_member !== {}">
+                            <router-link class="nav-link" :to="{name: 'membersProfil', params: {id: active_member.id}}">Mon profil</router-link>
                         </li>
                         <li class="nav-item dropdown" v-if="connected">
                             <router-link class="nav-link dropdown-toggle"  id="dropdown-a" data-toggle="dropdown" to="/Uvar/administration">Administration</router-link>
                             <div class="dropdown-menu" aria-labelledby="dropdown-a">
                                 <router-link class="dropdown-item" to="/Uvar/administration">Acceuil</router-link>
-                                <a class="dropdown-item" href="#">Gestion des actions </a>
-                                <a class="dropdown-item" href="#">Gestion des produits </a>
                                 <a class="dropdown-item" href="#">Les formations </a>
                                 <a class="dropdown-item" href="#">Les affiliations </a>
+                                <router-link class="dropdown-item" :to="{name: 'productsListing'}"> Gestion des produits</router-link>
+                                <router-link class="dropdown-item" :to="{name: 'actionsListing'}"> Gestions des actions</router-link>
                                 <router-link class="dropdown-item" :to="{name: 'usersListing'}">Les utilisateurs</router-link>
                                 <router-link class="dropdown-item" :to="{name: 'membersListing'}">Les membres</router-link>
                             </div>
@@ -77,7 +77,7 @@
         },
         
         created(){
-
+            this.$store.dispatch('getUserMember')
         },
         
         methods: {
@@ -85,9 +85,14 @@
                 return this.logoutShow = !this.logoutShow
             }
         },
+        getRouteForTeacher(id){
+            if(id !== null){
+                return {name: 'teachersProfil', id: id}
+            }
+        },
 
         computed: mapState([
-            'user', 'connected', 'member', 'login'
+            'user', 'user_member', 'connected', 'member', 'login', 'active_member'
         ])
     }
 

@@ -11,6 +11,7 @@
                    <router-link class="btn-official mx-1" :to="{name: 'actionsListing'}">Les actions</router-link>
                    <router-link class="btn-official" :to="{name: 'productsListing'}">Les produits</router-link>
                    <router-link class="btn-official mx-1" :to="{name: 'categoriesListing'}">Les Catégories</router-link>
+                   <router-link class="btn-official" :to="{name: 'notifications'}">Mes notifications</router-link>
                </div> 
             </div>
             <div class="w-100 mx-auto">

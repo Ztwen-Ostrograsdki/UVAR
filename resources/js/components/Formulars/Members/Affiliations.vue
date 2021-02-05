@@ -13,8 +13,8 @@
                 <form role="form" class="form-horizontal">
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <input autocomplete="email" class="form-control" :class="affiliationsInvalids.status !== undefined ? 'is-invalid' : '' " v-model="newReferee.email" name="email" placeholder="Veuillez renseigner l'adresse mail de l'affiliant" type="email">
-                            <i class="m-0 p-0 mt-1 text-danger" v-if="affiliationsInvalids.status !== undefined">{{ affiliationsInvalids.msg }}</i>
+                            <input autocomplete="email" class="form-control" :class="affiliationsInvalids.status == true ? 'is-invalid' : '' " v-model="newReferee.email" name="email" placeholder="Veuillez renseigner l'adresse mail de l'affiliant" type="email">
+                            <i class="m-0 p-0 mt-1 text-danger" v-if="affiliationsInvalids.status == true">{{ affiliationsInvalids.msg }}</i>
                         </div>
                     </div>
                     <div class="row px-3">                           
@@ -46,7 +46,7 @@
         },
         
         created(){
-           
+           this.$store.dispatch('getUserMember')
         },
         methods :{
 
@@ -56,12 +56,11 @@
                 // $('#affiliations form i').text('')
             },
            affiliate(){
-
                 let email = this.newReferee.email
-                    
+                let member = this.active_member
                 if (email !== '' && email !== undefined) {
                     this.$store.commit('RESET_AFFILIATION_INVALIDS', {status: false, msg: ""})
-                    this.$store.dispatch('affiliate', this.newReferee)
+                    this.$store.dispatch('affiliate', {email: this.newReferee, member: member})
                 }
                 else{
                     this.$store.commit('RESET_AFFILIATION_INVALIDS', {status: true, msg: "Veuillez renseigner l'adresse mail de l'utilisateur"})
@@ -72,7 +71,7 @@
         },
 
         computed: mapState([
-            'user', 'newReferee', 'affiliationsInvalids'
+            'user', 'newReferee', 'affiliationsInvalids', 'connected', 'member', 'user_member', 'active_member'
         ])
     }
 </script>

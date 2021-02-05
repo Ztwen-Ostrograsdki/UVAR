@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use App\Models\ShoppingAction;
 use Illuminate\Http\Request;
 
 class MembersController extends Controller
@@ -32,8 +33,20 @@ class MembersController extends Controller
     public function getMember(int $id)
     {
         $member = Member::withTrashed('deleted_at')->where('id', $id)->first();
-        return response()->json(['member' => $member]);
+        $actions = $member->actions();
+        $account = $member->account();
+        $referer = $member->referer();
+        $products = $member->shopping();
+
+        return response()->json(['member' => $member, 'myActions' => $actions, 'myAccount' => $account, 'myReferer' => $referer, 'myProducts' => $products]);
     }
+
+    public function getMemberProfil(int $id)
+    {
+        return $this->getMember($id);        
+    }
+
+
 
     /**
      * Show the form for creating a new resource.

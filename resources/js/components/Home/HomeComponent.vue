@@ -11,10 +11,11 @@
 		
         created(){
            this.$store.dispatch('getConnected')
+           this.$store.dispatch('getUserMember')
         },
 
         computed: mapState([
-            'login', 'user', 'connected', 'member'
+            'login', 'user', 'user_member', 'connected', 'member', 'active_member'
         ])
 	}
 </script>

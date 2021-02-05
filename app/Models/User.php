@@ -6,6 +6,7 @@ use App\Models\Action;
 use App\Models\Image;
 use App\Models\Member;
 use App\Models\Product;
+use App\Models\Shopping;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -49,19 +50,19 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
 
-    public function products()
-    {
-        return $this->morphedByMany(Product::class, 'shoppables'); 
-    }
-
     public function member()
     {
-        return $this->belongsTo(Member::class); 
+        return $this->hasOne(Member::class); 
     }
 
     public function images()
     {
         return $this->morphToMany(Image::class, 'imageables'); 
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Shopping::class);
     }
 
     /**

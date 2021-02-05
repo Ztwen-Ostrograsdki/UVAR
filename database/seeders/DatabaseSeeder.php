@@ -6,7 +6,9 @@ use App\Models\Account;
 use App\Models\Action;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Shopping;
 use App\Models\ShoppingAction;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,6 +20,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
+        // $users = User::all();
+        // $products = Product::all()->pluck('id')->toArray();
+
+
+        // foreach ($users as $user) {
+        //     $ts = array_slice($products, 0, rand(1, 4));
+            
+        //     Shopping::create([
+        //         "user_id" => $user->id,
+        //         "product_id" => ,
+        //         "total" => rand(1, 10)
+        //         ]);
+        // }
         // \App\Models\User::factory(20)->create();
         // \App\Models\Action::factory(100)->create();
 

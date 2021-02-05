@@ -30,6 +30,7 @@ Route::get('/', function () {
 Route::group(['prefix' => 'Uvar'], function() {
     Route::resource('administration', AdminController::class);
     Route::resource('administration/tag/membres', MembersController::class);
+    Route::get('/membres/{id}',[ MembersController::class, 'index']);
     Route::resource('administration/tag/utilisateur', UsersController::class);
     Route::resource('administration/tag/produits', ProductController::class);
     Route::resource('administration/tag/actions', ActionController::class);
@@ -40,6 +41,10 @@ Route::group(['prefix' => 'Uvar'], function() {
     Route::get('administration/actions&get&data/now', [ActionController::class, 'getActions']);
     Route::get('administration/products&get&data/now', [ProductController::class, 'getProducts']);
     Route::get('administration/categories&get&data/now', [CategoryController::class, 'getCategories']);
+    Route::post('/systeme/notify&system', [AffiliationsController::class, 'getNotifications']);
+    Route::post('/administration/affiliations/manage', [AffiliationsController::class, 'manageAffiliation']);
+    Route::get('/administration/tag/notifications', [AffiliationsController::class, 'index']);
+
 });
 
 
@@ -51,9 +56,10 @@ Route::post('/login/uvar&user&get&auth', [LoginController::class, 'login']);
 Route::post('/uvar/systeme/disconnect&user/now', [LoginController::class, 'logout']);
 Route::get('/uvar/systeme', [LoginController::class, 'getConnected']);
 Route::post('/uvar/systeme/get&auth&user', [LoginController::class, 'getConnected']);
+Route::post('/uvar/systeme/auth&get&auth&member', [LoginController::class, 'getUserMember']);
 Route::post('/Uvar/membre/affiliation/ID={id}', [AffiliationsController::class, 'affiliate']);
 
-
+Route::get('/mail', [App\Http\Controllers\MailController::class, 'index']);
 Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);

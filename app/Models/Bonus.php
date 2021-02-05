@@ -9,6 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 class Bonus extends Model
 {
     use HasFactory;
+    protected $fillable = ['beneficier', 'value', 'title'];
+
+    public static function __bonuser()
+    {
+    	$bonus = 500.00;
+    	return $bonus;
+    }
 
     public function beneficier()
     {

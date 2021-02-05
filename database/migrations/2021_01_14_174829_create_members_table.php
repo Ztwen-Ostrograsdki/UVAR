@@ -13,7 +13,6 @@ class CreateMembersTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('members');
         $levels = ['beginner', 'level-1', 'level-2', 'level-3', 'level-4'];
         Schema::create('members', function (Blueprint $table) {
             $table->bigIncrements('id');

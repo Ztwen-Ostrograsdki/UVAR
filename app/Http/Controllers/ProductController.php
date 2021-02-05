@@ -24,6 +24,11 @@ class ProductController extends Controller
     public function getProducts()
     {
         $products = Product::all();
+        $totalBoughtByProduct = [];
+
+        foreach ($products as $product) {
+            $totalBoughtByProduct[$product->id] = $product->totalBought();
+        }
 
         return response()->json(['products' => $products]);
     }

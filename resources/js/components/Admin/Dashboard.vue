@@ -4,11 +4,14 @@
         <router-link title="Recharger la page par defaut" class="fa fa-recycle mx-1" :to="{name: 'adminDefault'}"></router-link>
         <span class="fa fa-close cursor text-white-50" title="Masquer le profil" @click="resetTables()" v-if="tables"></span>
         <span class="fa fa-chevron-up cursor text-white-50" title="Afficher le profil" @click="resetTables()" v-if="!tables"></span>
-        <span class="fa float-right text-white fa-bell cursor fa-2x">
-            <span class="float-right bg-danger position-relative text-white p-1" style="right: 11px; top: 1px; border-radius: 50%; font-size: 0.5rem !important;">
-                <span>0</span>
+        <router-link class="float-right text-white" :to="{name: 'notifications'}">
+            <span :title="'Vous avez ' + notifications.length + ' notifications' " class="fa float-right text-white fa-bell cursor fa-2x">
+                <span class="float-right bg-danger position-relative text-white p-1" style="right: 11px; top: 1px; border-radius: 50%; font-size: 0.5rem !important;">
+                    <span>{{ notifications.length }}</span>
+                </span>
             </span>
-        </span>
+        </router-link>
+        
 
         <div class="tab-content">
             <transition name="justefade" appear> 
@@ -163,6 +166,7 @@
            this.$store.dispatch('getActions')
            this.$store.dispatch('getProducts')
            this.$store.dispatch('getCategories')
+           this.$store.dispatch('getNotifications')
 
         },
         methods :{
@@ -197,7 +201,7 @@
         },
 
         computed: mapState([
-            'users', 'members', 'actions', 'products', 'categories', 'totalBoughtByAction'
+            'users', 'members', 'notifications', 'actions', 'products', 'categories', 'totalBoughtByAction', 'active_member'
         ])
 	}
 </script>
