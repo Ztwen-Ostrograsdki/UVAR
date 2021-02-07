@@ -12,7 +12,8 @@ const member_s = {
 	affiliationsInvalids: {status: false, msg: ''},
 	invalidsEditMember: {},
 	editingMember: {},
-	memberPhoto: {}
+	memberPhoto: {},
+	active_member_photo: {},
 }
 
 export default member_s

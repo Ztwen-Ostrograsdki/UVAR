@@ -10,8 +10,9 @@
                 </a>
                   <!-- Dropdown - User Information -->
                 <div class="w-100 border p-2">
-                        <router-link style="border-radius: 30px;" v-if="connected && active_member !== null && active_member !== undefined" :to="{name: 'membersProfil', params: {id: active_member.id}}"   class="w-100 my-1 d-inline-block link-float" >
-                            <i  class="fas fa-user fa-sm fa-fw mr-2"></i>
+                        <router-link style="border-radius: 30px;" v-if="connected && active_member !== null" :to="{name: 'membersProfil', params: {id: active_member.id}}"   class="w-100 my-1 d-inline-block link-float" >
+                            <!-- <i  class="fas fa-user fa-sm fa-fw mr-2"></i> -->
+                            <img alt="Mon profil" width="30" v-if="active_member_photo.length > 0" class="login-photo border-official" :src="'/images/'+ getProfilPath()">
                             Mon profil
                         </router-link>
                         <a class="w-100 my-1 d-inline-block link-float" data-toggle="modal" data-target="#affiliations" href="" style="border-radius: 30px;">
@@ -57,16 +58,28 @@
         props: ['options'],
 		
         created(){
-           
+           if (this.connected) {
+                this.$store.dispatch('getMember', this.active_member.id)
+            }
         },
         methods: {
             logout(){
                 this.$store.dispatch('logout')
-            }
+            },
+            getProfilPath(){
+                let directory = ''
+                let image = this.active_member_photo
+                if (image.length > 0) {
+                    let name = image[0].name
+                    directory = name
+                }
+                return directory
+
+            },
         },
 
         computed: mapState([
-            'user', 'connected', 'member', 'user_member', 'active_member'
+            'user', 'connected', 'member', 'active_member', 'memberPhoto', 'active_member_photo'
         ])
 	}
 </script>
@@ -77,5 +90,11 @@
     }
     .members-options a:hover{
         color: #9dc15b !important
+    }
+    img.login-photo{
+        display: ;
+        border-radius: 50%;
+        z-index: 3000;
+
     }
 </style>

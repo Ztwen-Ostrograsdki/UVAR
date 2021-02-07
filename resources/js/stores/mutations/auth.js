@@ -6,19 +6,19 @@ const auth_mutations = {
     RESET_USER: (state, data) =>{
         state.user = data.user
         state.active_member = data.active_member
-        state.user_member = data.user_member
         state.connected = data.connected
     },
-    RESET_USER_MEMBER: (state, data) =>{
-        state.user_member = data.user_member
+    RESET_ACTIVE_MEMBER: (state, data) =>{
         state.active_member = data.active_member
+        state.active_member_photo = data.active_member_photo
     },
     GET_NOTIFICATIONS: (state, data) =>{
         state.notifications = data
     },
     LOGOUT: (state) => {
         state.user = {}
-        state.connected = false
+        state.connected = false,
+        active_member_photo = []
     },
 }
 

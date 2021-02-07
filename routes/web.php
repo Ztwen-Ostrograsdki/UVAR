@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\MarketController;
 use App\Http\Controllers\MembersController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UsersController;
@@ -49,6 +50,11 @@ Route::group(['prefix' => 'Uvar'], function() {
 
 });
 
+Route::group(['prefix' => 'boutique'], function(){
+    Route::get('q=actions', [MarketController::class, 'index']);
+    Route::post('q=actions', [MarketController::class, 'getAllActions']);
+    Route::post('q=actions/length', [MarketController::class, 'getAllActionsOnlyAPart']);
+});
 
 Route::get('/profil', function () {
     return view('layouts.home');

@@ -1,5 +1,7 @@
 const uvar_action_s = {
+	targetAction: {},
 	action: {},
+	allActions: [],
 	actions: [],
 	totalBoughtByAction: [],
 	newAction: {

@@ -4,7 +4,17 @@ const members_a = {
 		axios.get('/Uvar/administration/members&get&data/now')
 			.then(response => {
 				state.commit('GET_MEMBERS', {members: response.data.members})
-			})    
+			})  
+			.catch(err =>{
+				if (err.response.status == 401) {
+					Swal.fire({
+					  icon: 'warning',
+					  title: "Erreure connexion: Vous n'êtes pas authorisé",
+					  showConfirmButton: false,
+					})
+					window.location = '/'
+				}
+			})   
 	},
 	getMember: (state, id) => {
 		state.commit('RESET_READY_MEMBER', false)
@@ -12,7 +22,17 @@ const members_a = {
 			.then(response => {
 				state.commit('GET_MEMBER', response.data)
 				state.commit('RESET_READY_MEMBER', true)
-			})    
+			})
+			.catch(err =>{
+				if (err.response.status == 401) {
+					Swal.fire({
+					  icon: 'warning',
+					  title: "Erreure connexion: Vous n'êtes pas authorisé",
+					  showConfirmButton: false,
+					})
+					window.location = '/'
+				}
+			})       
 	},
 
 	createMember: (state, data) => {
@@ -81,6 +101,7 @@ const members_a = {
 				state.dispatch('getMembers')
 				state.dispatch('getUsers')
 				state.dispatch('getMember', data.data.member.id)
+				state.dispatch('getActiveMember', data.data.member.id)
 				$('#setMemberImage').modal('hide')
 				$('body').removeClass('modal-open')
 				$('.modal-backdrop').remove()

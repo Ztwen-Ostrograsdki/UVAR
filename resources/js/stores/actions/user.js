@@ -4,7 +4,17 @@ const users_a = {
 		axios.get('/Uvar/administration/users&get&data/now')
 			.then(response => {
 				state.commit('GET_USERS', {users: response.data.users})
-			})    
+			})  
+			.catch(err =>{
+				if (err.response.status == 401) {
+					Swal.fire({
+					  icon: 'warning',
+					  title: "Erreure connexion: Vous n'êtes pas authorisé",
+					  showConfirmButton: false,
+					})
+					window.location = '/'
+				}
+			})     
 	},
 
 	createUser: (state, data) => {

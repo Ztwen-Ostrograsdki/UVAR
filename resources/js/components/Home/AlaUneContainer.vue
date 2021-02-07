@@ -16,52 +16,19 @@
                 </div>
             </div><!-- end title -->
         
-            <div class="row align-items-center mx-auto border-official px-0 pl-2" style="width: 98%">
+            <div v-for="action in allActions" class="row align-items-center mx-auto border-official px-0 pl-2" style="width: 98%">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 m-0 p-0">
                     <div class="message-box">
-                        <h4>2018 BEST WEB HOSTING COMPANY</h4>
-                        <h2>Awards Winner Support Center</h2>
-                        <p>Quisque eget nisl id nulla sagittis auctor quis id. Aliquam quis vehicula enim, non aliquam risus. Sed a tellus quis mi rhoncus dignissim.</p>
+                        <h4>{{ getCreatedAt(action.action.created_at) }}</h4>
+                        <h2>{{ action.action.name }}</h2>
+                        <p>
+                            {{ action.action.description }}
+                        </p>
+                        <span class="text-white-50">
+                            <span>actionnaire : </span>
+                            <span>{{ 'UVAR'}}</span>
+                        </span>
 
-                        <p> Integer rutrum ligula eu dignissim laoreet. Pellentesque venenatis nibh sed tellus faucibus bibendum. Sed fermentum est vitae rhoncus molestie. Cum sociis natoque penatibus et magnis montes, nascetur ridiculus mus. Sed vitae rutrum neque. </p>
-
-                        <a href="#" class="hover-btn-new"><span>Lire plus</span></a>
-                    </div><!-- end messagebox -->
-                </div><!-- end col -->
-                
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 m-0 p-0">
-                    <div class="post-media wow fadeIn p-0 px-0">
-                        <img src="photo/ph4.jpg" class="img-fluid p-0 m-0 img-rounded">
-                    </div><!-- end media -->
-                </div><!-- end col -->
-            </div>
-            <div class="row align-items-center mx-auto border-official px-0" style="width: 98%">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 m-0 p-0 float-left">
-                    <div class="post-media wow fadeIn float-left p-0 px-0">
-                        <img src="photo/ph4.jpg" class="img-fluid p-0 m-0 float-left img-rounded">
-                    </div><!-- end media -->
-                </div><!-- end col -->
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 m-0 p-0">
-                    <div class="message-box px-2">
-                        <h4>2018 BEST WEB HOSTING COMPANY</h4>
-                        <h2>Awards Winner Support Center</h2>
-                        <p>Quisque eget nisl id nulla sagittis auctor quis id. Aliquam quis vehicula enim, non aliquam risus. Sed a tellus quis mi rhoncus dignissim.</p>
-
-                        <p> Integer rutrum ligula eu dignissim laoreet. Pellentesque venenatis nibh sed tellus faucibus bibendum. Sed fermentum est vitae rhoncus molestie. Cum sociis natoque penatibus et magnis montes, nascetur ridiculus mus. Sed vitae rutrum neque. </p>
-
-                        <a href="#" class="hover-btn-new float-right"><span>Lire plus</span></a>
-                    </div><!-- end messagebox -->
-                </div><!-- end col -->
-                
-            </div>
-            <div class="row align-items-center mx-auto border-official px-0 pl-2" style="width: 98%">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 m-0 p-0">
-                    <div class="message-box">
-                        <h4>2018 BEST WEB HOSTING COMPANY</h4>
-                        <h2>Awards Winner Support Center</h2>
-                        <p>Quisque eget nisl id nulla sagittis auctor quis id. Aliquam quis vehicula enim, non aliquam risus. Sed a tellus quis mi rhoncus dignissim.</p>
-
-                        <p> Integer rutrum ligula eu dignissim laoreet. Pellentesque venenatis nibh sed tellus faucibus bibendum. Sed fermentum est vitae rhoncus molestie. Cum sociis natoque penatibus et magnis montes, nascetur ridiculus mus. Sed vitae rutrum neque. </p>
 
                         <a href="#" class="hover-btn-new"><span>Lire plus</span></a>
                     </div><!-- end messagebox -->
@@ -83,11 +50,48 @@
 	export default {
 		
         created(){
-           
+            this.$store.dispatch('getAllActionsOnlyAPart')
+        },
+        methods :{
+            getCreatedAt(created_at){
+                if (created_at !== null) {
+                    let date = created_at
+                        let parts = (date.split("-"))
+                        let year = parts[0]
+                        let month = parts[1]
+                        let day = parts[2].substring(0, 2)
+                        let times = ((parts[2].split('T'))[1]).split(':')
+                        let hour = times[0] + 'H'
+                        let min = times[1] + "'"
+
+                        
+                        month = Number(month) - 1
+
+                        return day + " " + this.selfMonths[month] + " " + year + " à " + hour +  " " + min
+                }
+                else{
+                    return "inconnue"
+                }
+
+            },
+            getLeveler(level){
+                level = level.replace('-', '_')
+                return this.levels[level]
+            },
+            getPrice(price){
+                let solde = Number(price)
+                return {toFrancs: new Intl.NumberFormat().format(solde) + " FCFA", toAr: new Intl.NumberFormat().format(this.toARcoins(solde)) + " AR"}
+            },
+            toARcoins(price){
+                let ar = 0.00
+                ar = Number.parseFloat(price/1000).toFixed(2)
+                return ar
+            },
+            
         },
 
         computed: mapState([
-            
+            'member', 'connected', 'user', 'myActions', 'myAccount', 'myBonuses', 'memberReady', 'targetAction', 'allActionsOnlyAPart', 'allActions'
         ])
 	}
 </script>

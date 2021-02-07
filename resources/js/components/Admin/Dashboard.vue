@@ -201,7 +201,7 @@
         },
 
         computed: mapState([
-            'users', 'members', 'notifications', 'actions', 'products', 'categories', 'totalBoughtByAction', 'active_member'
+            'users', 'members', 'notifications', 'actions', 'products', 'categories', 'totalBoughtByAction', 'active_member', 'active_member_photo'
         ])
 	}
 </script>

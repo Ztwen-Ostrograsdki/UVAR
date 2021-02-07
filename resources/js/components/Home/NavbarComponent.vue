@@ -23,13 +23,20 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbars-host">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item active">
+                        <li class="nav-item active homePage">
                             <router-link class="nav-link" to="/">Acceuil</router-link>
                         </li>
-                        <li class="nav-item" v-if="connected && active_member !== undefined && active_member !== {}">
-                            <router-link class="nav-link" :to="{name: 'membersProfil', params: {id: active_member.id}}">Mon profil</router-link>
+                        <li class="nav-item dropdown marketsTables">
+                            <router-link class="nav-link dropdown-toggle"  id="dropdown-a" data-toggle="dropdown" to="/">Le Marché</router-link>
+                            <div class="dropdown-menu" aria-labelledby="dropdown-a">
+                                <router-link class="dropdown-item" :to="{name: 'actions_shop_default'}">Les actions</router-link>
+                                <router-link class="dropdown-item" :to="{name: 'actionsListing'}"> Les Produits</router-link>
+                            </div>
                         </li>
-                        <li class="nav-item dropdown" v-if="connected">
+                        <li class="nav-item memberProfil" v-if="connected">
+                            <router-link class="nav-link" :to="{name: getProfilRouteName(active_member).name, params: {id: getProfilRouteName(active_member).id}}">Mon profil</router-link>
+                        </li>
+                        <li class="nav-item dropdown administrationTables" v-if="connected">
                             <router-link class="nav-link dropdown-toggle"  id="dropdown-a" data-toggle="dropdown" to="/Uvar/administration">Administration</router-link>
                             <div class="dropdown-menu" aria-labelledby="dropdown-a">
                                 <router-link class="dropdown-item" to="/Uvar/administration">Acceuil</router-link>
@@ -77,23 +84,83 @@
         },
         
         created(){
-            this.$store.dispatch('getUserMember')
+            this.$store.dispatch('getActiveMember')
+
+            // let li_s = $('#navbars-host li.nav-item')
+            // let active_before = $('#navbars-host li.nav-item.active')
+            // let route = this.$route
+            // active_before.removeClass('active')
+            // if (route.path == '/') {
+            //     $('#navbars-host li.nav-item.homePage').addClass('active')
+            // }
+        },
+        updated(){
+            let li_s = $('#navbars-host li.nav-item')
+            let active_before = $('#navbars-host li.nav-item.active')
+            let route = this.$route
+
+            active_before.removeClass('active')
+            if (route.path == '/') {
+                $('#navbars-host li.nav-item.homePage').addClass('active')
+            }
+            else if (route.name == 'membersProfil' || route.name == 'membersProfilOnAdmin') {
+                $('#navbars-host li.nav-item.memberProfil').addClass('active')
+            }
+            else if (route.path.search('administration') !== -1) {
+               $('#navbars-host li.dropdown.administrationTables').addClass('active') 
+            }
+            else if (route.path.search('boutique') !== -1) {
+               $('#navbars-host li.dropdown.marketsTables').addClass('active') 
+            }
+            console.log()
         },
         
         methods: {
             logoutTask(){
                 return this.logoutShow = !this.logoutShow
-            }
-        },
-        getRouteForTeacher(id){
-            if(id !== null){
-                return {name: 'teachersProfil', id: id}
-            }
-        },
+            },
+            getProfilRouteName(member = undefined){
+                let name
+                let id = 0
+                let route = this.$route.name
+                if (route !== 'membersProfil') {
+                    name = 'membersProfil'
+                }
+                else{
+                    if (member.id == this.$route.params.id) {
 
+                    }
+                    else{
+                        name = 'membersProfilOnAdmin'
+                    }
+                }
+                if (member !== undefined) {
+                    return {name: name, id: member.id}
+                }
+            },
+            getProfilPath(){
+                let directory = ''
+                let image = this.memberPhoto
+                if (image.length > 0) {
+                    let name = image[0].name
+                    directory = name
+                }
+                return directory
+
+            },
+        },
+        
         computed: mapState([
-            'user', 'user_member', 'connected', 'member', 'login', 'active_member'
+            'user', 'connected', 'member', 'login', 'active_member', 'memberPhoto', 'active_member_photo'
         ])
     }
 
 </script>
+<style>
+    img.login-photo{
+        display: ;
+        border-radius: 50%;
+        z-index: 3000;
+
+    }
+</style>

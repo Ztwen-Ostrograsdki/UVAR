@@ -8,14 +8,14 @@
 			<div class="row w-100 mx-auto">
 				<div class="col-12 border my-1 row p-0 m-0" v-for="referee in myReferies">
 					<div class="w-100 mx-auto d-flex justify-content-between p-0">
-						<div class="w-25 p-0 float-left" style="height: 200px !important;">
+						<div class="p-0 float-left" style="height: auto !important; width:30%;">
 							<div class="w-100 p-0 m-0 float-left h-100">
 								<img class="p-0 m-0 float-left w-100 h-100" src="/photo/ph1.jpg">
 							</div>
 						</div>
-						<div class="w-75">
+						<div style="width:70%;">
 							<div class="w-100 mx-auto">
-								<table class="table table-borderless text-white-50 mt-2">
+								<table class="table table-borderless ml-3 text-white-50 mt-2 table-propertises">
                                     <tr>
                                         <td>Nom :</td>
                                         <td> {{ referee.name }} </td>
@@ -226,7 +226,17 @@
         },
 
         computed: mapState([
-            'member', 'connected', 'user', 'user_member', 'myActions', 'myAccount', 'myReferer', 'myReferies', 'myProducts', 'myBonuses', 'memberReady'
+            'member', 'connected', 'user', 'myActions', 'myAccount', 'myReferer', 'myReferies', 'myProducts', 'myBonuses', 'memberReady'
         ])
 	}
 </script>
+<style>
+	.table-propertises table tr td{
+        margin: 2px 0px 2px 0px;
+        padding: 3px 0 3px 0px;
+    }
+
+    .table-propertises table tr{
+        padding: 2px !important;
+    }
+</style>

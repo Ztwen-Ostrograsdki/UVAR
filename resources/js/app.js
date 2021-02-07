@@ -71,7 +71,8 @@ let formulars = Vue.component('formulars', require('./components/Home/Formulars.
 //NOTIFICATIONS
 let notifications = Vue.component('notifications', require('./components/Notifications/Listing.vue').default)
 
-
+//MARKETS
+let actions_shop_default = Vue.component('action-shop-default', require('./components/Market/Actions/Listing.vue').default)
 
 
 //CONFIRMATIONS
@@ -96,6 +97,11 @@ const routes = [
 					path: '/',
 					component: welcomes,
 					name: 'welcomes',
+				},
+				{
+					path: '/boutique/q=actions',
+					component: actions_shop_default,
+					name: 'actions_shop_default',
 				},
 		]
 	},
@@ -154,8 +160,6 @@ const routes = [
 				},
 		]
 	},
-
-	
 ]
 
 

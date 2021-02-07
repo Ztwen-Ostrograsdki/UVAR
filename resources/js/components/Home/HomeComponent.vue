@@ -10,12 +10,12 @@
 	export default {
 		
         created(){
-           this.$store.dispatch('getConnected')
-           this.$store.dispatch('getUserMember')
+            this.$store.dispatch('getConnected')
+            this.$store.dispatch('getActiveMember')
         },
 
         computed: mapState([
-            'login', 'user', 'user_member', 'connected', 'member', 'active_member'
+            'login', 'user', 'connected', 'member', 'active_member', 'active_member_photo'
         ])
 	}
 </script>

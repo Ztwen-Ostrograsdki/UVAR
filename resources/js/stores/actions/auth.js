@@ -9,13 +9,15 @@ const auth_actions = {
 		})
         axios.post('/uvar/systeme/disconnect&user/now')
 			.then(response => {
-				state.commit('LOGOUT')
+				if (response.data.success) {
+					state.commit('LOGOUT')
+					window.location = '/'
+				}
 			})      
 	},
 	login: (state, user) => {
         axios.post('/login/uvar&user&get&auth', user)
 		.then(response => {
-			console.log(response.data)
 			if(response.data.invalids !== undefined){
 				state.commit('RESET_LOGIN_INVALIDS', response.data.invalids)
 				
@@ -34,7 +36,7 @@ const auth_actions = {
 				$('#login').modal('hide')
 				$('body').removeClass('modal-open')
 				$('.modal-backdrop').remove()
-				state.commit('RESET_USER', {connected: true, active_member: response.data.success.active_member, user: response.data.success.user, user_member: response.data.success.user})
+				state.commit('RESET_USER', {connected: true, active_member_photo: response.data.success.active_member_photo, active_member: response.data.success.active_member, user: response.data.success.user, user_member: response.data.success.user})
 			}
 		})
 		.catch(err => {
@@ -51,23 +53,39 @@ const auth_actions = {
 				state.commit('RESET_USER', {connected: false, user: {}})
 			}
 		})
-		.catch(err => {
-			
-		})   
+		.catch(err =>{
+			if (err.response.status == 401) {
+				Swal.fire({
+				  icon: 'warning',
+				  title: "Erreure connexion: Vous n'êtes pas authorisé",
+				  showConfirmButton: false,
+				})
+				window.location = '/'
+			}
+		})     
 	},
-	getUserMember: (state) =>{
+	getActiveMember: (state) =>{
 		axios.post('/uvar/systeme/auth&get&auth&member')
 		.then(response => {
 			if (response.data.user_member !== undefined) {
-				state.commit('RESET_USER_MEMBER', {user_member: response.data.user_member, active_member: response.data.active_member})
+				state.commit('RESET_ACTIVE_MEMBER', 
+					{
+						active_member: response.data.active_member, 
+						active_member_photo: response.data.active_member_photo
+					}
+				)
+				// state.dispatch('getMember', response.data.user_member.id)
 			}
 		})
-		.catch(err => {
-			Swal.fire({
-			  icon: 'warning',
-			  title: 'Echec de connexion au serveur' + err,
-			  showConfirmButton: false,
-			})
+		.catch(err =>{
+			if (err.response.status == 401) {
+				Swal.fire({
+				  icon: 'warning',
+				  title: "Erreure connexion: Vous n'êtes pas authorisé",
+				  showConfirmButton: false,
+				})
+				window.location = '/'
+			}
 		})   
 	},
 	getNotifications: (state) =>{
@@ -77,13 +95,16 @@ const auth_actions = {
 				state.commit('GET_NOTIFICATIONS', response.data.notifications)
 			}
 		})
-		.catch(err => {
-			Swal.fire({
-			  icon: 'warning',
-			  title: 'Echec de connexion au serveur' + err,
-			  showConfirmButton: false,
-			})
-		})   
+		.catch(err =>{
+			if (err.response.status == 401) {
+				Swal.fire({
+				  icon: 'warning',
+				  title: "Erreure connexion: Vous n'êtes pas authorisé",
+				  showConfirmButton: false,
+				})
+				window.location = '/'
+			}
+		})    
 	},
 	manageAffiliation: (state, data) =>{
 		axios.post('/Uvar/administration/affiliations/manage', {
@@ -102,13 +123,16 @@ const auth_actions = {
 				state.dispatch('getMembers')
 			}
 		})
-		.catch(err => {
-			Swal.fire({
-			  icon: 'warning',
-			  title: 'Une erreure est survenue' + err,
-			  showConfirmButton: false,
-			})
-		})   
+		.catch(err =>{
+			if (err.response.status == 401) {
+				Swal.fire({
+				  icon: 'warning',
+				  title: "Erreure connexion: Vous n'êtes pas authorisé",
+				  showConfirmButton: false,
+				})
+				window.location = '/'
+			}
+		})    
 	},
 
 

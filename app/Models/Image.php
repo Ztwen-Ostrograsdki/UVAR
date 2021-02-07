@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Action;
 use App\Models\Member;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,11 @@ class Image extends Model
     public function member()
     {
     	return $this->morphedByMany(Member::class, 'imageable'); 
+    }
+
+    public function action()
+    {
+    	return $this->morphedByMany(Action::class, 'imageable'); 
     }
 
 

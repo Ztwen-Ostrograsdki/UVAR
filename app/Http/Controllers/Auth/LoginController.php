@@ -59,8 +59,9 @@ class LoginController extends Controller
             if ($user) {
                 if ($user->member !== null) {
                     $member = $user->member;
+                    $image = $user->member->images;
                 }
-                return response()->json(['success' => ['user' => $user, 'active_member' => $member]]);
+                return response()->json(['success' => ['user' => $user, 'active_member_photo' => $image, 'active_member' => $member]]);
             }
         }
         else{
@@ -101,10 +102,11 @@ class LoginController extends Controller
         $user = auth()->user();
         if ($user) {
             if ($user->member !== null) {
-                return response()->json(['user_member' => $user->member, 'active_member' => $user->member]);
+                $active_member_photo = $user->member->images;
+                return response()->json(['active_member_photo' => $active_member_photo, 'user_member' => $user->member, 'active_member' => $user->member]);
             }
             else{
-                return response()->json(['user_member' => null, 'active_member' => null]);
+                return response()->json(['user_member' => null, 'active_member_photo' => [], 'active_member' => null]);
             }
         }
     }
@@ -125,12 +127,13 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         if ($response = $this->loggedOut($request)) {
-            return $response;
+            // return $response;
+            return response()->json(['success' => true]);
         }
-
-        return $request->wantsJson()
-            ? new JsonResponse([], 204)
-            : redirect('/');
+        return response()->json(['success' => true]);
+        // return $request->wantsJson()
+        //     ? new JsonResponse([], 204)
+        //     : redirect('/');
     }
 
 

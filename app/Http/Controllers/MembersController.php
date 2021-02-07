@@ -23,6 +23,9 @@ class MembersController extends Controller
      */
     public function index()
     {
+        if (!auth()->user()) {
+            redirect('/');
+        }
         return view('members.index');
     }
 

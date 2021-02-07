@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Image;
 use App\Models\Member;
 use App\Models\ShoppingAction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,15 @@ class Action extends Model
     public function totalBought()
     {
     	return array_sum(ShoppingAction::where('action_id', $this->id)->pluck('total')->toArray());
+    }
+
+    /**
+     * Image profil of the member
+     * @return [type] [description]
+     */
+    public function images()
+    {
+        return $this->morphToMany(Image::class, 'imageable');
     }
 
 

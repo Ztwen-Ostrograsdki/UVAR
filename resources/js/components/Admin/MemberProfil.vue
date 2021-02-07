@@ -13,10 +13,12 @@
                     <div class="m-0 row w-100">
                         <div class="bg-official text-center m-0 p-0 col-sm-12 col-lg-4 row">
                             <div class="d-flex flex-column m-0 p-0 justify-content-start w-100">
-                                <img class="p-0 m-0 float-left w-100" src="/photo/ph4.jpg" style="height: 80%">
+                                <img v-if="memberPhoto.length > 0" class="p-0 m-0 float-left w-100" :src="'/images/'+ getProfilPath()" style="height: 80%">
+                                <img v-if="memberPhoto.length < 1" class="p-0 m-0 float-left w-100" :src="'/assets/images/1.jpg'" style="height: 80%">
                                 <span class="bg-secondary fa-2x m-0 w-100 pt-2" style="height: 20%;">
                                     <span v-if="user.id == member.user_id" data-toggle="modal" data-target="#editMemberData" class="fa fa-edit cursor mx-2" @click="setEditingMember(active_member)"></span>
                                     <span>{{member.name}}</span>
+                                    <span v-if="user.id == member.user_id" data-toggle="modal" data-target="#setMemberImage" class="fa fa-edit text-white cursor mx-2 position-relative" style="top: -200%; "></span>
                                 </span>
                             </div>
                         </div>
@@ -24,36 +26,36 @@
                             <div class="col-12 border-official p-0">
                                 <h5 class="text-center bg-secondary py-3 w-100 mx-auto m-0">Infos personnelles</h5>
                                 <hr class="m-0 p-0">
-                                <table class="table table-borderless text-white-50">
-                                    <tr>
+                                <table class="table table-borderless mx-auto w-90 text-white-50">
+                                    <tr class="py-2 my-2">
                                         <td>Nom :</td>
                                         <td> {{ member.name }} </td>
                                     </tr>
-                                    <tr>
+                                    <tr class="py-2 my-2">
                                         <td>Sexe:</td>
                                         <td>{{ member.sexe == 'female' ? 'Féminin' : 'Masculin'}}</td>
                                     </tr>
-                                    <tr>
+                                    <tr class="py-2 my-2">
                                         <td>Inscrit le:</td>
                                         <td>{{ getCreatedAt(member.created_at) }}</td>
                                     </tr>
-                                     <tr>
+                                     <tr class="py-2 my-2">
                                         <td>Email</td>
                                         <td>{{ member.email }}</td>
                                     </tr>
-                                    <tr>
+                                    <tr class="py-2 my-2">
                                         <td>ID:</td>
                                         <td> {{ member.IDENTIFY }} </td>
                                     </tr>
-                                    <tr>
+                                    <tr class="py-2 my-2">
                                         <td>Pays:</td>
                                         <td>{{ member.country}}</td>
                                     </tr>
-                                    <tr>
+                                    <tr class="py-2 my-2">
                                         <td>No Tél:</td>
                                         <td>{{ member.phone }}</td>
                                     </tr>
-                                    <tr>
+                                    <tr class="py-2 my-2">
                                         <td>Level:</td>
                                         <td>{{ member.level }}</td>
                                     </tr>
@@ -259,6 +261,17 @@
            this.$store.dispatch('getMember', this.$route.params.id)
         },
         methods :{
+            getProfilPath(){
+                let path = ''
+                let image = this.memberPhoto
+                if (image.length > 0) {
+                    let name = image[0].name
+                    path = name
+                }
+
+                return path
+
+            },
             displayProperties(active){
                 this.showProperties = true
                 this.targetTable = active
@@ -370,13 +383,12 @@
             },
             setEditingMember(member){
                 this.$store.commit('RESET_EDITING_MEMBER', member)
-                console.log(this.editingMember)
             }
             
         },
 
         computed: mapState([
-            'member', 'connected', 'user', 'user_member', 'myActions', 'myAccount', 'myReferer', 'myReferies', 'myProducts', 'myBonuses', 'memberReady', 'editingMember', 'active_member'
+            'member', 'connected', 'user', 'user_member', 'myActions', 'myAccount', 'myReferer', 'myReferies', 'myProducts', 'myBonuses', 'memberReady', 'editingMember', 'active_member', 'memberPhoto'
         ])
     }
 </script>
@@ -414,6 +426,15 @@
     }
     .pricing-table.pricing-table-highlighted p i.fa{
         color: #9dc15b !important;
+    }
+
+    .membersProfil table tr td{
+        margin: 2px 0px 2px 0px;
+        padding: 6px 0 6px 0px;
+    }
+
+    .membersProfil table tr{
+        padding: 2px !important;
     }
     
 

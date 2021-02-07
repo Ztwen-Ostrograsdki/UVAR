@@ -15,16 +15,19 @@
                             <div class="d-flex flex-column m-0 p-0 justify-content-start w-100">
                                 <img v-if="memberPhoto.length > 0" class="p-0 m-0 float-left w-100" :src="'/images/'+ getProfilPath()" style="height: 80%">
                                 <img v-if="memberPhoto.length < 1" class="p-0 m-0 float-left w-100" :src="'/assets/images/1.jpg'" style="height: 80%">
-                                <span class="bg-secondary fa-2x m-0 w-100 pt-2" style="height: 20%;">
-                                    <span v-if="user.id == member.user_id" data-toggle="modal" data-target="#editMemberData" class="fa fa-edit cursor mx-2" @click="setEditingMember(active_member)"></span>
-                                    <span>{{member.name}}</span>
-                                    <span v-if="user.id == member.user_id" data-toggle="modal" data-target="#setMemberImage" class="fa fa-edit text-white cursor mx-2 position-relative" style="top: -200%; "></span>
+                                <span class="bg-secondary m-0 w-100 pt-4" style="height: 20%;font-size: 1.2rem">
+                                    <span style="">{{member.name}}</span>
+                                    <span title="Editer ma photo de profil" v-if="user.id == member.user_id" data-toggle="modal" data-target="#setMemberImage" class="fa fa-edit cursor mx-2"></span>
                                 </span>
                             </div>
                         </div>
                         <div class=" col-lg-8 col-sm-12 row m-0 p-0" style="">
                             <div class="col-12 border-official p-0">
-                                <h5 class="text-center bg-secondary py-3 w-100 mx-auto m-0">Infos personnelles</h5>
+                                <h5 class="text-center bg-secondary py-3 w-100 mx-auto m-0">
+                                    <span title="Editer mon profil" v-if="user.id == member.user_id" data-toggle="modal" data-target="#editMemberData" class="fa fa-edit cursor mx-2" @click="setEditingMember(active_member)">
+                                    </span>
+                                    <span>Infos personnelles</span>
+                                </h5>
                                 <hr class="m-0 p-0">
                                 <table class="table table-borderless mx-auto w-90 text-white-50">
                                     <tr class="py-2 my-2">
@@ -388,7 +391,7 @@
         },
 
         computed: mapState([
-            'member', 'connected', 'user', 'user_member', 'myActions', 'myAccount', 'myReferer', 'myReferies', 'myProducts', 'myBonuses', 'memberReady', 'editingMember', 'active_member', 'memberPhoto'
+            'member', 'connected', 'user', 'myActions', 'myAccount', 'myReferer', 'myReferies', 'myProducts', 'myBonuses', 'memberReady', 'editingMember', 'active_member', 'memberPhoto'
         ])
 	}
 </script>

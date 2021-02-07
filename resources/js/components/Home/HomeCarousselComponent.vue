@@ -26,8 +26,10 @@
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <a href="#" class="hover-btn-new ">
                                                 <span>
-                                                    <span class="fa fa-shopping-bag mx-1"></span>
-                                                    <span>A la boutique</span>
+                                                    <router-link class="p-0" :to="{name: 'actions_shop_default'}">
+                                                        <span class="fa fa-shopping-bag mx-1"></span>
+                                                        <span>A la boutique</span>
+                                                    </router-link>
                                                 </span>
                                             </a>
                                     </div>

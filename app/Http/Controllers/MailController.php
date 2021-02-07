@@ -20,8 +20,7 @@ class MailController extends Controller
      */
     public function index()
     {
-        $users = Member::find(1);
-        $user = $users->bonuses();
+        // $users = Member::all()->take(3)->orderBy('id', 'DESC');
         // $products = Product::all()->pluck('id')->toArray();
         //     foreach ($users as $user) {
         //         $ts = array_slice($products, 0, rand(1, 4));
@@ -33,7 +32,7 @@ class MailController extends Controller
         //         ]);
         //         }
         //     }
-        dd($user);
+        dd($users);
         // $mail  = Mail::to('fadyljohaness00@gmail.com')->send(new Gmail());
         // dd($mail);
     }

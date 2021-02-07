@@ -25,7 +25,7 @@
         },
 
         computed: mapState([
-            'action'
+            'action', 'targetAction', 'active_member', 'connected', 'login', 'user'
         ])
 	}
 </script>
