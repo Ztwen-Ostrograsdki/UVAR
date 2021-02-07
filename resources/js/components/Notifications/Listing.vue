@@ -3,7 +3,7 @@
     	<div class="w-95 mx-auto">
             <h3 class="text-white">Les Notifications</h3>
             <div class="mx-auto d-flex justify-content-center px-2 w-75" v-if="notifications.length < 1">
-                <h5 class="alert alert-warning p-2 w-100 ">
+                <h5 class="fa-2x text-center border border-white text-white-50 bg-linear-official-50 p-2 w-100 ">
                     OOops vous n'avez aucune notification
                 </h5>
             </div>

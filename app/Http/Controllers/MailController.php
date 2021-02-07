@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\Gmail;
 use App\Models\Affiliate;
+use App\Models\Member;
 use App\Models\Product;
 use App\Models\Shopping;
 use App\Models\User;
@@ -19,7 +20,8 @@ class MailController extends Controller
      */
     public function index()
     {
-        $users = Affiliate::all();
+        $users = Member::find(1);
+        $user = $users->bonuses();
         // $products = Product::all()->pluck('id')->toArray();
         //     foreach ($users as $user) {
         //         $ts = array_slice($products, 0, rand(1, 4));
@@ -31,7 +33,7 @@ class MailController extends Controller
         //         ]);
         //         }
         //     }
-        dd($users);
+        dd($user);
         // $mail  = Mail::to('fadyljohaness00@gmail.com')->send(new Gmail());
         // dd($mail);
     }

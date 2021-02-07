@@ -46,7 +46,7 @@
         },
         
         created(){
-           this.$store.dispatch('getUserMember')
+           // this.$store.dispatch('getUserMember')
         },
         methods :{
 

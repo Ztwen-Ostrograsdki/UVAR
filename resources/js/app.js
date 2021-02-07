@@ -37,6 +37,8 @@ let users_listing = Vue.component('users-listing', require('./components/users/L
 let members = Vue.component('member-options', require('./components/Members/ProfilOptions.vue').default)
 let members_profil = Vue.component('members-profil', require('./components/Members/MainMemberProfil.vue').default)
 let members_listing = Vue.component('members-listing', require('./components/Members/Listing.vue').default)
+let members_profil_admin = Vue.component('members-profil-admin', require('./components/Admin/MemberProfil.vue').default)
+let members_properties = Vue.component('members-properties', require('./components/Members/Properties.vue').default)
 
 
 //ACTIONS
@@ -59,6 +61,7 @@ let horizontal_home_caroussel = Vue.component('horizontal-home-caroussel', requi
 
 //Formulars
 let edit_member_data = Vue.component('edit-member-data', require('./components/Formulars/Members/EditData.vue').default)
+let edit_member_photo = Vue.component('edit-member-photo', require('./components/Formulars/Members/SetImage.vue').default)
 let affiliation = Vue.component('affiliation', require('./components/Formulars/Members/Affiliations.vue').default)
 let registration = Vue.component('registration', require('./components/Formulars/Users/Registration.vue').default)
 let loginer = Vue.component('loginer', require('./components/Formulars/Connexions/Loginer.vue').default)
@@ -98,6 +101,7 @@ const routes = [
 	},
 	{
 		path: '/Uvar/administration',
+		store,
 		component: main_admin,
 		children: [
 				{
@@ -118,13 +122,15 @@ const routes = [
 				},
 				{
 					path: '/Uvar/administration/tag/membres/:id',
-					component: members_profil,
+					component: members_profil_admin,
 					name: 'membersProfilOnAdmin',
+					store
 				},
 				{
 					path: '/Uvar/membres/:id',
 					component: members_profil,
 					name: 'membersProfil',
+					store
 				},
 				{
 					path: '/Uvar/administration/tag/actions',
@@ -159,6 +165,7 @@ const routes = [
 const router = new VueRouter({mode: 'history', routes})
 new Vue({
 	store,
+	file: '',
 	router: router,
 	el: ".app",
 	components: {

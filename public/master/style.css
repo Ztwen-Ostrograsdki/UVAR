@@ -1453,10 +1453,10 @@ a img.aligncenter {
 
 
 .pricing-table:hover {
-	transform: scale(1.05,1.06);
-	-webkit-transform: scale(1.05,1.06);
-	-moz-transform: scale(1.05,1.06);
-	-o-transform: scale(1.05,1.06);
+	transform: scale(1.01);
+	-webkit-transform: scale(1.01);
+	-moz-transform: scale(1.01);
+	-o-transform: scale(1.01);
 	transition: 0.5s all ease;
 	-webkit-transition: 0.5s all ease;
 	-moz-transition: 0.5s all ease;

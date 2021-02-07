@@ -10,10 +10,10 @@
                 </a>
                   <!-- Dropdown - User Information -->
                 <div class="w-100 border p-2">
-                        <a class="w-100 my-1 d-inline-block link-float" href="" style="border-radius: 30px;">
-                            <i class="fas fa-cogs fa-sm fa-fw mr-2"></i>
-                            Editer mon profil
-                        </a>
+                        <router-link style="border-radius: 30px;" v-if="connected && active_member !== null && active_member !== undefined" :to="{name: 'membersProfil', params: {id: active_member.id}}"   class="w-100 my-1 d-inline-block link-float" >
+                            <i  class="fas fa-user fa-sm fa-fw mr-2"></i>
+                            Mon profil
+                        </router-link>
                         <a class="w-100 my-1 d-inline-block link-float" data-toggle="modal" data-target="#affiliations" href="" style="border-radius: 30px;">
                             <i class="fa fa-line-chart fa-sm fa-fw mr-2"></i>
                             Affilier un membre
@@ -66,7 +66,7 @@
         },
 
         computed: mapState([
-            
+            'user', 'connected', 'member', 'user_member', 'active_member'
         ])
 	}
 </script>

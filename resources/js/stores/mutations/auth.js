@@ -16,7 +16,7 @@ const auth_mutations = {
     GET_NOTIFICATIONS: (state, data) =>{
         state.notifications = data
     },
-    LOGOUT: (state, msg) => {
+    LOGOUT: (state) => {
         state.user = {}
         state.connected = false
     },

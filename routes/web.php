@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AffiliationsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\MembersController;
 use App\Http\Controllers\ProductController;
@@ -44,6 +45,7 @@ Route::group(['prefix' => 'Uvar'], function() {
     Route::post('/systeme/notify&system', [AffiliationsController::class, 'getNotifications']);
     Route::post('/administration/affiliations/manage', [AffiliationsController::class, 'manageAffiliation']);
     Route::get('/administration/tag/notifications', [AffiliationsController::class, 'index']);
+    Route::put('/administration/update/images/membres/{id}', [ImagesController::class, 'forMember']);
 
 });
 

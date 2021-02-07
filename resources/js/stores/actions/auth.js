@@ -9,12 +9,13 @@ const auth_actions = {
 		})
         axios.post('/uvar/systeme/disconnect&user/now')
 			.then(response => {
-				state.commit('LOGOUT', response.data)
+				state.commit('LOGOUT')
 			})      
 	},
 	login: (state, user) => {
         axios.post('/login/uvar&user&get&auth', user)
 		.then(response => {
+			console.log(response.data)
 			if(response.data.invalids !== undefined){
 				state.commit('RESET_LOGIN_INVALIDS', response.data.invalids)
 				
@@ -33,7 +34,7 @@ const auth_actions = {
 				$('#login').modal('hide')
 				$('body').removeClass('modal-open')
 				$('.modal-backdrop').remove()
-				state.commit('RESET_USER', {connected: true, active_member: response.data.active_member, user: response.data.success.user, user_member: response.data.success.user})
+				state.commit('RESET_USER', {connected: true, active_member: response.data.success.active_member, user: response.data.success.user, user_member: response.data.success.user})
 			}
 		})
 		.catch(err => {

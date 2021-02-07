@@ -9,17 +9,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
+
     use HasFactory;
 
+    protected $fillable = ['name'];
 
     public function product()
     {
-    	return $this->morphedByMany(Product::class, 'imageables'); 
+    	return $this->morphedByMany(Product::class, 'imageable'); 
     }
 
     public function member()
     {
-    	return $this->morphedByMany(Member::class, 'imageables'); 
+    	return $this->morphedByMany(Member::class, 'imageable'); 
     }
 
 

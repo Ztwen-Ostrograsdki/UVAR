@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use App\Models\ShoppingAction;
+use App\Models\User;
+use App\Traits\Validators\MembersValidators;
 use Illuminate\Http\Request;
 
 class MembersController extends Controller
 {
+    use MembersValidators;
 
     public function __construct()
     {
@@ -37,8 +40,11 @@ class MembersController extends Controller
         $account = $member->account();
         $referer = $member->referer();
         $products = $member->shopping();
+        $referies = $member->referies();
+        $bonuses = $member->bonuses();
+        $image = $member->images;
 
-        return response()->json(['member' => $member, 'myActions' => $actions, 'myAccount' => $account, 'myReferer' => $referer, 'myProducts' => $products]);
+        return response()->json(['member' => $member, 'myActions' => $actions, 'myAccount' => $account, 'myReferer' => $referer, 'myProducts' => $products, 'myReferies' => $referies, 'myBonuses' => $bonuses, 'myImage' => $image]);
     }
 
     public function getMemberProfil(int $id)
@@ -101,6 +107,38 @@ class MembersController extends Controller
     public function update(Request $request, $id)
     {
         
+       $member = Member::find($id);
+       $user = User::find($member->user_id);
+
+       $name = $request->name;
+       $phone = $request->phone;
+       $existed_name = Member::where('name', $name)->first();
+       $existed_phone = Member::where('phone', $phone)->first();
+
+       if ($existed_phone !== null && $existed_phone->id == $id && $existed_name !== null && $existed_name->id == $id) {
+           $validators = null;
+       }
+       else{
+            if ($existed_name !== null && $existed_name->id == $id) {
+               $validators = $this->EditMemberValidator($request->all(), 'name');
+           }
+           elseif ($existed_phone !== null && $existed_phone->id == $id) {
+               $validators = $this->EditMemberValidator($request->all(), 'phone');
+           }
+           else{
+                $validators = $this->EditMemberValidator($request->all());
+           }
+       }
+
+       if ($validators !== null && $validators->fails()) {
+           return response()->json(['errors' => $validators->errors()]);
+       }
+       else{
+            $member->update(['name' => $request->name, 'phone' => $request->phone, 'sexe' => $request->sexe, 'country' => $request->country]);
+            $user->update(['name' => $request->name]);
+            return response()->json(['success' => "Mise à jour des informations réussie"]);
+       }
+
     }
 
     public function changeEmail(Request $request)

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Account;
 use App\Models\Action;
+use App\Models\Bonus;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\ShoppingAction;
@@ -17,7 +18,7 @@ class Member extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['level', 'amount', 'referer', 'country', 'sexe', 'AR-coin', 'phone', 'pseudo', 'IDENTIFY'];
+    protected $fillable = ['level', 'name', 'amount', 'referer', 'country', 'sexe', 'AR-coin', 'phone', 'pseudo', 'IDENTIFY'];
 
 
     /**
@@ -29,13 +30,20 @@ class Member extends Model
     	return Member::withTrashed('deleted_at')->whereId($this->referer)->first();
     }
 
+
+    public function bonuses()
+    {
+        $bonuses = Bonus::where('beneficier', $this->id)->get();
+        return $bonuses;
+    }
+
     /**
      * Image profil of the member
      * @return [type] [description]
      */
     public function images()
     {
-        return $this->ManyToMany(Image::class);
+        return $this->morphToMany(Image::class, 'imageable');
     }
 
     /**
@@ -44,8 +52,7 @@ class Member extends Model
      */
     public function referies()
     {
-    	return Member::withTrashed('deleted_at')->where('referer', $this->id)->get();
-
+    	return Member::withTrashed('deleted_at')->where('referer', $this->id)->latest()->get();
     }
 
 
@@ -71,7 +78,8 @@ class Member extends Model
                 $action = Action::find($shop->action_id);
                 $actions[$shop->action_id] = [
                     'action' => $action,
-                    'total' => $shop->total
+                    'total' => $shop->total,
+                    'shop' => $shop
                 ];
                 $totalPrices += ($shop->total)*($action->price);
                 $totalActions += ($shop->total);
@@ -116,7 +124,8 @@ class Member extends Model
                 $price = $total*$p->price;
                 $shoppings[$p->id] = [
                     'total' => $total,
-                    'product' => $p
+                    'shop' => $product,
+                    'product' => $p,
                 ];
 
                 $totalProducts += $total;

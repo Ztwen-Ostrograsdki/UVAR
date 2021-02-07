@@ -2,7 +2,9 @@
 	<div class="w-100 p-0 m-0">
 		<registred></registred>
 		<confirm-registration></confirm-registration>
-		<affiliation></affiliation>
+        <affiliation></affiliation>
+        <edit-member-data></edit-member-data>
+		<edit-member-photo></edit-member-photo>
             
 	</div>
 </template>

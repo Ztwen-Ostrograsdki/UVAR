@@ -9,7 +9,7 @@
         <div class="carousel-inner" style="height: 580px" role="listbox">
 
             <div class="carousel-item active">
-                <div id="home" class="first-section" style="background-image:url('master/images/slider-01.jpg');">
+                <div id="home" class="first-section" style="background-image:url('master/images/uvar-font.jpg');">
                     <div class="dtab">
                         <div class="container">
                             <div class="row">
