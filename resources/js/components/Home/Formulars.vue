@@ -5,6 +5,7 @@
         <affiliation></affiliation>
         <edit-member-data></edit-member-data>
 		<edit-member-photo></edit-member-photo>
+        <edit-action></edit-action>
             
 	</div>
 </template>

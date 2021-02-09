@@ -1,5 +1,7 @@
 const uvar_action_s = {
-	targetAction: {},
+	targetedAction: {},
+	editingAction: {},
+	invalidsEditAction: {},
 	action: {},
 	allActions: [],
 	actions: [],

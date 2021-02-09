@@ -67,9 +67,11 @@ let registration = Vue.component('registration', require('./components/Formulars
 let loginer = Vue.component('loginer', require('./components/Formulars/Connexions/Loginer.vue').default)
 let registred = Vue.component('registred', require('./components/Formulars/Users/RegistredComponent.vue').default)
 let formulars = Vue.component('formulars', require('./components/Home/Formulars.vue').default)
+let edit_action = Vue.component('edit-action', require('./components/Formulars/Actions/EditAction.vue').default)
 
 //NOTIFICATIONS
 let notifications = Vue.component('notifications', require('./components/Notifications/Listing.vue').default)
+let requests = Vue.component('requests', require('./components/Notifications/Requests.vue').default)
 
 //MARKETS
 let actions_shop_default = Vue.component('action-shop-default', require('./components/Market/Actions/Listing.vue').default)
@@ -91,6 +93,7 @@ const routes = [
 	
 	{
 		path: '/',
+		store,
 		component: home_page,
 		children: [
 				{
@@ -157,6 +160,11 @@ const routes = [
 					path: '/Uvar/administration/tag/notifications',
 					component: notifications,
 					name: 'notifications',
+				},
+				{
+					path: '/Uvar/administration/tag/demandes',
+					component: requests,
+					name: 'requests',
 				},
 		]
 	},

@@ -16,10 +16,10 @@
                 </div>
             </div><!-- end title -->
         
-            <div v-for="action in allActions" class="row align-items-center mx-auto border-official px-0 pl-2" style="width: 98%">
+            <div v-for="action in allActionsOnlyAPart" class="row align-items-center mx-auto border-official px-0 pl-2" style="width: 98%">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 m-0 p-0">
                     <div class="message-box">
-                        <h4>{{ getCreatedAt(action.action.created_at) }}</h4>
+                        <h4> 22 Janvier 2021</h4>
                         <h2>{{ action.action.name }}</h2>
                         <p>
                             {{ action.action.description }}
@@ -53,7 +53,7 @@
             this.$store.dispatch('getAllActionsOnlyAPart')
         },
         methods :{
-            getCreatedAt(created_at){
+            getCreatedAtOf(created_at){
                 if (created_at !== null) {
                     let date = created_at
                         let parts = (date.split("-"))
@@ -73,10 +73,6 @@
                     return "inconnue"
                 }
 
-            },
-            getLeveler(level){
-                level = level.replace('-', '_')
-                return this.levels[level]
             },
             getPrice(price){
                 let solde = Number(price)

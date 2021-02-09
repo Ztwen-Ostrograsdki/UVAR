@@ -35,7 +35,7 @@ class CreateMembersTable extends Migration
                   ->onUpdate('cascade');
             $table->float('amount')->nullable();
             $table->float('AR-coin')->nullable();
-            $table->enum('level', ['beginner', 'level-1', 'level-2', 'level-3', 'level-4'])->default('beginner');
+            $table->enum('level', ['beginner', 'level-1', 'level-2', 'level-3', 'level-4'])->default('level-1');
 
         });
     }

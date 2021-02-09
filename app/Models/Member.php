@@ -18,7 +18,7 @@ class Member extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['level', 'name', 'amount', 'referer', 'country', 'sexe', 'AR-coin', 'phone', 'pseudo', 'IDENTIFY'];
+    protected $fillable = ['level', 'name', 'amount', 'referer', 'country', 'sexe', 'AR-coin', 'phone', 'pseudo', 'IDENTIFY', 'role'];
 
 
     /**

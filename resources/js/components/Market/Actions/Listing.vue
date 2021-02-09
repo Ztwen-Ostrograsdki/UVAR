@@ -1,3 +1,4 @@
+
 <template>
 	<div class="w-100 mx-auto d-flex justify-content-center flex-column">
 		<div class="w-95 mx-auto oneProperty mt-2">
@@ -17,7 +18,8 @@
 					<div class="w-100 mx-auto d-flex justify-content-between p-0">
 						<div class="w-25 p-0 float-left" style="height: auto !important;">
 							<div class="w-100 p-0 m-0 float-left h-100">
-								<img class="p-0 m-0 float-left w-100 h-100" src="/photo/ph2.jpg">
+                                <img v-if="action.images.length < 1" class="p-0 m-0 float-left w-100 h-100" src="/photo/ph2.jpg">
+								<img v-if="action.images.length > 0" class="p-0 m-0 float-left w-100 h-100" :src="'/images/'+ getProfilPath(action.images)">
 							</div>
 						</div>
 						<div class="w-75">
@@ -29,7 +31,7 @@
 											<span class="text-secondary">{{ getPrice(action.action.price).toFrancs }}</span>
 											<span class="text-official">||</span>
 											<span class="text-warning">{{ getPrice(action.action.price).toAr }}</span>
-											<span class="m-0 float-right mr-2 btn btn-primary border-official">Acheter cette action</span>
+											<span @click="buyAction(action.action, active_member)" class="m-0 float-right mr-2 btn btn-primary border-official">Acheter cette action</span>
 										</h4>
 										<p class="m-0 p-0 mt-1 w-100 float-right text-warning">
 											Cette action n'est plus disponible sur le marché
@@ -43,9 +45,12 @@
 										<span class="d-inline-block ml-2 text-white-50 float-left text-secondary">
 											Mise sur le marché dépuis le : {{  getCreatedAt(action.action.created_at) }}
 										</span>
-										<span class="d-inline-block text-white-50 float-right text-white-50">
-											Actionnaire : {{ action.action.actionnary == null ? 'UVAR' : action.action.actionnary }}
-										</span>
+										<span class="float-right mr-2">
+                                            <span v-if="user.role == 'admin'" style="font-size: 19px;" data-toggle="modal" data-target="#editActionData" @click="setEditingAction(action.action)" class="d-inline-block text-white-50 float-right mx-2 cursor text-white-50 fa fa-edit"></span>
+                                            <span class="d-inline-block text-white-50 float-right text-white-50">
+                                             Actionnaire : {{ action.action.actionnary == null ? 'UVAR' : action.action.actionnary }}
+                                            </span>
+                                        </span>
 									</div>
 								</div>                                    
 							</div>
@@ -59,6 +64,7 @@
 
 <script>
 	import { mapState } from 'vuex'
+    import Swal from 'sweetalert2'
 	export default {
 		props : [],
         data() {
@@ -66,6 +72,7 @@
             	options : false,
                 actions : true,
                 shop : true,
+                total: 0,
                 referies : true,
                 selfMonths : [
                     "Janvier",
@@ -90,6 +97,63 @@
         	this.$store.dispatch('getAllActions')
         },
         methods :{
+
+            buyAction(action, member){
+                let token = this.token
+                this.total = 0
+                Swal.fire({
+                    title: "Achat de l'action " + action.name,
+                    input: 'text',
+                    className: 'bg-official',
+                    inputAttributes: {
+                        autocapitalize: 'off',
+                        placeholder: "Veuillez renseiller la quantité d'actions"
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Acheter',
+                    cancelButtonText: 'Annuler',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (total) => {
+                        this.total = total
+                        return fetch('/Uvar/administration/boutique/action/q=achat/a='+ action.id + '/m=' + member.id + '/t=' + total,{
+                                method: 'PUT',
+                                headers: {
+                                    'X-CSRF-TOKEN': token,
+                                },
+                            })
+                            .then(response => {
+                            if (!response.ok) {
+                              throw new Error(response.statusText)
+                            }
+                            // return response.json()
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(
+                              `Request failed: ${error}`
+                            )
+                        })
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                })
+                .then((response) => {
+                    if (response.isConfirmed) {
+                        this.$store.dispatch('getMember', member.id)
+                        this.$store.dispatch('getRequests')
+                        Swal.fire({
+                            icon: 'success',
+                            text: "Opération réussie! Pour entrer en Possession des actions veuillez faire un dépot de " + (Number(this.total) * action.price) + " FCFA sur le numero de la plateforme.",
+                            showConfirmButton: true,
+                        })
+                    }
+                    else if (response.data.errors !== undefined) {
+                        Swal.fire({
+                            icon: 'errors',
+                            title: response.data.errors,
+                            showConfirmButton: false,
+                        })
+                    }
+                })
+            },
         	getCreatedAt(created_at){
                 if (created_at !== null) {
                     let date = created_at
@@ -111,6 +175,16 @@
                 }
 
             },
+            getProfilPath(images){
+                let path = ''
+                if (images.length > 0) {
+                    let name = images[0].name
+                    path = name
+                }
+
+                return path
+
+            },
             getLeveler(level){
                 level = level.replace('-', '_')
                 return this.levels[level]
@@ -124,11 +198,15 @@
                 ar = Number.parseFloat(price/1000).toFixed(2)
                 return ar
             },
+            setEditingAction(action){
+                this.$store.commit('RESET_TARGETED_ACTION', action)
+                this.$store.commit('RESET_EDITING_ACTION', action)
+            }
             
         },
 
         computed: mapState([
-            'member', 'connected', 'user', 'myActions', 'myAccount', 'myBonuses', 'memberReady', 'targetAction', 'allActions'
+            'member', 'connected', 'user', 'myActions', 'myAccount', 'myBonuses', 'memberReady', 'targetedAction', 'allActions', 'editingAction', 'active_member', 'token'
         ])
 	}
 </script>

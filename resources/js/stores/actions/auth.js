@@ -36,7 +36,7 @@ const auth_actions = {
 				$('#login').modal('hide')
 				$('body').removeClass('modal-open')
 				$('.modal-backdrop').remove()
-				state.commit('RESET_USER', {connected: true, active_member_photo: response.data.success.active_member_photo, active_member: response.data.success.active_member, user: response.data.success.user, user_member: response.data.success.user})
+				state.commit('RESET_USER', {token: response.data.success.token, connected: true, active_member_photo: response.data.success.active_member_photo, active_member: response.data.success.active_member, user: response.data.success.user, user_member: response.data.success.user})
 			}
 		})
 		.catch(err => {
@@ -47,7 +47,7 @@ const auth_actions = {
 		axios.post('/uvar/systeme/get&auth&user')
 		.then(response => {
 			if (response.data.success !== undefined) {
-				state.commit('RESET_USER', {connected: true, user: response.data.success})
+				state.commit('RESET_USER', {connected: true, user: response.data.success, token: response.data.success.token})
 			}
 			else if (response.data.disconnected !== undefined) {
 				state.commit('RESET_USER', {connected: false, user: {}})
@@ -71,7 +71,8 @@ const auth_actions = {
 				state.commit('RESET_ACTIVE_MEMBER', 
 					{
 						active_member: response.data.active_member, 
-						active_member_photo: response.data.active_member_photo
+						active_member_photo: response.data.active_member_photo,
+						token: response.data.token,
 					}
 				)
 				// state.dispatch('getMember', response.data.user_member.id)
@@ -93,6 +94,54 @@ const auth_actions = {
 		.then(response => {
 			if (response.data.notifications !== undefined) {
 				state.commit('GET_NOTIFICATIONS', response.data.notifications)
+			}
+		})
+		.catch(err =>{
+			if (err.response.status == 401) {
+				Swal.fire({
+				  icon: 'warning',
+				  title: "Erreure connexion: Vous n'êtes pas authorisé",
+				  showConfirmButton: false,
+				})
+				window.location = '/'
+			}
+		})    
+	},
+	getRequests: (state) =>{
+		axios.post('/Uvar/systeme/requests/fecth&them')
+		.then(response => {
+			if (response.data.requests !== undefined) {
+				state.commit('GET_REQUESTS', response.data.requests)
+			}
+		})
+		.catch(err =>{
+			if (err.response.status == 401) {
+				Swal.fire({
+				  icon: 'warning',
+				  title: "Erreure connexion: Vous n'êtes pas authorisé",
+				  showConfirmButton: false,
+				})
+				window.location = '/'
+			}
+		})    
+	},
+	manageRequest: (state, data) =>{
+		axios.post('/Uvar/administration/requests/manage', {
+			status: data.status,
+			target: data.target,
+			demander: data.demander,
+			type: data.type,
+		})
+		.then(response => {
+			if (response.data.requests !== undefined) {
+				Swal.fire({
+				  icon: 'success',
+				  title: 'Opération réussie avec succès',
+				  showConfirmButton: false,
+				  timer: 2000
+				})
+				state.commit('GET_REQUESTS', response.data.requests)
+				state.dispatch('getMembers')
 			}
 		})
 		.catch(err =>{

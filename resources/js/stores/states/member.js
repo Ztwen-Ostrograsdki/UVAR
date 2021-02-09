@@ -1,5 +1,5 @@
 const member_s = {
-	member: {},
+	member: {id: '', name: ''},
 	myAccount: {},
 	myReferer: {},
 	members: [],

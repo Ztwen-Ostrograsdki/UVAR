@@ -26,16 +26,14 @@
                         <li class="nav-item active homePage">
                             <router-link class="nav-link" to="/">Acceuil</router-link>
                         </li>
-                        <li class="nav-item dropdown marketsTables">
+                        <li class="nav-item dropdown marketsTables" v-if="connected">
                             <router-link class="nav-link dropdown-toggle"  id="dropdown-a" data-toggle="dropdown" to="/">Le Marché</router-link>
                             <div class="dropdown-menu" aria-labelledby="dropdown-a">
                                 <router-link class="dropdown-item" :to="{name: 'actions_shop_default'}">Les actions</router-link>
-                                <router-link class="dropdown-item" :to="{name: 'actionsListing'}"> Les Produits</router-link>
+                                <router-link class="dropdown-item" :to="{name: 'actionsListing'}"> Les Articles</router-link>
                             </div>
                         </li>
-                        <li class="nav-item memberProfil" v-if="connected">
-                            <router-link class="nav-link" :to="{name: getProfilRouteName(active_member).name, params: {id: getProfilRouteName(active_member).id}}">Mon profil</router-link>
-                        </li>
+                        
                         <li class="nav-item dropdown administrationTables" v-if="connected">
                             <router-link class="nav-link dropdown-toggle"  id="dropdown-a" data-toggle="dropdown" to="/Uvar/administration">Administration</router-link>
                             <div class="dropdown-menu" aria-labelledby="dropdown-a">
@@ -80,20 +78,14 @@
         data() {
             return {
                 logoutShow: false,
+                timer: 0
             }   
         },
         
         created(){
             this.$store.dispatch('getActiveMember')
-
-            // let li_s = $('#navbars-host li.nav-item')
-            // let active_before = $('#navbars-host li.nav-item.active')
-            // let route = this.$route
-            // active_before.removeClass('active')
-            // if (route.path == '/') {
-            //     $('#navbars-host li.nav-item.homePage').addClass('active')
-            // }
         },
+
         updated(){
             let li_s = $('#navbars-host li.nav-item')
             let active_before = $('#navbars-host li.nav-item.active')
@@ -112,12 +104,14 @@
             else if (route.path.search('boutique') !== -1) {
                $('#navbars-host li.dropdown.marketsTables').addClass('active') 
             }
-            console.log()
         },
         
         methods: {
             logoutTask(){
                 return this.logoutShow = !this.logoutShow
+            },
+            clicked(){
+                this.timer += this.timer
             },
             getProfilRouteName(member = undefined){
                 let name

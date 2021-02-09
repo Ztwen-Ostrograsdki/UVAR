@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAffiliatesTable extends Migration
+class CreateRequestedProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,18 @@ class CreateAffiliatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('affiliates', function (Blueprint $table) {
+        Schema::create('requested_products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->unsignedBigInteger('referer_id');
-            $table->foreign('referer_id')
+            $table->unsignedBigInteger('total');
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')
                   ->references('id')
-                  ->on('members')
+                  ->on('products')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->unsignedBigInteger('referee_id');
-            $table->foreign('referee_id')
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
                   ->onDelete('cascade')
@@ -38,6 +39,6 @@ class CreateAffiliatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('affiliates');
+        Schema::dropIfExists('requested_products');
     }
 }

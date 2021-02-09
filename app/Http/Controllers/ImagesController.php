@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ModelsHelpers\ImageStores\Storer;
 use App\Models\Image;
 use App\Models\Member;
 use Illuminate\Http\Request;
@@ -19,45 +20,13 @@ class ImagesController extends Controller
 	 */
     public function forMember(Request $request, int $id)
     {
-        $path = null;
-        $member = Member::find($id);
-        $oldsImages = $member->images;
-
-        $parts = explode(',', $request->image);
-        $decoded = base64_decode($parts[1], true);
-        $extention = (explode('/', mb_substr($parts[0], 0, strpos($parts[0], ';'))))[1];
-        $name = getdate()['year'].''.getdate()['mon'].''.getdate()['hours'].''.getdate()['minutes'].''.getdate()['seconds']. '' .  Str::random(20) . '.' . $extention;
-
-        if (count($oldsImages) > 0) {
-            foreach ($oldsImages as $img) {
-                $member->images()->detach($img->id);
-                $local = Storage::delete($img->name);
-                if ($local) {
-                    $del_db = $img->delete();
-                    if ($del_db) {
-                        $stored = Storage::disk('images')->put($name, $decoded);
-                        if ($stored) {
-                            $intoDB = Image::create(['name' => $name]);
-                            if ($intoDB) {
-                                $member->images()->attach($intoDB->id);
-                                return response()->json(['success' => "Mise à jour du profil réussie"]);
-                            }
-                        }
-                    }
-                }
-            }
+        $storer = (new Storer($request->image, $id))->__MEMBER_STORER();
+        if ($storer) {
+            return response()->json(['success' => "Mise à jour réussie"]);
         }
         else{
-            $stored = Storage::disk('images')->put($name, $decoded);
-            if ($stored) {
-                $intoDB = Image::create(['name' => $name]);
-                if ($intoDB) {
-                    $member->images()->attach($intoDB->id);
-                    return response()->json(['success' => "Mise à jour du profil réussie"]);
-                }
-            }
+            return response()->json(['errors' => "Echec de mise à jour"]);
         }
-        
     }
 
 

@@ -30,6 +30,7 @@ return [
     ],
     'boolean'              => 'Le champ :attribute doit être vrai ou faux.',
     'confirmed'            => 'Le champ de confirmation :attribute ne correspond pas.',
+    'price'            => 'Le champ de :attribute ne correspond pas.',
     'date'                 => "Le champ :attribute n'est pas une date valide.",
     'date_format'          => 'Le champ :attribute ne correspond pas au format :format.',
     'different'            => 'Les champs :attribute et :other doivent être différents.',
@@ -86,6 +87,7 @@ return [
         'file'    => 'La taille du fichier de :attribute doit être supérieure à :min kilo-octets.',
         'string'  => 'Le texte doit contenir au moins :min caractères.',
         'array'   => 'Le tableau :attribute doit contenir au moins :min éléments.',
+        // 'price'   => 'Le prix doit être au moins supérieur à :min FCFA.',
     ],
     'not_in'               => "Le champ :attribute sélectionné n'est pas valide.",
     'not_regex'            => "Le format du champ :attribute n'est pas valide.",
@@ -111,6 +113,7 @@ return [
     'unique'               => 'Cette valeur est déjà utilisée.',
     'uploaded'             => "Le fichier du champ :attribute n'a pu être téléversé.",
     'url'                  => "Le format de l'URL de :attribute n'est pas valide.",
+    'price'                  => "Le format de :attribute doit être un prix valide.",
 
     /*
     |--------------------------------------------------------------------------
@@ -170,5 +173,6 @@ return [
         'time'                  => 'heure',
         'available'             => 'disponible',
         'size'                  => 'taille',
+        // 'price'                  => 'prix',
     ],
 ];

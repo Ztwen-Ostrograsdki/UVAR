@@ -167,6 +167,7 @@
            this.$store.dispatch('getProducts')
            this.$store.dispatch('getCategories')
            this.$store.dispatch('getNotifications')
+           this.$store.dispatch('getRequests')
 
         },
         methods :{
@@ -201,7 +202,7 @@
         },
 
         computed: mapState([
-            'users', 'members', 'notifications', 'actions', 'products', 'categories', 'totalBoughtByAction', 'active_member', 'active_member_photo'
+            'users', 'members', 'notifications', 'actions', 'products', 'categories', 'totalBoughtByAction', 'active_member', 'active_member_photo', 'requests'
         ])
 	}
 </script>

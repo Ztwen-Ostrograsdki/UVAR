@@ -16,6 +16,13 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        $user = auth()->user();
+        if ($user && $user->role == 'admin') {
+            return $next($request);
+        }
+        else{
+            return abort(403, "Vous n'etes pas autorisé");
+        }
+        
     }
 }

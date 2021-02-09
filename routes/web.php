@@ -10,6 +10,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\MembersController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,8 @@ Route::get('/', function () {
 Route::group(['prefix' => 'Uvar'], function() {
     Route::resource('administration', AdminController::class);
     Route::resource('administration/tag/membres', MembersController::class);
+    Route::resource('administration/tag/demandes', RequestsController::class);
+    Route::post('/systeme/requests/fecth&them', [RequestsController::class, 'getRequests']);
     Route::get('/membres/{id}',[ MembersController::class, 'index']);
     Route::resource('administration/tag/utilisateur', UsersController::class);
     Route::resource('administration/tag/produits', ProductController::class);
@@ -47,6 +50,8 @@ Route::group(['prefix' => 'Uvar'], function() {
     Route::post('/administration/affiliations/manage', [AffiliationsController::class, 'manageAffiliation']);
     Route::get('/administration/tag/notifications', [AffiliationsController::class, 'index']);
     Route::put('/administration/update/images/membres/{id}', [ImagesController::class, 'forMember']);
+    Route::put('/administration/boutique/action/q=achat/a={action}/m={member}/t={total}', [MarketController::class, 'buyAction']);
+
 
 });
 
@@ -54,6 +59,11 @@ Route::group(['prefix' => 'boutique'], function(){
     Route::get('q=actions', [MarketController::class, 'index']);
     Route::post('q=actions', [MarketController::class, 'getAllActions']);
     Route::post('q=actions/length', [MarketController::class, 'getAllActionsOnlyAPart']);
+
+    Route::get('q=articles', [MarketController::class, 'index']);
+    Route::post('q=articles', [MarketController::class, 'getAllProducts']);
+    // Route::post('q=articles/length', [MarketController::class, 'getAllActionsOnlyAPart']);
+
 });
 
 Route::get('/profil', function () {

@@ -42,6 +42,8 @@ class LoginController extends Controller
     public function login(Request $request)
     {
 
+        $token = csrf_token();
+
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
@@ -61,7 +63,7 @@ class LoginController extends Controller
                     $member = $user->member;
                     $image = $user->member->images;
                 }
-                return response()->json(['success' => ['user' => $user, 'active_member_photo' => $image, 'active_member' => $member]]);
+                return response()->json(['success' => ['user' => $user, 'token' => $token, 'active_member_photo' => $image, 'active_member' => $member]]);
             }
         }
         else{
@@ -88,8 +90,9 @@ class LoginController extends Controller
     public function getConnected()
     {
         $user = auth()->user();
+        $token = csrf_token();
         if ($user !== null) {
-            return response()->json(['success' => $user]);
+            return response()->json(['success' => $user, 'token' => $token]);
         }
         else{
             return response()->json(['disconnected' => true]);
@@ -100,13 +103,14 @@ class LoginController extends Controller
     public function getUserMember()
     {
         $user = auth()->user();
+        $token = csrf_token();
         if ($user) {
             if ($user->member !== null) {
                 $active_member_photo = $user->member->images;
-                return response()->json(['active_member_photo' => $active_member_photo, 'user_member' => $user->member, 'active_member' => $user->member]);
+                return response()->json(['active_member_photo' => $active_member_photo, 'user_member' => $user->member, 'active_member' => $user->member,  'token' => $token]);
             }
             else{
-                return response()->json(['user_member' => null, 'active_member_photo' => [], 'active_member' => null]);
+                return response()->json(['user_member' => null,  'token' => $token, 'active_member_photo' => [], 'active_member' => null]);
             }
         }
     }

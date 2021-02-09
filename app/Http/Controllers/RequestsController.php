@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\Gmail;
-use App\Models\Affiliate;
+use App\Models\Action;
 use App\Models\Member;
 use App\Models\Product;
-use App\Models\Shopping;
-use App\Models\User;
+use App\Models\RequestedAction;
+use App\Models\RequestedProducts;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 
-class MailController extends Controller
+class RequestsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('admin');
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -20,22 +27,42 @@ class MailController extends Controller
      */
     public function index()
     {
-        $to = csrf_token();
-        // $users = Member::all()->take(3)->orderBy('id', 'DESC');
-        // $products = Product::all()->pluck('id')->toArray();
-        //     foreach ($users as $user) {
-        //         $ts = array_slice($products, 0, rand(1, 4));
-        //         foreach ($ts as $t) {
-        //             Shopping::create([
-        //             "user_id" => $user->id,
-        //             "product_id" => $t,
-        //             "total" => rand(1, 10)
-        //         ]);
-        //         }
-        //     }
-        dd($to);
-        // $mail  = Mail::to('fadyljohaness00@gmail.com')->send(new Gmail());
-        // dd($mail);
+        return view('requests.index');
+    }
+
+
+    public function getRequests()
+    {
+        $actionsRequests = RequestedAction::all();
+        $productsRequests = RequestedProducts::all();
+
+        $requests = [];
+
+        foreach ($actionsRequests as $act_req) {
+            $member = Member::find($act_req->member_id);
+            $action = Action::find($act_req->action_id);
+
+            $requests[] = 
+                [
+                    'member' => $member,
+                    'action' => $action,
+                    'request' => $act_req,
+                    'type' => 'action',
+                ];
+        }
+
+        foreach ($productsRequests as $pr_req) {
+            $member = Member::find($pr_req->member_id);
+            $product = Product::find($pr_req->product_id);
+            $requests[] = 
+                [
+                    'member' => $member,
+                    'product' => $product,
+                    'request' => $pr_req,
+                    'type' => 'product',
+                ];
+        }
+        return response()->json(['requests' => $requests]);
     }
 
     /**

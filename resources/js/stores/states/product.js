@@ -1,5 +1,7 @@
 const product_s = {
 	product: {},
+	allProductsOnlyAPart: [],
+	allProducts: [],
 	products: [],
 	newProduct: {
 

@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\ModelsHelpers\ImageStores\Storer;
 use App\Models\Action;
 use App\Models\ShoppingAction;
+use App\Traits\Validators\ActionsValidators;
 use Illuminate\Http\Request;
 
 class ActionController extends Controller
 {
+    use ActionsValidators;
 
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('admin')->only(['create', 'store', 'edit', 'update']);
     }
     /**
      * Display a listing of the resource.
@@ -85,7 +89,36 @@ class ActionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $action = Action::find($id);
+        $oldName = Action::where('name', $request->name)->first();
+        $storer = false;
+        $make = false;
+
+        if ($oldName && $oldName->id == $id) {
+            $v = $this->validateAction($request->all(), 'name');
+        }
+        else{
+            $v = $this->validateAction($request->all());
+        }
+        if ($v->fails()) {
+            return response()->json(['errors' => $v->errors()]);
+        }
+        if (!$action) {
+            return abort(403, "Requête non autorisée");
+        }
+        if ($request->image !== "" &&  $request->image !== null) {
+            $storer = (new Storer($request->image, $id))->__ACTION_STORER();
+        }
+        if ($storer) {
+            $make = $action->update(['name' => $request->name, 'description' => $request->description, 'price' => $request->price, 'total' => $request->total]);
+            if ($make) {
+                return response()->json(['success' => "Mise à jour réussie!"]);
+            }
+        }
+        else{
+            return response()->json(["errors" => "Erreure de stockage de l'image"]);
+        }
+        
     }
 
     /**

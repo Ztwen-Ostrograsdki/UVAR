@@ -15,16 +15,14 @@ $(function(){
     //         activate.classList.add('active')
     //     }
     // }
-    if ($('#navbars-host .nav-link.dropdown-toggle').hasClass('router-link-active')) {
-        console.log("okay")
-    }
+    // if ($('#navbars-host .nav-link.dropdown-toggle').hasClass('router-link-active')) {
+    // }
 
 
-    $(document).ready(function(){
-        $(window).on('hashchange', function(e){
-            console.log(e)
-        })
-    })
+    // $(document).ready(function(){
+    //     $(window).on('hashchange', function(e){
+    //     })
+    // })
     
     
 

@@ -28,7 +28,7 @@ class Product extends Model
 
     public function images()
     {
-        return $this->morphToMany(Image::class, 'imageables'); 
+        return $this->morphToMany(Image::class, 'imageable'); 
     }
 
     public function poster()

@@ -16,6 +16,42 @@ const product_a = {
 				}
 			})   
 	},
+	getAllProducts: (state) => {
+		axios.post('/boutique/q=articles')
+			.then(response => {
+				state.commit('GET_ALL_PRODUCTS', {
+						products: response.data.products,
+				})
+			})
+			.catch(err =>{
+				if (err.response.status == 401) {
+					Swal.fire({
+					  icon: 'warning',
+					  title: "Vous n'êtes pas authorisé",
+					  showConfirmButton: false,
+					})
+					window.location = '/'
+				}
+			})   
+	},
+	getAllProductsOnlyAPart: (state) => {
+		axios.post('/boutique/q=articles/length')
+			.then(response => {
+				state.commit('GET_ALL_PRODUCTS_ONLY_A_PART', {
+						products: response.data.products,
+				})
+			})
+			.catch(err =>{
+				if (err.response.status == 401) {
+					Swal.fire({
+					  icon: 'warning',
+					  title: "Vous n'êtes pas authorisé",
+					  showConfirmButton: false,
+					})
+					window.location = '/'
+				}
+			})   
+	},
 
 	createProduct: (state, data) => {
 		axios.post('/Uvar/administration', {
