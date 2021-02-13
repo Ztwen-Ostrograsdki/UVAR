@@ -33,7 +33,7 @@ class MailController extends Controller
         //         ]);
         //         }
         //     }
-        dd($to);
+        dd(now());
         // $mail  = Mail::to('fadyljohaness00@gmail.com')->send(new Gmail());
         // dd($mail);
     }

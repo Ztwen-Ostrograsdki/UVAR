@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
             $table->softDeletes();
+            $table->boolean('bought')->default(false);
             $table->string('name')->unique();
             $table->string('description')->nullable();
             $table->unsignedBigInteger('total');

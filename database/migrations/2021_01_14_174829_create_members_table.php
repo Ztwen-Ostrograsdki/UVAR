@@ -21,7 +21,7 @@ class CreateMembersTable extends Migration
             $table->string('name')->unique();
             $table->string('email')->unique();
             $table->string('pseudo')->nullable();
-            $table->string('phone')->unique();
+            $table->string('phone')->unique()->nullable();
             $table->string('country')->nullable();
             $table->enum('sexe', ['female', 'male'])->default('male');
             $table->timestamps();

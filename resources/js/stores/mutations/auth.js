@@ -13,6 +13,10 @@ const auth_mutations = {
         state.active_member = data.active_member
         state.active_member_photo = data.active_member_photo
         state.token = data.token
+        state.connected = data.connected
+    },
+    GET_TOKEN: (state, data) =>{
+        state.token = data.token
     },
     GET_NOTIFICATIONS: (state, data) =>{
         state.notifications = data

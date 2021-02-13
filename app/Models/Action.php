@@ -14,11 +14,24 @@ class Action extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'price', 'actionnary', 'total', 'description'];
+    protected $fillable = ['name', 'price', 'actionnary', 'total', 'description', 'bought'];
 
     public function author()
     {
     	return $this->belongsTo(Member::class);
+    }
+
+    public function buyers()
+    {
+        $buyers = [];
+        $shops = ShoppingAction::where('action_id', $this->id)->get();
+        if (count($shops) > 0) {
+            foreach ($shops as $shop) {
+                $buyers[] = Member::find($shop->member_id);
+            }
+        }
+
+        return $buyers;
     }
 
     public function totalBought()
@@ -36,8 +49,45 @@ class Action extends Model
 
     public function boughtable($total)
     {
-        return ($this->total - $this->totalBought()) > $total;
+        return ($this->total - $this->totalBought()) >= $total;
     }
+
+    public function finish()
+    {
+        return ($this->total - $this->totalBought()) == 0;
+    }
+
+    public static function getActionsDetails()
+    {
+        $actions = Action::all();
+        $actionsDetails['lastAction'] = null;
+        $actionsDetails['bestAction'] = null;
+        $actionsDetails['bestTotalBought'] = 0;
+        $actionsDetails['lastTotalBought'] = 0;
+        $actionsTables = [];
+        $actionsTables["max_key"] = 0;
+
+        if (count($actions) > 0) {
+            $lastAction = $actions->last();
+            $bestAction = null;
+            foreach ($actions as $action) {
+                $actionsTables[$action->id] = $action->totalBought();
+                if ($action->totalBought() > $actionsTables['max_key']) {
+                    $actionsTables['max_key'] = $action->totalBought();
+                    $bestAction = $action;
+                }
+            }
+
+            $actionsDetails['lastAction'] = $lastAction;
+            $actionsDetails['bestAction'] = $bestAction;
+            $actionsDetails['bestTotalBought'] = $bestAction->totalBought();
+            $actionsDetails['lastTotalBought'] = $lastAction->totalBought();
+        }
+        return $actionsDetails;
+    }
+
+
+
 
     /**
      * Image profil of the member

@@ -1,7 +1,15 @@
 <template>
     <div class="row mx-auto w-90 mt-3 profils">
     	<div class="w-95 mx-auto">
-            <h3 class="text-white">Les Demandes d'achat {{requests.length}}</h3>
+            <h3 class="text-white">
+                <span v-if="requests.length < 1">Aucune demande en attente</span>
+                <strong v-if="requests.length > 0">
+                    {{requests.length > 9 ? requests.length : '0' + requests.length }}
+                </strong> 
+                <span v-if="requests.length > 0">
+                    demande {{requests.length > 1 ? 's' : ''}} d'achat en attente de confirmation
+                </span>
+            </h3>
             <div class="mx-auto d-flex justify-content-center px-2 w-75" v-if="requests.length < 1">
                 <h5 class="fa-2x text-center border border-white text-white-50 bg-linear-official-50 p-2 w-100 ">
                     Aucune demande en cours...
@@ -30,8 +38,8 @@
                         </td>
                         <td>{{ "une demande en cours ..." }}</td>
                         <td class="text-center">
-                            <span title="Autoriser la possession" class="mr-1 btn cursor btn-success fa fa-check my-0 py-1" @click="manageRequest(req.member, req.action, req.request, true)"></span>
-                            <span title="Rejéter cette demande" class="btn fa cursor fa-close text-danger btn-warning my-0 py-1" @click="manageRequest(req.member, req.action, req.request, false)"></span>
+                            <span title="Autoriser la possession" class="mr-1 btn cursor btn-success fa fa-check my-0 py-1" @click="manageRequest(req.request, req.type, 1)"></span>
+                            <span title="Rejéter cette demande" class="btn fa cursor fa-close text-danger btn-warning my-0 py-1" @click="manageRequest(req.request, req.type, 2)"></span>
                         </td>
                     </tr>
                 </tbody>
@@ -42,6 +50,7 @@
 
 <script>
 	import { mapState } from 'vuex'
+    import Swal from 'sweetalert2'
 	export default {
         data() {
             return {
@@ -54,9 +63,18 @@
         },
         methods :{
            
-           manageRequest(member, action, request, status){
-                this.$store.dispatch('manageRequest', {status: status})
-           }
+            manageRequest(request, type, response){
+                if (navigator.onLine) {
+                    this.$store.dispatch('manageRequest', {request_id: request.id, type: type, response: response})
+                }
+                else{
+                    Swal.fire({
+                        icon: 'warning',
+                        title: "Erreur de connexion à internet",
+                        showConfirmButton: false,
+                    })
+                }
+            }
             
         },
 

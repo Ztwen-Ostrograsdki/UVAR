@@ -16,7 +16,7 @@ class Product extends Model
 
     use SoftDeletes;
 
-    protected $fillable = ['authorized', 'price', 'creator', 'editor', 'quantity', 'name'];
+    protected $fillable = ['price', 'description', 'bought', 'poster', 'total', 'name'];
 
 
 

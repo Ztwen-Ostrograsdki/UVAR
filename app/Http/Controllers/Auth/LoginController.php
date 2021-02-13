@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Notifications\RegisterUser;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -36,7 +39,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except(['logout', 'getConnected', 'getUserMember']);
+        $this->middleware('guest')->except(['logout', 'getConnected', 'getUserMember' , 'getToken']);
     }
 
     public function login(Request $request)
@@ -58,12 +61,13 @@ class LoginController extends Controller
             
             $user = auth()->user();
             $member = null;
+            $image = null;
             if ($user) {
                 if ($user->member !== null) {
                     $member = $user->member;
                     $image = $user->member->images;
                 }
-                return response()->json(['success' => ['user' => $user, 'token' => $token, 'active_member_photo' => $image, 'active_member' => $member]]);
+                return response()->json(['success' => ['user' => $user, 'token' => $token, 'active_member_photo' => $image, 'active_member' => $member], 'connected' => true]);
             }
         }
         else{
@@ -92,7 +96,7 @@ class LoginController extends Controller
         $user = auth()->user();
         $token = csrf_token();
         if ($user !== null) {
-            return response()->json(['success' => $user, 'token' => $token]);
+            return response()->json(['success' => $user, 'token' => $token, 'connected' => true]);
         }
         else{
             return response()->json(['disconnected' => true]);
@@ -107,10 +111,10 @@ class LoginController extends Controller
         if ($user) {
             if ($user->member !== null) {
                 $active_member_photo = $user->member->images;
-                return response()->json(['active_member_photo' => $active_member_photo, 'user_member' => $user->member, 'active_member' => $user->member,  'token' => $token]);
+                return response()->json(['active_member_photo' => $active_member_photo, 'user_member' => $user->member, 'active_member' => $user->member,  'token' => $token, 'connected' => true]);
             }
             else{
-                return response()->json(['user_member' => null,  'token' => $token, 'active_member_photo' => [], 'active_member' => null]);
+                return response()->json(['user_member' => null,  'token' => $token, 'active_member_photo' => [], 'active_member' => json_encode(['id' => null]), 'connected' => true]);
             }
         }
     }
@@ -170,4 +174,43 @@ class LoginController extends Controller
     // {
         
     // }
+    // 
+    // 
+    public function confirm($id, $token)
+    {
+        $user = User::where('id', $id)->where('confirmation_token', $token)->first();
+        if ($user) {
+            $user->update(['confirmation_token' => null, 'remember_token' => Str::random(10), 'email_verified_at' => now()]);
+            if ($user) {
+                $user->notify(new RegisterUser("success"));
+                return redirect('/')->with('info', "Votre compte a bien été confirmé avec succès")->with('type', 'success');
+            }
+            elseif($user->confirmation_token !== null){
+                $user->notify(new RegisterUser("errors"));
+                return redirect('/')->with('info', "Votre compte n'a pas pu être confirmé")->with('type', 'danger');
+            }
+            
+        }
+        else{
+            return abort(404, 'Page non retrouvée');
+        }
+    }
+
+    protected function credentials(Request $request)
+    {
+        return  array_merge(
+                    $request->only($this->username(), 'password'),
+                    ['confirmation_token' => null]
+                );
+    }
+
+
+    public function getToken()
+    {
+        $token = csrf_token();
+        return response()->json(['token' => $token]);
+    }
+
+
+
 }

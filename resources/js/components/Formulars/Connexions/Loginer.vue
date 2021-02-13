@@ -40,7 +40,7 @@
         },
 		
         created(){
-           
+           this.$store.dispatch('getToken')
         },
 		
 
@@ -50,12 +50,12 @@
 			login(){
 				let inputs = $('input')
 				this.$store.commit('RESET_LOGIN_INVALIDS', [])
-				this.$store.dispatch('login', {email: this.email, password: this.password})
+				this.$store.dispatch('login', {email: this.email, password: this.password, token: this.token})
 			}
 		},
 
 		computed: mapState([
-            'invalidsLogin', 'newUserSucess', 'newUser', 'connected', 'member'
+            'invalidsLogin', 'newUserSucess', 'newUser', 'connected', 'member', 'token'
         ])
 	}
 </script>

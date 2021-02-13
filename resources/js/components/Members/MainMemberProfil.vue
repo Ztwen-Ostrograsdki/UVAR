@@ -3,10 +3,10 @@
 	<div class="col-md-12">
         <div class="w-100 mx-auto p-1 d-flex justify-content-start">
             <span v-if="showProperties" @click="hideProperties()" class="float-left fa-2x fa fa-undo cursor text-official"></span>
-            <h4 class="mx-3 text-white-50 d-inline" v-if="memberReady">Profil de :<strong>{{member.name}}</strong></h4>
         </div>
         <span class="fa fa-close cursor text-white-50 fa-2x" title="Masquer le profil" @click="resetProfil()" v-if="profil && !showProperties"></span>
         <span class="fa fa-chevron-up cursor text-white-50" title="Afficher le profil" @click="resetProfil()" v-if="!profil && !showProperties"></span>
+        <h4 class="mx-3 text-white-50 d-inline mx-auto text-center" v-if="memberReady">Profil de : <strong>{{member.name}}</strong></h4>
         <div class="tab-content" v-if="!showProperties">
             <transition name="justefade" appear> 
                 <div class="mx-auto my-2 w-100 border-official" v-if="profil && member.name !== undefined">
@@ -83,11 +83,14 @@
                         </transition>
                         <transition name="bodyfade" appear>
                             <div class="pricing-table pricing-table-highlighted my-0" v-if="amount">
-                                <div class="pricing-table-header grd1" @click="resetAmount()">
+                                <div v-if="(user.role == 'admin' && user.id == member.user_id) || (user.role == 'admin' && user.id !== member.user_id) || (user.role !== 'admin' && user.id == member.user_id)" class="pricing-table-header grd1" @click="resetAmount()">
                                     <h2>{{ user.id == member.user_id ? 'Mon ' : ' Son '}} solde</h2>
                                     <h3 class="m-0 p-0">{{ getAccount(myAccount.solde).toFrancs}}</h3>
                                     <hr class="m-0 p-0 bg-secondary w-50 mx-auto my-1">
                                     <h5 class="text-muted font-italic m-0 p-0">{{ getAccount(myAccount.solde).toAr }}</h5>
+                                </div>
+                                <div v-if="(user.role !== 'admin' && user.id !== member.user_id)" class="pricing-table-header bg-secondary-100 border border-white">
+                                    <span class="text-center text-white-50 fa-2x">MEMBRE UVAR</span>
                                 </div>
                                 <div class="pricing-table-space"></div>
                                 <div class="pricing-table-features p-0">
@@ -112,19 +115,22 @@
                         </transition>
                         <transition name="bodyfade" appear>
                             <div class="pricing-table pricing-table-highlighted my-0" v-if="actions">
-                                <div class="pricing-table-header grd1" @click="resetAction()">
+                                <div v-if="(user.role == 'admin' && user.id == member.user_id) || (user.role == 'admin' && user.id !== member.user_id) || (user.role !== 'admin' && user.id == member.user_id)" class="pricing-table-header grd1" @click="resetAction()">
                                     <h2>{{ user.id == member.user_id ? 'Mes ' : ' Ses '}} actions</h2>
-                                    <h3 class="m-0 p-0"> {{ getMyActions(myActions).pricesToFrancs }}</h3>
+                                    <h3 class="m-0 p-0"> {{ myActions.totalActions ? getMyActions(myActions).pricesToFrancs : '0. 000 FCFA' }}</h3>
                                     <hr class="m-0 p-0 bg-secondary w-50 mx-auto my-1">
-                                    <h5 class="text-muted font-italic m-0 p-0">{{ getMyActions(myActions).pricesToAr }}</h5>
+                                    <h5 class="text-muted font-italic m-0 p-0">{{  myActions.totalActions ? getMyActions(myActions).pricesToAr : '0. 000 AR' }}</h5>
+                                </div>
+                                <div v-if="connected && active_member && user && (member.user_id !== user.id && user.role !== 'admin')" class="pricing-table-header bg-secondary-100 border border-white">
+                                    <span class="text-center text-white-50 fa-2x">MEMBRE UVAR</span>
                                 </div>
                                 <div class="pricing-table-space"></div>
                                 <div class="pricing-table-features p-0">
-                                    <span class="text-center text-white-50 fa-2x">{{getMyActions(myActions).totalActions}}</span>
+                                    <span class="text-center text-white-50 fa-2x">{{ myActions.totalActions ? getMyActions(myActions).totalActions : '00'}}</span>
                                     <span> Actions achetées</span>
                                     <span title="Epingler les actions achetées" @click="displayProperties('actions')" class="float-right fa fa-tag cursor text-official"></span>
                                     <p><i class="fa fa-plus 2x"></i> <strong>Bonus:</strong> 25 AR</p>
-                                    <p><i class="fa fa-user"></i> <strong>Récent:</strong>{{ "(" + myActions.lastAction.total + ") " + myActions.lastAction.action.name.substring(0, 9) }}...</p>
+                                    <p><i class="fa fa-user"></i> <strong>Récent:</strong>{{ myActions.totalActions ? "(" + myActions.lastAction.total + ") " + myActions.lastAction.action.name.substring(0, 9) : 'pas encore' }}...</p>
                                 </div>
                                 <div class="pricing-table-sign-up" v-if="user.id == member.user_id">
                                     <a href="#" class="hover-btn-new border border-white"><span>Aller sur le marché</span></a>
@@ -142,19 +148,25 @@
                         </transition>
                         <transition name="bodyfade" appear>
                             <div class="pricing-table pricing-table-highlighted my-0" v-if="shop == true">
-                                <div class="pricing-table-header grd1 border border-white" @click="resetShop()">
+                                <div v-if="(user.role == 'admin' && user.id == member.user_id) || (user.role == 'admin' && user.id !== member.user_id) || (user.role !== 'admin' && user.id == member.user_id)" class="pricing-table-header grd1 border border-white" @click="resetShop()">
                                     <h2>{{ user.id == member.user_id ? 'Mes ' : ' Ses '}} achats</h2>
-                                    <h3 class="m-0 p-0">{{ getMyProducts(myProducts).pricesToFrancs }}</h3>
+                                    <h3 class="m-0 p-0">{{ myProducts.totalProducts ? getMyProducts(myProducts).pricesToFrancs : '0.000 FCFA'}}</h3>
                                     <hr class="m-0 p-0 bg-secondary w-50 mx-auto my-1">
-                                    <h5 class="text-muted font-italic m-0 p-0">{{ getMyProducts(myProducts).pricesToAr }}</h5>
+                                    <h5 class="text-muted font-italic m-0 p-0">{{ myProducts.totalProducts ? getMyProducts(myProducts).pricesToAr : '0.000 AR'}}</h5>
                                 </div>
+                                <div v-if="connected && active_member && user && (member.user_id !== user.id && user.role !== 'admin')" class="pricing-table-header bg-secondary-100 border border-white">
+                                    <span class="text-center text-white-50 fa-2x">MEMBRE UVAR</span>
+                                </div>
+
                                 <div class="pricing-table-space"></div>
                                 <div class="pricing-table-features p-0">
-                                    <span class="text-center text-white-50 fa-2x">{{getMyProducts(myProducts).totalProducts}}</span>
-                                    <span> Produit{{ myProducts.totalProducts > 1 ? 's' : '' }} acheté{{ myProducts.totalProducts > 1 ? 's' : '' }}</span>
+                                    <span class="text-center text-white-50 fa-2x">{{ myProducts.totalProducts ? getMyProducts(myProducts).totalProducts : '00'}}</span>
+                                    <span v-if="myProducts.totalProducts"> Produit{{ myProducts.totalProducts > 1 ? 's' : '' }} acheté{{ myProducts.totalProducts > 1 ? 's' : '' }}</span>
+                                    <span v-if="!myProducts.totalProducts">Produit acheté</span>
                                     <span title="Epingler les produits achetés" @click="displayProperties('products')" class="float-right fa fa-tag cursor text-official"></span>
                                     <p><i class="fa fa-plus 2x"></i> <strong>Bonus Achat:</strong> 00 AR</p>
-                                    <p><i class="fa fa-user"></i> <strong>Récent:</strong>{{ "(" + myProducts.lastProduct.total + ") " + myProducts.lastProduct.product.name.substring(0, 9) }} ...</p>
+                                    <p v-if="myProducts.totalProducts"><i class="fa fa-user"></i> <strong>Récent:</strong>{{ "(" + myProducts.lastProduct.total + ") " + myProducts.lastProduct.product.name.substring(0, 9) }} ...</p>
+                                    <p v-if="myProducts.length < 1"><i class="fa fa-user"></i> <strong>Récent:</strong>{{ 'pas encore' }} ...</p>
                                 </div>
                                 <div class="pricing-table-sign-up" v-if="user.id == member.user_id">
                                     <a href="#" class="hover-btn-new border border-white"><span>Faire du shopping</span></a>
@@ -172,10 +184,14 @@
                         </transition>
                         <transition name="bodyfade" appear>
                             <div class="pricing-table pricing-table-highlighted my-0" v-if="referies">
-                                <div class="pricing-table-header grd1" @click="resetReferies()">
+                                <div v-if="(user.role == 'admin' && user.id == member.user_id) || (user.role == 'admin' && user.id !== member.user_id) || (user.role !== 'admin' && user.id == member.user_id)" class="pricing-table-header grd1" @click="resetReferies()">
                                     <h2>{{ user.id == member.user_id ? 'Mes ' : ' Ses '}} affiliiés</h2>
-                                    <h3 class="m-0 p-0">{{ myReferies.length > 9 ? myReferies.length :  + "0" + myReferies.length }}</h3>
+                                    <h3 v-if="myReferies.length > 0" class="m-0 p-0">{{ myReferies.length > 9 ? myReferies.length :  + "0" + myReferies.length }}</h3>
+                                    <h3 v-if="myReferies.length < 1" class="m-0 p-0">{{ '00' }}</h3>
                                     <h5 class="text-warning font-italic m-0 p-0">{{ getLeveler(member.level) }} Level member</h5>
+                                </div>
+                                <div v-if="(member.user_id !== user.id && user.role !== 'admin')" class="pricing-table-header bg-secondary-100 border border-white">
+                                    <span class="text-center text-white-50 fa-2x">MEMBRE UVAR</span>
                                 </div>
                                 <div class="pricing-table-space"></div>
                                 <div class="pricing-table-features p-0">
@@ -185,9 +201,9 @@
                                     <span title="Epingler les membres affiliés" @click="displayProperties('referies')" class="float-right fa fa-tag cursor text-official"></span>
                                     <p>
                                         <i class="fa fa-user-secret 2x"></i> <strong>Affiliant:</strong>
-                                        <router-link v-if="myReferer !== null && myReferer !== undefined" :to="{name: 'membersProfilOnAdmin', params: {id: myReferer.id}}"   class="card-link d-inline-block" >
+                                        <router-link v-if="myReferer !== null && myReferer !== undefined" :to="{name: getRouteBasedOnComponent(), params: {id: myReferer.id}}"   class="card-link text-white-50 d-inline-block" >
                                             <span  class="w-100 d-inline-block link-profiler">
-                                                {{myReferer.name}}
+                                                {{myReferer.name.substring(0, 5)}}...
                                             </span>
                                         </router-link>
 
@@ -196,7 +212,7 @@
                                     <p><i class="fa fa-plus 2x"></i> <strong>Bonus:</strong> {{ getBonus(myBonuses).total }}</p>
                                     <p v-if="myReferies.length > 0">
                                         <i class="fa fa-user"></i> <strong>Récent:</strong>
-                                        <router-link v-if="myReferies.length > 0" :to="{name: 'membersProfilOnAdmin', params: {id: myReferies[0].id}}"   class="card-link d-inline-block" >
+                                        <router-link v-if="myReferies.length > 0" :to="{name: getRouteBasedOnComponent(), params: {id: myReferies[0].id}}"   class="card-link d-inline-block" >
                                             <i  class="w-100 text-official d-inline-block link-profiler">
                                                 {{myReferies[0].name.substring(0, 5)}}...
                                             </i>
@@ -264,6 +280,15 @@
            this.$store.dispatch('getMember', this.$route.params.id)
         },
         methods :{
+            getRouteBasedOnComponent(){
+                if (this.$route.name !== 'otherMemberProfil') {
+                    return 'otherMemberProfil'
+                }
+                else{
+                    return 'membersProfil'
+                }
+
+            },
             getProfilPath(){
                 let path = ''
                 let image = this.memberPhoto
@@ -391,7 +416,7 @@
         },
 
         computed: mapState([
-            'member', 'connected', 'user', 'myActions', 'myAccount', 'myReferer', 'myReferies', 'myProducts', 'myBonuses', 'memberReady', 'editingMember', 'active_member', 'memberPhoto'
+            'member', 'connected', 'user', 'myActions', 'myAccount', 'myReferer', 'myReferies', 'myProducts', 'myBonuses', 'memberReady', 'editingMember', 'active_member', 'memberPhoto', 'token'
         ])
 	}
 </script>
@@ -438,6 +463,11 @@
 
     .membersProfil table tr{
         padding: 2px !important;
+    }
+
+    .bg-secondary-100{
+        color: #ffffff !important;
+        background: #2d3032;
     }
     
 

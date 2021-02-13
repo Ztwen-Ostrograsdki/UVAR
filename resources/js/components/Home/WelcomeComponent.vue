@@ -35,8 +35,10 @@
                                             <span class="text-secondary">{{ getPrice(action.action.price).toFrancs }}</span>
                                             <span class="text-official">||</span>
                                             <span class="text-warning">{{ getPrice(action.action.price).toAr }}</span>
-                                            <span v-if="connected" class="m-0 float-right mr-2 btn btn-primary border-official">Acheter cette action</span>
-                                            <span v-if="!connected" class="m-0 float-right mr-2 btn btn-primary border-official">Inscrivez-vous pour acheter cette action</span>
+                                            <span v-if="!connected || !active_member || !active_member.id" class="m-0 float-right mr-2 btn btn-primary border-official">Inscrivez-vous pour acheter cette action</span>
+                                            <i class="ml-2 text-white-50">({{action.totalBought}}) achétées</i>
+                                            <i class="ml-2 text-danger">({{ action.action.total - action.totalBought}}) restantes</i>
+                                            <span v-if="connected && active_member && active_member.id" @click="buyAction(action.action, active_member)" class="m-0 float-right mr-2 btn btn-primary border-official">Acheter cette action</span>
                                         </h4>
                                         <p class="m-0 p-0 mt-1 w-100 float-right text-warning">
                                             Cette action n'est plus disponible sur le marché
@@ -59,6 +61,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- <pagination :data="laravelData" @pagination-change-page="getResults"></pagination> -->
             </div>
             <span class="btn btn-primary d-inline-block w-100 border-warning" @click="changeLength('actions', true)" v-if="actionsLength !== true">Tout afficher</span>
             <span class="btn btn-primary d-inline-block w-100 border-warning" @click="changeLength('actions', 4)" v-if="actionsLength !== 4">Reduire l'affichage</span>
@@ -129,6 +132,8 @@
 
 <script>
     import { mapState } from 'vuex'
+
+    
     export default {
         props : [],
         data() {
@@ -161,6 +166,92 @@
             this.$store.dispatch('getAllProducts')
         },
         methods :{
+
+            // getResults(page = 1) {
+            //     axios.post('/boutique/q=actions')
+            //             .then(response => {
+            //                 state.commit('GET_ALL_ACTIONS', {
+            //                         actions: response.data.actions,
+            //                 })
+            //             })
+            //     axios.get('example/results?page=' + page)
+            //         .then(response => {
+            //             this.laravelData = response.data;
+            //         });
+            // },
+            buyAction(action, member){
+                if (!navigator.onLine) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: "Erreur de connexion à internet",
+                        showConfirmButton: false,
+                    })
+                    return false
+                }
+                let token = this.token
+                this.total = 0
+                Swal.fire({
+                    title: "Achat de l'action " + action.name,
+                    input: 'text',
+                    inputAttributes: {
+                        autocapitalize: 'off',
+                        placeholder: "Veuillez renseiller la quantité d'actions"
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Acheter',
+                    cancelButtonText: 'Annuler',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (total) => {
+                        this.total = total
+                        return fetch('/Uvar/administration/boutique/action/q=achat/a='+ action.id + '/m=' + member.id + '/t=' + total,{
+                                method: 'PUT',
+                                headers: {
+                                    'X-CSRF-TOKEN': token,
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(response => {
+                                if (response.errors !== undefined) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: response.errors,
+                                        showConfirmButton: false,
+                                    })
+                                }
+                                else{
+                                    if (response.success !== undefined) {
+                                        this.$store.dispatch('getMember', member.id)
+                                        this.$store.dispatch('getRequests')
+                                        this.$store.dispatch('getAllActions')
+                                        Swal.fire({
+                                            icon: 'success',
+                                            text: "Opération réussie! Pour entrer en Possession des actions veuillez faire un dépot de " + (Number(this.total) * action.price) + " FCFA sur le numero de la plateforme.",
+                                            showConfirmButton: true,
+                                        })
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(
+                                    `Echec: ${error}`
+                                )
+                            })
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                })
+                .then((response) => {
+                    if (response.isConfirmed) {
+                        this.$store.dispatch('getMember', member.id)
+                        this.$store.dispatch('getRequests')
+                        this.$store.dispatch('getAllActions')
+                        Swal.fire({
+                            icon: 'success',
+                            text: "Opération réussie! Pour entrer en Possession des actions veuillez faire un dépot de " + (Number(this.total) * action.price) + " FCFA sur le numero de la plateforme.",
+                            showConfirmButton: true,
+                        })
+                    }
+                })
+            },
             getCreatedAt(created_at){
                 if (created_at !== null) {
                     let date = created_at

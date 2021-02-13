@@ -14,7 +14,7 @@ class ShoppingAction extends Model
 
 
 
-    public function buyers()
+    public function members()
     {
         return $this->HasMany(Member::class);
     }

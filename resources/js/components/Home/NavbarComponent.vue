@@ -23,23 +23,30 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbars-host">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item active homePage">
+                        <li class="nav-item active homePage" >
                             <router-link class="nav-link" to="/">Acceuil</router-link>
+                        </li>
+                        <li class="nav-item profiling" v-if="connected && active_member && active_member.id == null">
+                            <router-link class="nav-link" :to="{name: 'usersProfil', params: {id: user.id}}">Mon profil</router-link>
+                        </li>
+                        <li class="nav-item profiling" v-if="connected && active_member && active_member.id">
+                            <router-link class="nav-link" :to="{name: getProfilRouteName(active_member).name, params: {id: getProfilRouteName(active_member).id}}">Mon profil</router-link>
                         </li>
                         <li class="nav-item dropdown marketsTables" v-if="connected">
                             <router-link class="nav-link dropdown-toggle"  id="dropdown-a" data-toggle="dropdown" to="/">Le Marché</router-link>
                             <div class="dropdown-menu" aria-labelledby="dropdown-a">
-                                <router-link class="dropdown-item" :to="{name: 'actions_shop_default'}">Les actions</router-link>
-                                <router-link class="dropdown-item" :to="{name: 'actionsListing'}"> Les Articles</router-link>
+                                <router-link class="dropdown-item" :to="{name: 'shop_home_actions'}">Les actions</router-link>
+                                <router-link class="dropdown-item" :to="{name: 'shop_home_products'}"> Les Articles</router-link>
                             </div>
                         </li>
                         
-                        <li class="nav-item dropdown administrationTables" v-if="connected">
+                        <li class="nav-item dropdown administrationTables" v-if="connected && user.role == 'admin'">
                             <router-link class="nav-link dropdown-toggle"  id="dropdown-a" data-toggle="dropdown" to="/Uvar/administration">Administration</router-link>
                             <div class="dropdown-menu" aria-labelledby="dropdown-a">
                                 <router-link class="dropdown-item" to="/Uvar/administration">Acceuil</router-link>
                                 <a class="dropdown-item" href="#">Les formations </a>
-                                <a class="dropdown-item" href="#">Les affiliations </a>
+                                <router-link class="dropdown-item" :to="{name: 'notifications'}"> Les affiliations en attente</router-link>
+                                <router-link class="dropdown-item" :to="{name: 'notifications'}"> Les achats en attente</router-link>
                                 <router-link class="dropdown-item" :to="{name: 'productsListing'}"> Gestion des produits</router-link>
                                 <router-link class="dropdown-item" :to="{name: 'actionsListing'}"> Gestions des actions</router-link>
                                 <router-link class="dropdown-item" :to="{name: 'usersListing'}">Les utilisateurs</router-link>
@@ -84,6 +91,10 @@
         
         created(){
             this.$store.dispatch('getActiveMember')
+            this.$store.dispatch('getToken')
+            if (this.connected) {
+                this.$store.dispatch('getUser', this.user.id)
+            }
         },
 
         updated(){
@@ -95,8 +106,8 @@
             if (route.path == '/') {
                 $('#navbars-host li.nav-item.homePage').addClass('active')
             }
-            else if (route.name == 'membersProfil' || route.name == 'membersProfilOnAdmin') {
-                $('#navbars-host li.nav-item.memberProfil').addClass('active')
+            else if (route.name == 'membersProfil' || route.name == 'membersProfilOnAdmin' || route.name == 'usersListing') {
+                $('#navbars-host li.nav-item.profiling').addClass('active')
             }
             else if (route.path.search('administration') !== -1) {
                $('#navbars-host li.dropdown.administrationTables').addClass('active') 
@@ -121,10 +132,10 @@
                     name = 'membersProfil'
                 }
                 else{
-                    if (member.id == this.$route.params.id) {
+                    if (member && member.id == this.$route.params.id) {
 
                     }
-                    else{
+                    else if(member && member.id == this.$route.params.id){
                         name = 'membersProfilOnAdmin'
                     }
                 }
@@ -145,7 +156,7 @@
         },
         
         computed: mapState([
-            'user', 'connected', 'member', 'login', 'active_member', 'memberPhoto', 'active_member_photo'
+            'user', 'connected', 'member', 'login', 'active_member', 'memberPhoto', 'userRequests', 'active_member_photo', 'token'
         ])
     }
 

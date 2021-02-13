@@ -114,6 +114,9 @@ button.bg-linear-official-50:hover{
 .bg-official{
     background-color: #9dc15b !important
 }
+.bg-official-opacity{
+    background-color: rgba(157, 193, 91, 0.8) !important;
+}
 .w-95{
     width: 95% !important;
 }

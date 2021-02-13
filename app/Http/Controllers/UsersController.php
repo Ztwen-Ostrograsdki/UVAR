@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\AffiliationsController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Mail\Gmail;
+use App\Models\Affiliate;
+use App\Models\Bonus;
+use App\Models\Member;
 use App\Models\User;
+use App\Notifications\AffiliationRequestedNotification;
+use App\Notifications\MessagerNotification;
 use App\Notifications\RegisterUser;
 use App\Traits\Storers\UsersStorers;
 use App\Traits\Validators\TraitUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class UsersController extends Controller
@@ -18,7 +25,7 @@ class UsersController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['store', 'manageAffiliationExternally']);
     }
 
     /**
@@ -36,6 +43,34 @@ class UsersController extends Controller
     {
         $users = User::all();
         return response()->json(['users' => $users]);
+    }
+
+
+
+
+    public function getUser(int $id)
+    {
+        if (auth()->user()->id !== $id) {
+            return abort(403, "Vous n'etes pas autorisé");
+        }
+        if (!is_int($id)) {
+            return abort(404, 'Page introuvable');
+        }
+        $user = User::find($id);
+
+        if (!$user) {
+            return abort(404, 'Page introuvable');
+        }
+
+        $notifs_a = Affiliate::where('referee_id', $user->id)->get();
+        $requests = [];
+
+        foreach ($notifs_a as $notif) {
+            $member = Member::find($notif->referer_id);
+            $requests[] = ['member' => $member, 'affiliation' => $notif];
+        }
+        
+        return response()->json(['user' => $user, 'requests' => $requests]);
     }
 
     /**
@@ -76,9 +111,20 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
-        //
+        if (auth()->user()->id !== $id) {
+            return abort(403, "Vous n'etes pas autorisé");
+        }
+        if (!is_int($id)) {
+            return abort(404, 'Page introuvable');
+        }
+        $user = User::find($id);
+
+        if (!$user) {
+            return abort(404, 'Page introuvable');
+        }
+        return view('users.profil');
     }
 
     /**
@@ -103,6 +149,86 @@ class UsersController extends Controller
     {
         //
     }
+
+
+    // public function IDoNotRecognizedThatRequest(int $referer, int $referee)
+    // {
+
+    //     $aff = Affiliate::where('referee_id', $referee)->where('referer_id', $referer)->first();
+    //     if ($aff) {
+    //         $referer = Member::find($aff->referer_id);
+    //         $referee = User::find($aff->referee_id);
+    //         $aff->delete();
+    //         if ($aff && $referee && $referer) {
+    //             $referer->user->notify(new AffiliationRequestedNotification($referer, $referee, false, 'par lui même!'));
+    //         }
+    //         return redirect('/');
+    //     }
+    // }
+
+    public function manageMyIncomingAffiliation(int $referer, int $referee, string $token, string $r, string $key, string $externe)
+    {
+        $admin = User::where('role', 'admin')->first();
+        $aff = Affiliate::where('referee_id', $referee)->where('referer_id', $referer)->first();
+
+        if ($aff) {
+            $realToken = $aff->token;
+            $realKey = $aff->token;
+            if ($key == $realKey && $token == $realToken) {
+                $referer = Member::find($referer);
+                $referee = User::find($referee);
+
+                if ($referer && $referee) {
+                    if ($r == 'yes') {
+                        $aff->update(['accepted' => true]);
+                        $referee->notify(new MessagerNotification("Vous venez de reconnaître la demande d'affiliation de {$referee->name}. Veuillez contacter UVAR pour finaliser la procedure de creation de compte membre UVAR.", "Acceptation d'affiliation de membre", false, $aff));
+                        if ($admin) {
+                            $admin->notify(new MessagerNotification("$referee->name vient de reconnaître la demande d'affiliation de {$referee->name}.", "Acceptation d'affiliation de membre", true, $aff));
+                        }
+                        if ($externe == 'yes') {
+                            return redirect('/');
+                        }
+                        else{
+                            return response()->json(['success' => $referer]);
+                        }
+                    }
+                    elseif ($r == 'no') {
+                        $aff->delete();
+                        $referer->user->notify(new AffiliationRequestedNotification($referer, $referee, false, 'ceci par lui même!'));
+                        if ($externe == 'yes') {
+                            return redirect('/');
+                        }
+                        else{
+                            if ($externe !== 'yes') {
+                                return response()->json(['success' => "Affiliation refusée avec succès"]);
+                            }
+                            return redirect('/');
+                        }
+                    }
+                    else{
+                        if ($externe !== 'yes') {
+                            return response()->json(['errors' => "Requête invalide, vous n'êtes pas authorisé"]);
+                        }
+                        return abort(403, "Vous n'êtes pas authorisé");
+                    }
+                }
+                else{
+                    if ($externe !== 'yes') {
+                        return response()->json(['errors' => "Requête invalide, vous n'êtes pas autho"]);
+                    }
+                    return abort(403, "Vous n'êtes pas authorisé");
+                }
+            }
+            else{
+                if ($externe !== 'yes') {
+                    return response()->json(['errors' => "Requête invalide, vous n'êtes pas autho"]);
+                }
+                return abort(403, "Vous n'êtes pas authorisé");
+            }
+        }
+    }
+
+    
 
     /**
      * Remove the specified resource from storage.

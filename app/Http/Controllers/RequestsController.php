@@ -31,7 +31,7 @@ class RequestsController extends Controller
     }
 
 
-    public function getRequests()
+    public function getRequests($message = null)
     {
         $actionsRequests = RequestedAction::all();
         $productsRequests = RequestedProducts::all();
@@ -61,6 +61,9 @@ class RequestsController extends Controller
                     'request' => $pr_req,
                     'type' => 'product',
                 ];
+        }
+        if ($message !== null) {
+            return response()->json(['requests' => $requests, 'message' => $message]);
         }
         return response()->json(['requests' => $requests]);
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use App\Models\Shopping;
 use App\Models\ShoppingAction;
 use App\Models\User;
 use App\Traits\Validators\MembersValidators;
@@ -38,11 +39,17 @@ class MembersController extends Controller
 
     public function getMember(int $id)
     {
+        $actions = [];
+        $products = [];
         $member = Member::withTrashed('deleted_at')->where('id', $id)->first();
-        $actions = $member->actions();
+        if (count(ShoppingAction::where('member_id', $id)->get()) > 0) {
+            $actions = $member->actions();
+        }
+        if (count(Shopping::where('user_id', $member->user->id)->get()) > 0) {
+            $products = $member->shopping();
+        }
         $account = $member->account();
         $referer = $member->referer();
-        $products = $member->shopping();
         $referies = $member->referies();
         $bonuses = $member->bonuses();
         $image = $member->images;
@@ -84,8 +91,16 @@ class MembersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
+        if (!is_int($id)) {
+            return abort(404, 'Page introuvable');
+        }
+        $member = Member::find($id);
+
+        if (!$member) {
+            return abort(404, 'Page introuvable');
+        }
         return view('members.profil');
     }
 
@@ -107,12 +122,21 @@ class MembersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-        
-       $member = Member::find($id);
-       $user = User::find($member->user_id);
+        if (auth()->user()->member && auth()->user()->member->id !== $id) {
+            return abort(403, "Vous n'etes pas autorisé");
+        }
+        if (!is_int($id)) {
+            return abort(404, 'Page introuvable');
+        }
+        $member = Member::find($id);
+        $user = User::find($member->user_id);
 
+        if (!$user || !$member) {
+            return abort(404, 'Page introuvable');
+        }
+        
        $name = $request->name;
        $phone = $request->phone;
        $existed_name = Member::where('name', $name)->first();

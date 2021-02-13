@@ -15,7 +15,7 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 text-right">
                                     <div class="big-tagline">
-                                        <h2><strong>Université Virtuelle Académique</strong> de la Réussite</h2>
+                                        <h2><strong>Université Virtuelle Académique</strong> <span class="text-lowercase">de la</span> Réussite</h2>
                                         <p class="lead">With Landigoo responsive landing page template, you can promote your all hosting, domain and email services. </p>
                                             <a href="#" class="hover-btn-new">
                                                 <span>
@@ -26,10 +26,14 @@
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <a href="#" class="hover-btn-new ">
                                                 <span>
-                                                    <router-link class="p-0" :to="{name: 'actions_shop_default'}">
+                                                    <router-link v-if="connected && user" class="p-0" :to="{name: 'shop_home'}">
                                                         <span class="fa fa-shopping-bag mx-1"></span>
                                                         <span>A la boutique</span>
                                                     </router-link>
+                                                    <a href="#" v-if="!connected || !user" class="p-0">
+                                                        <span class="fa fa-shopping-bag mx-1"></span>
+                                                        <span>A la boutique</span>
+                                                    </a href="#">
                                                 </span>
                                             </a>
                                     </div>
@@ -55,12 +59,16 @@
                                                 </span>
                                             </a>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <a href="#" class="hover-btn-new ">
-                                                <span>
+                                            <span>
+                                                <router-link v-if="connected && user" class="p-0" :to="{name: 'shop_home'}">
                                                     <span class="fa fa-shopping-bag mx-1"></span>
                                                     <span>A la boutique</span>
-                                                </span>
-                                            </a>
+                                                </router-link>
+                                                <a href="#" v-if="!connected || !user" class="p-0">
+                                                    <span class="fa fa-shopping-bag mx-1"></span>
+                                                    <span>A la boutique</span>
+                                                </a href="#">
+                                            </span>
                                     </div>
                                 </div>
                             </div><!-- end row -->            
@@ -88,8 +96,14 @@
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <a href="#" class="hover-btn-new ">
                                                 <span>
-                                                    <span class="fa fa-shopping-bag mx-1"></span>
-                                                    <span>A la boutique</span>
+                                                    <router-link v-if="connected && user" class="p-0" :to="{name: 'shop_home'}">
+                                                        <span class="fa fa-shopping-bag mx-1"></span>
+                                                        <span>A la boutique</span>
+                                                    </router-link>
+                                                    <a href="#" v-if="!connected || !user" class="p-0">
+                                                        <span class="fa fa-shopping-bag mx-1"></span>
+                                                        <span>A la boutique</span>
+                                                    </a href="#">
                                                 </span>
                                             </a>
                                     </div>
@@ -119,11 +133,14 @@
 	export default {
 		
         created(){
-           
+           console.log(this.connected, 'created')
+        },
+        mounted(){
+            console.log(this.connected)
         },
 
         computed: mapState([
-            
+            'member', 'connected', 'user', 'myActions', 'myAccount', 'myBonuses', 'memberReady', 'targetAction', 'allActions', 'allProducts'
         ])
 	}
 </script>

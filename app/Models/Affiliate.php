@@ -9,7 +9,7 @@ class Affiliate extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['referer_id', 'referee_id'];
+    protected $fillable = ['referer_id', 'referee_id', 'accepted', 'token'];
 
 
 

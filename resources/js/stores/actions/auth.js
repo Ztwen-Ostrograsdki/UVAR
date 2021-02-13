@@ -16,7 +16,13 @@ const auth_actions = {
 			})      
 	},
 	login: (state, user) => {
-        axios.post('/login/uvar&user&get&auth', user)
+        axios.post('/login/uvar&user&get&auth', user, 
+        	{
+        		headers: {
+        			'X-CSRF-TOKEN': user.token,
+		        }
+		    }
+		)
 		.then(response => {
 			if(response.data.invalids !== undefined){
 				state.commit('RESET_LOGIN_INVALIDS', response.data.invalids)
@@ -64,6 +70,14 @@ const auth_actions = {
 			}
 		})     
 	},
+	getToken: (state) =>{
+		axios.post('/uvar/systeme/token/auth')
+		.then(response => {
+			if (response.data.token !== undefined) {
+				state.commit('GET_TOKEN', {token: response.data.token})
+			}
+		})
+	},
 	getActiveMember: (state) =>{
 		axios.post('/uvar/systeme/auth&get&auth&member')
 		.then(response => {
@@ -73,6 +87,7 @@ const auth_actions = {
 						active_member: response.data.active_member, 
 						active_member_photo: response.data.active_member_photo,
 						token: response.data.token,
+						connected: true,
 					}
 				)
 				// state.dispatch('getMember', response.data.user_member.id)
@@ -110,6 +125,7 @@ const auth_actions = {
 	getRequests: (state) =>{
 		axios.post('/Uvar/systeme/requests/fecth&them')
 		.then(response => {
+
 			if (response.data.requests !== undefined) {
 				state.commit('GET_REQUESTS', response.data.requests)
 			}
@@ -126,21 +142,18 @@ const auth_actions = {
 		})    
 	},
 	manageRequest: (state, data) =>{
-		axios.post('/Uvar/administration/requests/manage', {
-			status: data.status,
-			target: data.target,
-			demander: data.demander,
-			type: data.type,
-		})
+		axios.post('/Uvar/administration/demande/manage/type=' + data.type +'/request=' + data.request_id + '/response=' + data.response)
 		.then(response => {
-			if (response.data.requests !== undefined) {
+			if (response.data.requests !== undefined || response.data.message !== undefined) {
 				Swal.fire({
 				  icon: 'success',
-				  title: 'Opération réussie avec succès',
+				  title: 'Opération réussie: ' + response.data.message,
 				  showConfirmButton: false,
 				  timer: 2000
 				})
-				state.commit('GET_REQUESTS', response.data.requests)
+				if (response.data.requests !== undefined) {
+					state.commit('GET_REQUESTS', response.data.requests)
+				}
 				state.dispatch('getMembers')
 			}
 		})
@@ -158,7 +171,8 @@ const auth_actions = {
 	manageAffiliation: (state, data) =>{
 		axios.post('/Uvar/administration/affiliations/manage', {
 			status: data.status,
-			referee: data.referee
+			referee: data.referee,
+			affiliate_id: data.affiliate_id,
 		})
 		.then(response => {
 			if (response.data.notifications !== undefined) {
@@ -170,6 +184,14 @@ const auth_actions = {
 				})
 				state.commit('GET_NOTIFICATIONS', response.data.notifications)
 				state.dispatch('getMembers')
+			}
+			else if (response.data.errors !== undefined) {
+				Swal.fire({
+				  	icon: 'warning',
+				  	title:"Echec de procedure",
+				  	text: response.data.errors,
+				  	showConfirmButton: false,
+				})
 			}
 		})
 		.catch(err =>{

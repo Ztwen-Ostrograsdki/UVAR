@@ -6,7 +6,7 @@
             <div class="modal-header tit-up">
                 <div class="w-100 d-flex justify-content-between pr-3">
                     <button type="button" class="close mt-2 mr-2 text-white-50" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 v-if="active_member !== undefined" class="modal-title text-white">Edition de profil de {{active_member.name}}</h4>
+                    <h4 v-if="connected && active_member && active_member.id !== null" class="modal-title text-white">Edition de profil de {{active_member.name}}</h4>
                 </div>
             </div>
             <div class="modal-body">

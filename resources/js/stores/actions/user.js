@@ -17,6 +17,23 @@ const users_a = {
 			})     
 	},
 
+	getUser: (state, data) => {
+		axios.post('/Uvar/utilisateur/' + data)
+			.then(response => {
+				state.commit('GET_USERS_REQUESTS', {user: response.data.user, requests: response.data.requests})
+			})  
+			.catch(err =>{
+				if (err.response.status == 401) {
+					Swal.fire({
+					  icon: 'warning',
+					  title: "Erreure connexion: Vous n'êtes pas authorisé",
+					  showConfirmButton: false,
+					})
+					window.location = '/'
+				}
+			})     
+	},
+
 	createUser: (state, data) => {
 		axios.post('/Uvar/administration/tag/utilisateur', {
 			name: data.name,
@@ -56,6 +73,40 @@ const users_a = {
 			  timer: 2000
 			})
 		})  
+	},
+	manageMyAffiliation: (state, data) =>{
+		axios.post('/Uvar/Je&ne&reconnais&pas&cette&demande/affiliations/manage/referer=' + data.affiliation.referer_id + '/referee=' + data.affiliation.referee_id + '/token=' + data.affiliation.token + '/r=' + data.response + '/key=' + data.affiliation.token + '/e=no')
+		.then(response => {
+			if (response.data.success !== undefined) {
+				Swal.fire({
+				  icon: 'success',
+				  title: 'Affiliation approuvée avec succès! ',
+				  text: "Veuillez à présent consulter votre boite de reception email, afin de finaliser le processus de membre UVAR.",
+				  showConfirmButton: true,
+				  timer: 4000
+				})
+				state.dispatch('getUser', data.affiliation.referee_id)
+				
+			}
+			else if (response.data.errors !== undefined) {
+				Swal.fire({
+				  	icon: 'warning',
+				  	title:"Echec de procedure",
+				  	text: response.data.errors,
+				  	showConfirmButton: false,
+				})
+			}
+		})
+		.catch(err =>{
+			if (err.response.status == 401) {
+				Swal.fire({
+				  icon: 'warning',
+				  title: "Erreure connexion: Vous n'êtes pas authorisé",
+				  showConfirmButton: false,
+				})
+				window.location = '/'
+			}
+		})    
 	},
 
 }

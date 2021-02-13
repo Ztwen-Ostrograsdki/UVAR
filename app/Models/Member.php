@@ -18,7 +18,7 @@ class Member extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['level', 'name', 'amount', 'referer', 'country', 'sexe', 'AR-coin', 'phone', 'pseudo', 'IDENTIFY', 'role'];
+    protected $fillable = ['level', 'name', 'amount', 'referer', 'country', 'sexe', 'AR-coin', 'phone', 'pseudo', 'IDENTIFY', 'email', 'user_id'];
 
 
     /**
@@ -70,10 +70,13 @@ class Member extends Model
         $actions = [];
         $totalPrices = 0;
         $totalActions = 0;
+        $lastAct = [];
         $shops = ShoppingAction::where('member_id', $this->id)->get();
         $last = ShoppingAction::where('member_id', $this->id)->latest()->first();
-        $lastAct = Action::find($last->action_id);
-        if (true) {
+        if ($last) {
+            $lastAct = Action::find($last->action_id);
+        }
+        if ($shops) {
             foreach ($shops as $shop) {
                 $action = Action::find($shop->action_id);
                 $actions[$shop->action_id] = [

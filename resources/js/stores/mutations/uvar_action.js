@@ -8,7 +8,11 @@ const uvar_action_m = {
         state.action = data.action
     },
      GET_ALL_ACTIONS: (state, data) => {
-        state.allActions = data.actions
+        state.allActions = data.actions 
+    },
+    GET_ACTIONS_DETAILS: (state, data) => {
+        state.lastAction = data.lastAction
+        state.bestAction = data.bestAction
     },
     GET_ALL_ACTIONS_ONLY_A_PART: (state, data) => {
         state.allActionsOnlyAPart = data.actions
@@ -19,10 +23,10 @@ const uvar_action_m = {
     	}
     },
     RESET_NEW_ACTION_INVALIDS: (state, data) =>{
-        state.newActionInvalids = data
+        state.invalidsNewAction = data
     },
     RESET_INVALIDS_ACTION_EDIT: (state, data) =>{
-        state.newActionInvalids = data
+        state.invalidsEditAction = data
     },
     RESET_TARGETED_ACTION: (state, data) =>{
         state.targetedAction = data

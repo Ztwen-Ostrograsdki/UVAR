@@ -92,6 +92,9 @@ class Storer{
 		$path = null;
 		$id = $this->id;
         $action = Action::find($id);
+        if (!$action) {
+            return false;
+        }
         $oldsImages = $action->images;
 
         $this->setName();

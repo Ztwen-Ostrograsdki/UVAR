@@ -24,6 +24,10 @@ const users_m = {
             step: data.step
         }
     },
+    GET_USERS_REQUESTS: (state, data) => {
+        state.user = data.user
+        state.userRequests = data.requests
+    },
     
     
 }

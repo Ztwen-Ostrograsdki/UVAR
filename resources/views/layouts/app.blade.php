@@ -29,7 +29,7 @@
     <link href="{{ asset('vendor/fontawesome-free/css/v4-shims.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bg.css') }}" rel="stylesheet">
-    <link rel="shortcut icon" href="{{ asset('master/images/favicon.ico') }}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{{ asset('logos/uvar.png') }}" type="image/x-icon" />
     <link rel="apple-touch-icon" href="{{ asset('master/images/apple-touch-icon.png') }}">
 
     <!-- Bootstrap CSS -->
@@ -53,7 +53,6 @@
     <div class="app bg-linear-official-dark">
         <navbar></navbar>
         <acceuil></acceuil>
-
     <div id="testimonials" class="parallax section db parallax-off" style="background-image:url('master/images/parallax_04.jpg');">
         <div class="container py-2">
             <div class="section-title text-center">

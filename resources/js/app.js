@@ -10,9 +10,16 @@ window.Vue = require('vue').default;
 import Swal from 'sweetalert2'
 import VueRouter from 'vue-router'
 import store from './stores/store.js'
+import Loading from 'vue-loading-overlay';
+    // Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
+    // import Preloader from 'vue-ui-preloader'
 // import routes from './routes/routers.js'
 Vue.use(VueRouter)
+Vue.use(Loading)
 
+
+Vue.component('pagination', require('laravel-vue-pagination'))
 //HOME PAGES
 let welcomes = Vue.component('welcomes', require('./components/Home/WelcomeComponent.vue').default)
 let home_page = Vue.component('acceuil', require('./components/Home/HomeComponent.vue').default)
@@ -30,12 +37,14 @@ let admin_default = Vue.component('admin-default', require('./components/Admin/D
 
 //USERS
 let users_listing = Vue.component('users-listing', require('./components/users/Listing.vue').default)
+let users_profil = Vue.component('users-profil', require('./components/users/Profil.vue').default)
 
 
 
 //MEMBERS
 let members = Vue.component('member-options', require('./components/Members/ProfilOptions.vue').default)
 let members_profil = Vue.component('members-profil', require('./components/Members/MainMemberProfil.vue').default)
+let others_members_profil = Vue.component('others-members-profil', require('./components/Members/OtherMemberProfil.vue').default)
 let members_listing = Vue.component('members-listing', require('./components/Members/Listing.vue').default)
 let members_profil_admin = Vue.component('members-profil-admin', require('./components/Admin/MemberProfil.vue').default)
 let members_properties = Vue.component('members-properties', require('./components/Members/Properties.vue').default)
@@ -68,13 +77,15 @@ let loginer = Vue.component('loginer', require('./components/Formulars/Connexion
 let registred = Vue.component('registred', require('./components/Formulars/Users/RegistredComponent.vue').default)
 let formulars = Vue.component('formulars', require('./components/Home/Formulars.vue').default)
 let edit_action = Vue.component('edit-action', require('./components/Formulars/Actions/EditAction.vue').default)
+let create_action = Vue.component('create-action', require('./components/Formulars/Actions/CreateAction.vue').default)
 
 //NOTIFICATIONS
 let notifications = Vue.component('notifications', require('./components/Notifications/Listing.vue').default)
 let requests = Vue.component('requests', require('./components/Notifications/Requests.vue').default)
 
 //MARKETS
-let actions_shop_default = Vue.component('action-shop-default', require('./components/Market/Actions/Listing.vue').default)
+let actions_shop = Vue.component('action-shop', require('./components/Market/Actions/Listing.vue').default)
+let shop_home = Vue.component('shop-home', require('./components/Market/Home.vue').default)
 
 
 //CONFIRMATIONS
@@ -103,9 +114,38 @@ const routes = [
 				},
 				{
 					path: '/boutique/q=actions',
-					component: actions_shop_default,
-					name: 'actions_shop_default',
+					component: shop_home,
+					name: 'shop_home_actions',
 				},
+				{
+					path: '/boutique',
+					component: shop_home,
+					name: 'shop_home',
+				},
+				{
+					path: '/boutique/q=produits',
+					component: shop_home,
+					name: 'shop_home_products',
+				},
+				{
+					path: '/Uvar/utilisateur/:id',
+					component: users_profil,
+					name: 'usersProfil',
+					store
+				},
+				{
+					path: '/Uvar/membres/:id',
+					component: members_profil,
+					name: 'membersProfil',
+					store
+				},
+				{
+					path: '/Uvar/membres/:id',
+					component: others_members_profil,
+					name: 'otherMemberProfil',
+					store
+				},
+
 		]
 	},
 	{
@@ -133,12 +173,6 @@ const routes = [
 					path: '/Uvar/administration/tag/membres/:id',
 					component: members_profil_admin,
 					name: 'membersProfilOnAdmin',
-					store
-				},
-				{
-					path: '/Uvar/membres/:id',
-					component: members_profil,
-					name: 'membersProfil',
 					store
 				},
 				{
@@ -177,6 +211,7 @@ const routes = [
 const router = new VueRouter({mode: 'history', routes})
 new Vue({
 	store,
+	Loading,
 	file: '',
 	router: router,
 	el: ".app",

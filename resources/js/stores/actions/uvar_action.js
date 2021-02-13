@@ -1,11 +1,11 @@
 import Swal from 'sweetalert2'
 const uvar_action_a = {
 	getActions: (state) => {
-		axios.get('/Uvar/administration/actions&get&data/now')
+		axios.post('/Uvar/administration/actions&get&data/now')
 			.then(response => {
 				state.commit('GET_ACTIONS', {
-						actions: response.data.actions,
-						totalBoughtByAction: response.data.totalBoughtByAction,
+					actions: response.data.actions,
+					totalBoughtByAction: response.data.totalBoughtByAction,
 				})
 			})
 			.catch(err =>{
@@ -44,6 +44,10 @@ const uvar_action_a = {
 				state.commit('GET_ALL_ACTIONS', {
 						actions: response.data.actions,
 				})
+				state.commit('GET_ACTIONS_DETAILS', {
+						lastAction: {action: response.data.actionsDetails.lastAction, totalBought: response.data.actionsDetails.lastTotalBought},
+						bestAction: {action: response.data.actionsDetails.bestAction, totalBought: response.data.actionsDetails.bestTotalBought},
+				})
 			})
 			.catch(err =>{
 				if (err.response.status == 401) {
@@ -76,12 +80,51 @@ const uvar_action_a = {
 	},
 
 	createAction: (state, data) => {
-		axios.post('/Uvar/administration', {
-			
+		axios.post('/Uvar/administration/tag/actions/',
+		{
+			image: data.action.image,
+			name: data.action.action.name,
+			description: data.action.action.description,
+			price: data.action.action.price,
+			total: data.action.action.total,
+		},
+		{
+			headers: {
+    			'X-CSRF-TOKEN': data.token,
+	        }
 		})
 		.then(response => {
-			state.commit('GET_ACTIONS', {actions: response.data.actions})
+			if (response.data.errors !== undefined) {
+				state.commit('RESET_NEW_ACTION_INVALIDS', response.data.errors)
+			}
+			// state.commit('GET_ACTIONS', {actions: response.data.actions})
+			else if (response.data.success !== undefined) {
+				$('#createAction').modal('hide')
+				$('body').removeClass('modal-open')
+				$('.modal-backdrop').remove()
+				Swal.fire({
+				  icon: 'success',
+				  title: "Créaction d'une nouvelle action",
+				  text: response.data.success,
+				  showConfirmButton: false,
+				})
+				state.dispatch('getActions')
+				state.dispatch('getAllActions')
+			}
 		})    
+		.catch(err =>{
+			if (err.response.status == 403) {
+				$('#createAction').modal('hide')
+				$('body').removeClass('modal-open')
+				$('.modal-backdrop').remove()
+				Swal.fire({
+				  icon: 'warning',
+				  title: "Vous n'êtes pas authorisé",
+				  showConfirmButton: false,
+				})
+				
+			}
+		})   
 	},
 	updateAction: (state, data) => {
 		axios.put('/Uvar/administration/tag/actions/' + data.action.action.id, {

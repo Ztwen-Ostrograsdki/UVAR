@@ -36,6 +36,7 @@
 </template>
 <script>
     import { mapState } from 'vuex'
+    import Swal from 'sweetalert2'
     export default {
         data() {
             return {
@@ -60,7 +61,16 @@
                 let member = this.active_member
                 if (email !== '' && email !== undefined) {
                     this.$store.commit('RESET_AFFILIATION_INVALIDS', {status: false, msg: ""})
-                    this.$store.dispatch('affiliate', {email: this.newReferee, member: member})
+                    if (navigator.onLine) {
+                        this.$store.dispatch('affiliate', {email: this.newReferee, member: member})
+                    }
+                    else{
+                        Swal.fire({
+                            icon: 'warning',
+                            title: "Erreur de connexion à internet",
+                            showConfirmButton: false,
+                        })
+                    }
                 }
                 else{
                     this.$store.commit('RESET_AFFILIATION_INVALIDS', {status: true, msg: "Veuillez renseigner l'adresse mail de l'utilisateur"})

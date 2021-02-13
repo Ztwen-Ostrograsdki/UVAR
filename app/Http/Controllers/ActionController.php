@@ -15,7 +15,7 @@ class ActionController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('admin')->only(['create', 'store', 'edit', 'update']);
+        $this->middleware('admin');
     }
     /**
      * Display a listing of the resource.
@@ -29,7 +29,7 @@ class ActionController extends Controller
 
     public function getActions()
     {
-        $actions = Action::all();
+        $actions = Action::where('id', '>', 0)->latest()->get();
         $totalBoughtByAction = [];
         foreach ($actions as $action) {
             $totalBoughtByAction[$action->id] = $action->totalBought();
@@ -55,7 +55,32 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $v = $this->validateAction($request->all());
+
+        if ($v->fails()) {
+            return response()->json(['errors' => $v->errors()]);
+        }
+        else{
+            $action = Action::create(['name' => $request->name, 'description' => $request->description, 'price' => (int)$request->price, 'total' => (int)$request->total]);
+
+            if ($action) {
+                if ($request->image !== "" &&  $request->image !== null) {
+                    $storer = (new Storer($request->image, $action->id))->__ACTION_STORER();
+                    if ($storer) {
+                        return response()->json(['success' => "L'action {$action->name} a bien été créé"]);
+                    }
+                    else{
+                        return response()->json(['success' => "L'action {$action->name} a bien été créé, mais une erreure s'est produite lors du stockage de l'image jointe"]);
+                    }
+                }
+                else{
+                    return response()->json(['success' => "L'action {$action->name} a bien été créé"]);
+                }
+            }
+
+            
+        }
+
     }
 
     /**
@@ -87,9 +112,13 @@ class ActionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
+
         $action = Action::find($id);
+        if (!is_int($id) || !$action) {
+            return abort(404, 'Page introuvable');
+        }
         $oldName = Action::where('name', $request->name)->first();
         $storer = false;
         $make = false;
@@ -129,6 +158,21 @@ class ActionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $action = Action::find($id);
+        if ($action) {
+            $alreadyBought = $action->buyers();
+            if (count($alreadyBought) > 0) {
+                return response()->json(['errors' => "Cette action a déjà des détenteurs, vous ne pouvez pas la supprimer! Veuillez essayez la procedure de forçage de suppression sécurisée"]);
+            }
+            $delete = $action->forceDelete();
+            if ($delete) {
+                return response()->json(['success' => $alreadyBought]);
+            }
+            else{
+                return response()->json(['errors' => "Erreure lors de la suppression!"]);
+            }
+        }
+        return response()->json(['errors' => "Requête inconnue, veuillez vérifier votre requête!"]);
+        
     }
 }

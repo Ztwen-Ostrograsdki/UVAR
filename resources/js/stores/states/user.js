@@ -11,7 +11,8 @@ const user_s = {
     	step: null,
     	status: false
     },
-    invalidsUserRegister: {}
+    invalidsUserRegister: {},
+    userRequests: []
 }
 
 export default user_s

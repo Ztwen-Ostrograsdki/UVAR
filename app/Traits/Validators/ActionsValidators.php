@@ -20,7 +20,7 @@ trait ActionsValidators {
         if ($except !== null) {
             if ($except == 'name') {
                 return Validator::make($data, [
-                    'name' => ['required', 'string', 'max:255', 'min:5', 'bail'],
+                    'name' => ['required', 'string', 'max:50', 'min:5', 'bail'],
                     'description' => ['required', 'string', 'max:255', 'min:5', 'bail'],
                     'price' => ['required', 'numeric', 'min:5', 'bail'],
                     'total' => ['required', 'numeric', 'min:1', 'bail'],
@@ -28,7 +28,7 @@ trait ActionsValidators {
             }
             elseif ($except == 'phone') {
                 return Validator::make($data, [
-                    'name' => ['required', 'string', 'unique:actions', 'max:255', 'min:5', 'bail'],
+                    'name' => ['required', 'string', 'unique:actions', 'max:50', 'min:5', 'bail'],
                     'description' => ['required', 'string', 'max:255', 'min:5', 'bail'],
                     'price' => ['required', 'numeric', 'min:5', 'bail'],
                     'total' => ['required', 'numeric', 'min:1', 'bail'],
@@ -36,7 +36,7 @@ trait ActionsValidators {
             }
         }
         return Validator::make($data, [
-            'name' => ['required', 'string', 'unique:actions', 'max:255', 'min:5', 'bail'],
+            'name' => ['required', 'string', 'unique:actions', 'max:50', 'min:5', 'bail'],
             'description' => ['required', 'string', 'max:255', 'min:5', 'bail'],
             'price' => ['required', 'numeric', 'min:5', 'bail'],
             'total' => ['required', 'numeric', 'min:1', 'bail'],

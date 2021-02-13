@@ -16,6 +16,8 @@ class CreateAffiliatesTable extends Migration
         Schema::create('affiliates', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
+            $table->boolean('accepted')->default(false);
+            $table->string('token');
             $table->unsignedBigInteger('referer_id');
             $table->foreign('referer_id')
                   ->references('id')

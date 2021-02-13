@@ -3,10 +3,16 @@
 	<div class="w-100 mx-auto d-flex justify-content-center flex-column">
 		<div class="w-95 mx-auto oneProperty mt-2">
 			<div class="w-100 d-flex justify-content-start mb-0 mt-2">
-				<h5 class="text-official fa-2x p-0 m-0 mb-1">Le marché des Actions UVAR 
-					<span v-if="allActions.length > 0" class="text-white-50 ml-2">
-						(Plus de {{ allActions.length }} actions disponibles)
-					</span>
+				<h5 class="text-official fa-2x p-0 m-0 mb-1 w-100">
+                    <span class="">
+                        MARCHE UVAR 
+                    </span>
+					<span class="float-right text-white-50">
+                        <span class="fa">
+                            <img class="text-official" src="/icons/graph-5_icon-icons.com_58023.png" width="40">
+                        </span>
+                        LES ACTIONS               
+                    </span>
 				</h5>
 
 			</div>
@@ -14,7 +20,7 @@
 				Chargement des données en cours...
 			</h4>
 			<div class="row w-100 mx-auto" v-if="allActions.length > 0">
-				<div class="col-12 border my-1 row m-0 p-0" v-for="action in allActions">
+				<div :id="'action' + action.action.id" class="col-12 border my-1 row m-0 p-0" v-for="action in allActions">
 					<div class="w-100 mx-auto d-flex justify-content-between p-0">
 						<div class="w-25 p-0 float-left" style="height: auto !important;">
 							<div class="w-100 p-0 m-0 float-left h-100">
@@ -31,6 +37,8 @@
 											<span class="text-secondary">{{ getPrice(action.action.price).toFrancs }}</span>
 											<span class="text-official">||</span>
 											<span class="text-warning">{{ getPrice(action.action.price).toAr }}</span>
+                                            <i class="ml-2 text-white-50">({{action.totalBought}}) achétées</i>
+                                            <i class="ml-2 text-danger">({{ action.action.total - action.totalBought}}) restantes</i>
 											<span @click="buyAction(action.action, active_member)" class="m-0 float-right mr-2 btn btn-primary border-official">Acheter cette action</span>
 										</h4>
 										<p class="m-0 p-0 mt-1 w-100 float-right text-warning">
@@ -99,12 +107,19 @@
         methods :{
 
             buyAction(action, member){
+                if (!navigator.onLine) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: "Erreur de connexion à internet",
+                        showConfirmButton: false,
+                    })
+                    return false
+                }
                 let token = this.token
                 this.total = 0
                 Swal.fire({
                     title: "Achat de l'action " + action.name,
                     input: 'text',
-                    className: 'bg-official',
                     inputAttributes: {
                         autocapitalize: 'off',
                         placeholder: "Veuillez renseiller la quantité d'actions"
@@ -121,17 +136,33 @@
                                     'X-CSRF-TOKEN': token,
                                 },
                             })
+                            .then(response => response.json())
                             .then(response => {
-                            if (!response.ok) {
-                              throw new Error(response.statusText)
-                            }
-                            // return response.json()
-                        })
-                        .catch(error => {
-                            Swal.showValidationMessage(
-                              `Request failed: ${error}`
-                            )
-                        })
+                                if (response.errors !== undefined) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: response.errors,
+                                        showConfirmButton: false,
+                                    })
+                                }
+                                else{
+                                    if (response.success !== undefined) {
+                                        this.$store.dispatch('getMember', member.id)
+                                        this.$store.dispatch('getRequests')
+                                        this.$store.dispatch('getAllActions')
+                                        Swal.fire({
+                                            icon: 'success',
+                                            text: "Opération réussie! Pour entrer en Possession des actions veuillez faire un dépot de " + (Number(this.total) * action.price) + " FCFA sur le numero de la plateforme.",
+                                            showConfirmButton: true,
+                                        })
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(
+                                    `Echec: ${error}`
+                                )
+                            })
                     },
                     allowOutsideClick: () => !Swal.isLoading()
                 })
@@ -139,17 +170,11 @@
                     if (response.isConfirmed) {
                         this.$store.dispatch('getMember', member.id)
                         this.$store.dispatch('getRequests')
+                        this.$store.dispatch('getAllActions')
                         Swal.fire({
                             icon: 'success',
                             text: "Opération réussie! Pour entrer en Possession des actions veuillez faire un dépot de " + (Number(this.total) * action.price) + " FCFA sur le numero de la plateforme.",
                             showConfirmButton: true,
-                        })
-                    }
-                    else if (response.data.errors !== undefined) {
-                        Swal.fire({
-                            icon: 'errors',
-                            title: response.data.errors,
-                            showConfirmButton: false,
                         })
                     }
                 })
@@ -203,6 +228,20 @@
                 this.$store.commit('RESET_EDITING_ACTION', action)
             }
             
+        },
+        updated(){
+            $(document).ready(function(){
+                $(window).on('hashchange', function(e){
+                    let hash = location.hash.substr(1)
+                    if (hash !== "") {
+                        if (hash.search('action') !== -1) {
+                            $('div.targetedAction').removeClass('border-official shadow targetedAction')
+                            $('div#' + hash).addClass('border-official bg-official-opacity shadow targetedAction')
+                        }
+                    }
+
+                })
+            })
         },
 
         computed: mapState([

@@ -13,7 +13,7 @@
         </router-link>
         
 
-        <div class="tab-content">
+        <div class="tab-content" v-if="connected && active_member && active_member.id && user && user.role == 'admin'">
             <transition name="justefade" appear> 
                 
             </transition>
@@ -161,13 +161,17 @@
         },
 		
         created(){
-           this.$store.dispatch('getUsers')
-           this.$store.dispatch('getMembers')
-           this.$store.dispatch('getActions')
-           this.$store.dispatch('getProducts')
-           this.$store.dispatch('getCategories')
-           this.$store.dispatch('getNotifications')
-           this.$store.dispatch('getRequests')
+            this.$store.dispatch('getActiveMember')
+            this.$store.dispatch('getToken')
+           if (this.connected && this.user && this.user.role == 'admin') {
+                this.$store.dispatch('getUsers')
+                this.$store.dispatch('getMembers')
+                this.$store.dispatch('getActions')
+                this.$store.dispatch('getProducts')
+                this.$store.dispatch('getCategories')
+                this.$store.dispatch('getNotifications')
+                this.$store.dispatch('getRequests')
+           }
 
         },
         methods :{
@@ -202,7 +206,7 @@
         },
 
         computed: mapState([
-            'users', 'members', 'notifications', 'actions', 'products', 'categories', 'totalBoughtByAction', 'active_member', 'active_member_photo', 'requests'
+            'users', 'user', 'members', 'notifications', 'actions', 'products', 'categories', 'totalBoughtByAction', 'active_member', 'active_member_photo', 'requests', 'token', 'connected'
         ])
 	}
 </script>

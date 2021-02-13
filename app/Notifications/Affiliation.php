@@ -44,10 +44,11 @@ class Affiliation extends Notification
      */
     public function toMail($notifiable)
     {
+        $response = true;
         return (new MailMessage)
                     ->subject("Demande d'affiliation sur UVAR ")
                     ->line("{$this->referer->name} vient de faire une demande d'affiliation de {$this->referee->name}")
-                    ->action('Confirmé cette demande', url("UVAR/confirmation/{$notifiable->id}/affiliation"))
+                    ->action('Confirmé cette demande', url("Uvar/administration/affiliations/manage/referer={$this->referer->id}/referee={$this->referee->id}/r={$response}"))
                     ->line('UVAR vous remercie et vous promet une meilleure expérience utilisateur');
     }
 

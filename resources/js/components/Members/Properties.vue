@@ -1,9 +1,9 @@
 <template>
 	<div class="w-100 mx-auto d-flex justify-content-center flex-column">
 		<div class="w-95 mx-auto oneProperty" v-if="active == 'referies'">
-			<div class="w-100 d-flex justify-content-end">
+			<div class="d-inline float-right">
 				<span data-toggle="modal" data-target="#affiliations" class="mr-4 fa fa-plus fa-2x text-official"></span>
-				<h5 class="text-official fa-2x text-right">{{ user.id == member.user_id ? 'Mes ' : ' Ses '}} Affiliés </h5>
+				<h5 class="text-official d-inline mx-2 fa-2x text-right">{{ user.id == member.user_id ? 'Mes ' : ' Ses '}} Affiliés </h5>
 			</div>
 			<div class="row w-100 mx-auto">
 				<div class="col-12 border my-1 row p-0 m-0" v-for="referee in myReferies">

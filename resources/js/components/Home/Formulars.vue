@@ -6,6 +6,7 @@
         <edit-member-data></edit-member-data>
 		<edit-member-photo></edit-member-photo>
         <edit-action></edit-action>
+        <create-action></create-action>
             
 	</div>
 </template>
