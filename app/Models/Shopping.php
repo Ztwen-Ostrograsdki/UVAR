@@ -14,7 +14,7 @@ class Shopping extends Model
 
 
 
-    public function buyers()
+    public function user()
     {
         return $this->belongsToMany(User::class);
     }

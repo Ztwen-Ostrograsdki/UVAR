@@ -1,23 +1,40 @@
-
 <template>
 	<div class="w-100 mx-auto d-flex justify-content-center flex-column">
 		<div class="w-95 mx-auto oneProperty mt-2">
             <div class="w-100 d-flex justify-content-start mb-0 mt-2">
-                <h5 class="text-official fa-2x p-0 m-0 mb-1">Bienvenue à la boutique UVAR
-                    <span v-if="allProducts.length > 0" class="text-white-50 ml-2">
-                        (Plus de {{ allProducts.length }} produits disponibles)
+                <h5 class="text-official fa-2x p-0 m-0 mb-1 w-100">
+                    <span class="">
+                        MARCHE UVAR 
+                    </span>
+                    <span class="float-right text-white-50">
+                        <span class="fa">
+                            <img class="text-official" src="/icons/graph-5_icon-icons.com_58023.png" width="40">
+                        </span>
+                        LES ARTICLES               
                     </span>
                 </h5>
+
             </div>
-            <h4 class="text-white-50 text-center p-3 mx-auto w-100" v-if="allProducts.length <= 0">
-                Chargement des données en cours...
-            </h4>
-            <div class="row w-100 mx-auto mt-2" v-if="allProducts.length > 0">
-                <div class="col-12 border my-1 row m-0 p-0" v-for="product in getApartOf(allProducts, productsLength)">
+            <transition name="bodyfade" appear>
+                <div class="mx-auto w-100 text-white text-center my-3" v-if="!isLoadedProducts">
+                    <div id="app" class="w-screen h-screen bg-gray-800 flex flex-col justify-center">
+                        <div class="container m-auto bg-gray-900 text-center text-white shadow-2xl h-64 flex flex-col justify-center rounded-lg text-3xl">
+                          <typical
+                            class="vt-title"
+                            :steps="['Chargement des articles en cours...', 1000, 'Veuillez patienter....', 1000]"
+                            :wrapper="'h2'"
+                          ></typical>
+                        </div>
+                      </div>
+                </div>
+            </transition>
+            <div class="row w-100 mx-auto mt-2" v-if="isLoadedProducts">
+                <div class="col-12 border my-1 row m-0 p-0" v-for="product in allProducts">
                     <div class="w-100 mx-auto d-flex justify-content-between p-0">
                         <div class="w-25 p-0 float-left" style="height: auto !important;">
                             <div class="w-100 p-0 m-0 float-left h-100">
-                                <img class="p-0 m-0 float-left w-100 h-100" src="/photo/ph2.jpg">
+                                <img v-if="product.images.length < 1" class="p-0 m-0 float-left w-100 h-100" src="/photo/ph2.jpg">
+                                <img v-if="product.images.length > 0" class="p-0 m-0 float-left w-100 h-100" :src="'/images/'+ getProfilPath(product.images)">
                             </div>
                         </div>
                         <div class="w-75">
@@ -29,11 +46,12 @@
                                             <span class="text-secondary">{{ getPrice(product.product.price).toFrancs }}</span>
                                             <span class="text-official">||</span>
                                             <span class="text-warning">{{ getPrice(product.product.price).toAr }}</span>
-                                            <span v-if="connected" class="m-0 float-right mr-2 btn btn-primary border-official">Acheter cet article </span>
-                                            <span v-if="!connected" class="m-0 float-right mr-2 btn btn-primary border-official">Inscrivez-vous pour acheter cet article</span>
+                                            <i class="ml-2 text-white-50">({{product.totalBought}}) achétés</i>
+                                            <i class="ml-2 text-danger">({{ product.product.total - product.totalBought}}) restants</i>
+                                            <span @click="buyProduct(product.product, active_member)" class="m-0 float-right mr-2 btn btn-primary border-official">Acheter cet article</span>
                                         </h4>
                                         <p class="m-0 p-0 mt-1 w-100 float-right text-warning">
-                                            Cet article n'est plus disponible sur le marché
+                                            Cet article est disponible sur le marché
                                         </p>
                                         <hr class="w-100 bg-official p-0 m-0">
                                     </div>
@@ -44,8 +62,11 @@
                                         <span class="d-inline-block ml-2 text-white-50 float-left text-secondary">
                                             Mise sur le marché dépuis le : {{  getCreatedAt(product.product.created_at) }}
                                         </span>
-                                        <span class="d-inline-block text-white-50 float-right text-white-50">
-                                            Vendeur : UVAR
+                                        <span class="float-right mr-2">
+                                            <span v-if="user.role == 'admin'" style="font-size: 19px;" data-toggle="modal" data-target="#editProduct" @click="setEditingProduct(product.product)" class="d-inline-block text-white-50 float-right mx-2 cursor text-white-50 fa fa-edit"></span>
+                                            <span class="d-inline-block text-white-50 float-right text-white-50">
+                                             Actionnaire : UVAR
+                                            </span>
                                         </span>
                                     </div>
                                 </div>                                    
@@ -65,6 +86,7 @@
 		props : [],
         data() {
             return {
+                isLoaded : false,
             	options : false,
                 actions : true,
                 shop : true,
@@ -90,11 +112,13 @@
         },
 		
         created(){
+            this.$store.dispatch('getAllProducts')
         	this.$store.dispatch('getAllActions')
         },
+        
         methods :{
 
-            buyAction(action, member){
+            buyProduct(action, member){
                 if (!navigator.onLine) {
                     Swal.fire({
                         icon: 'warning',
@@ -211,15 +235,15 @@
                 ar = Number.parseFloat(price/1000).toFixed(2)
                 return ar
             },
-            setEditingAction(action){
-                this.$store.commit('RESET_TARGETED_ACTION', action)
-                this.$store.commit('RESET_EDITING_ACTION', action)
+            setEditingProduct(product){
+                this.$store.commit('RESET_TARGETED_PRODUCT', product)
+                this.$store.commit('RESET_EDITING_PRODUCT', product)
             }
             
         },
 
         computed: mapState([
-            'member', 'connected', 'user', 'myActions', 'myAccount', 'myBonuses', 'memberReady', 'targetedAction', 'allActions', 'editingAction', 'active_member', 'token'
+            'member', 'connected', 'user', 'myActions', 'myAccount', 'myBonuses', 'memberReady', 'targetedProduct', 'products', 'allProducts', 'editingProduct', 'active_member', 'isLoadedProducts'
         ])
 	}
 </script>

@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
             $table->string('name')->unique();
             $table->string('description')->nullable();
             $table->unsignedBigInteger('total');
-            $table->float('price')->nullable();
+            $table->decimal('price', 12, 2)->nullable();
             $table->unsignedBigInteger('poster')->default(1)->nullable();
             $table->string('editor')->nullable();
             $table->foreign('poster')

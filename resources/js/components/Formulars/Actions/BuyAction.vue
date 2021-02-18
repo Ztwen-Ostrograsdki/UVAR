@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<div class="buyAction">
 	<div class="modal fade" id="buyAction" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -85,4 +85,4 @@
         margin: 0 !important;
         color: black !important;
     }
-</style>
+</style> -->

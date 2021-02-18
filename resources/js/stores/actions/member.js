@@ -1,7 +1,12 @@
 import Swal from 'sweetalert2'
 const members_a = {
 	getMembers: (state) => {
-		axios.get('/Uvar/administration/members&get&data/now')
+		axios.get('/Uvar/administration/members&get&data/now', 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    })
 			.then(response => {
 				state.commit('GET_MEMBERS', {members: response.data.members})
 			})  
@@ -15,10 +20,16 @@ const members_a = {
 					window.location = '/'
 				}
 			})   
+			.finally(() => state.commit('RESET_MEMBERS_LOADING', true))  
 	},
 	getMember: (state, id) => {
 		state.commit('RESET_READY_MEMBER', false)
-		axios.get('/Uvar/administration/get&a&member/profil/id=' + id)
+		axios.get('/Uvar/administration/get&a&member/profil/id=' + id, 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    })
 			.then(response => {
 				state.commit('GET_MEMBER', response.data)
 				state.commit('RESET_READY_MEMBER', true)
@@ -33,12 +44,18 @@ const members_a = {
 					window.location = '/'
 				}
 			})       
+			.finally(() => state.commit('RESET_MEMBER_LOADING', true))  
 	},
 
 	createMember: (state, data) => {
 		axios.post('/Uvar/administration', {
 			name: data.name,
-		})
+		}, 
+		{
+    		headers: {
+    			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+	        }
+	    })
 		.then(response => {
 			state.commit('GET_MEMBERS', {members: response.data.members})
 		})    
@@ -49,7 +66,12 @@ const members_a = {
 			sexe: data.sexe,
 			phone: data.phone,
 			country: data.country
-		})
+		}, 
+		{
+    		headers: {
+    			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+	        }
+	    })
 		.then(response => {
 			if (response.data.errors !== undefined) {
 				Swal.fire({
@@ -89,7 +111,12 @@ const members_a = {
 		axios.put('/Uvar/administration/update/images/membres/' + data.data.member.id, {
 			image: data.data.image,
 			headers: {'content-Type': 'multipart/form-data', 'charset': 'UTF8'},
-		})
+		}, 
+		{
+    		headers: {
+    			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+	        }
+	    })
 		.then(response => {
 			if (response.data.success !== undefined) {
 				Swal.fire({
@@ -121,7 +148,12 @@ const members_a = {
 	affiliate: (state, data) =>{
 		axios.post('/Uvar/membre/affiliation/ID=' +  data.member.IDENTIFY, {
 			email: data.email,
-		})
+		}, 
+		{
+    		headers: {
+    			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+	        }
+	    })
 		.then(response => {
 			// state.commit('GET_MEMBERS', {members: response.data.members})
 			if (response.data.success !== undefined) {

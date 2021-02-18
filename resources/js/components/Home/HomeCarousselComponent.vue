@@ -133,12 +133,8 @@
 	export default {
 		
         created(){
-           console.log(this.connected, 'created')
-        },
-        mounted(){
-            console.log(this.connected)
-        },
 
+        },
         computed: mapState([
             'member', 'connected', 'user', 'myActions', 'myAccount', 'myBonuses', 'memberReady', 'targetAction', 'allActions', 'allProducts'
         ])

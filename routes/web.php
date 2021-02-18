@@ -33,6 +33,8 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'Uvar'], function() {
     Route::resource('administration', AdminController::class);
+    Route::put('administration/security/a=locked/user/u={user}', [AdminController::class, 'lockedUser']);
+    Route::put('administration/security/a=dislocked/user/u={user}', [AdminController::class, 'dislockedUser']);
     Route::resource('administration/tag/membres', MembersController::class);
     Route::resource('administration/tag/demandes', RequestsController::class);
     Route::post('/systeme/requests/fecth&them', [RequestsController::class, 'getRequests']);
@@ -47,6 +49,7 @@ Route::group(['prefix' => 'Uvar'], function() {
     Route::get('administration/members&get&data/now', [MembersController::class, 'getMembers']);
     Route::get('administration/get&a&member/profil/id={id}', [MembersController::class, 'getMember']);
     Route::post('administration/actions&get&data/now', [ActionController::class, 'getActions']);
+    Route::post('administration/get&action&data&/target/id={id}', [ActionController::class, 'getAction']);
     Route::get('administration/products&get&data/now', [ProductController::class, 'getProducts']);
     Route::get('administration/categories&get&data/now', [CategoryController::class, 'getCategories']);
     Route::post('/systeme/notify&system', [AffiliationsController::class, 'getNotifications']);

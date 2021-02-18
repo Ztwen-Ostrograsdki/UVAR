@@ -23,15 +23,20 @@ class Action extends Model
 
     public function buyers()
     {
-        $buyers = [];
-        $shops = ShoppingAction::where('action_id', $this->id)->get();
+        return $this->hasMany(ShoppingAction::class);
+    }
+
+    public function Membersbuyers()
+    {
+        $tables = [];
+        $shops = $this->buyers()->with('member')->get();
         if (count($shops) > 0) {
             foreach ($shops as $shop) {
-                $buyers[] = Member::find($shop->member_id);
+                $tables[] = ['member' => $shop->member, 'shop' => $shop, 'images' => $shop->member->images];
             }
         }
 
-        return $buyers;
+        return $tables;
     }
 
     public function totalBought()

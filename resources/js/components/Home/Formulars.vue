@@ -7,6 +7,8 @@
 		<edit-member-photo></edit-member-photo>
         <edit-action></edit-action>
         <create-action></create-action>
+        <create-product></create-product>
+        <edit-product></edit-product>
             
 	</div>
 </template>

@@ -16,7 +16,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(category, k) in categories">
-                        <td>{{ k + 1 > 10 ? k + 1 : '0' + (k + 1) }}</td>
+                        <td>{{ k + 1 > 9 ? k + 1 : '0' + (k + 1) }}</td>
                         <td>{{ category.name }}</td>
                         <td>{{ 3 }}</td>
                         <td class="text-center">

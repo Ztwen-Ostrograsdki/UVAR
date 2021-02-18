@@ -1,8 +1,21 @@
 <template>
     <div class="row mx-auto w-90 mt-3 profils">
+        <transition name="bodyfade" appear>
+            <div class="mx-auto w-100 text-white text-center my-3" v-if="!isLoadedRequests">
+                <div id="app" class="w-screen h-screen bg-gray-800 flex flex-col justify-center">
+                    <div class="container m-auto bg-gray-900 text-center text-white shadow-2xl h-64 flex flex-col justify-center rounded-lg text-3xl">
+                      <typical
+                        class="vt-title"
+                        :steps="['Chargement des demandes d\'affiliations UVAR en cours...', 1000, 'Veuillez patienter....', 1000]"
+                        :wrapper="'h2'"
+                      ></typical>
+                    </div>
+                  </div>
+            </div>
+        </transition>
     	<div class="w-95 mx-auto">
-            <h3 class="text-white">
-                <span v-if="requests.length < 1">Aucune demande en attente</span>
+
+            <h3 class="text-white" v-if="isLoadedRequests">
                 <strong v-if="requests.length > 0">
                     {{requests.length > 9 ? requests.length : '0' + requests.length }}
                 </strong> 
@@ -10,12 +23,12 @@
                     demande {{requests.length > 1 ? 's' : ''}} d'achat en attente de confirmation
                 </span>
             </h3>
-            <div class="mx-auto d-flex justify-content-center px-2 w-75" v-if="requests.length < 1">
+            <div class="mx-auto d-flex justify-content-center px-2 w-75" v-if="isLoadedRequests && requests.length < 1">
                 <h5 class="fa-2x text-center border border-white text-white-50 bg-linear-official-50 p-2 w-100 ">
                     Aucune demande en cours...
                 </h5>
             </div>
-            <table class="table table-official text-white text-center" v-if="requests.length > 0">
+            <table class="table table-official text-white text-center" v-if="isLoadedRequests && requests.length > 0">
                 <thead>
                     <th>No</th>
                     <th>Description</th>
@@ -59,7 +72,9 @@
         },
 		
         created(){
-           
+            this.$store.dispatch('getRequests')
+        },
+        mounted(){
         },
         methods :{
            
@@ -79,7 +94,7 @@
         },
 
         computed: mapState([
-            'user', 'requests', 'active_member'
+            'user', 'requests', 'active_member', 'isLoadedRequests'
         ])
 	}
 </script>

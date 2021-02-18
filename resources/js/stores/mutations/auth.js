@@ -29,6 +29,12 @@ const auth_mutations = {
         state.connected = false,
         active_member_photo = []
     },
+    RESET_NOTIFICATIONS_LOADING : (state, status) => {
+        state.isLoadedNotifications = status
+    },
+    RESET_REQUESTS_LOADING : (state, status) => {
+        state.isLoadedRequests = status
+    },
 }
 
 export default auth_mutations

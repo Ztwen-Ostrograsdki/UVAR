@@ -1,11 +1,17 @@
 import Swal from 'sweetalert2'
 const uvar_action_a = {
 	getActions: (state) => {
-		axios.post('/Uvar/administration/actions&get&data/now')
+		axios.post('/Uvar/administration/actions&get&data/now', 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    })
 			.then(response => {
 				state.commit('GET_ACTIONS', {
 					actions: response.data.actions,
 					totalBoughtByAction: response.data.totalBoughtByAction,
+					boughtedActions: response.data.boughtedActions,
 				})
 			})
 			.catch(err =>{
@@ -18,28 +24,41 @@ const uvar_action_a = {
 					window.location = '/'
 				}
 			})   
+			.finally(() => state.commit('RESET_ACTIONS_LOADING', true))  
 	},
-	getAction: (state, action) => {
-		// axios.get('/Uvar/administration/actions&get&data/now' + action.id)
-		// 	.then(response => {
-		// 		state.commit('GET_ACTION', {
-		// 				action: response.data.action,
-		// 				totalBoughtByAction: response.data.totalBoughtByAction,
-		// 		})
-		// 	})
-		// 	.catch(err =>{
-		// 		if (err.response.status == 401) {
-		// 			Swal.fire({
-		// 			  icon: 'warning',
-		// 			  title: "Vous n'êtes pas authorisé",
-		// 			  showConfirmButton: false,
-		// 			})
-		// 			window.location = '/'
-		// 		}
-		// 	})   
+	getAction: (state, id) => {
+		axios.post('/Uvar/administration/get&action&data&/target/id=' + id, 
+			{
+				headers: {
+	    			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+			})
+			.then(response => {
+				state.commit('GET_ACTION', {
+					action: response.data.action,
+					buyers: response.data.buyers,
+					totalBought: response.data.totalBought,
+				})
+			})
+			.catch(err =>{
+				if (err.response.status == 401) {
+					Swal.fire({
+					  icon: 'warning',
+					  title: "Vous n'êtes pas authorisé",
+					  showConfirmButton: false,
+					})
+					window.location = '/'
+				}
+			})
+			.finally(() => state.commit('RESET_ACTION_LOADING', true))  
 	},
 	getAllActions: (state) => {
-		axios.post('/boutique/q=actions')
+		axios.post('/boutique/q=actions', 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    })
 			.then(response => {
 				state.commit('GET_ALL_ACTIONS', {
 						actions: response.data.actions,
@@ -59,9 +78,15 @@ const uvar_action_a = {
 					window.location = '/'
 				}
 			})   
+			.finally(() => state.commit('RESET_ACTIONS_LOADING', true))  
 	},
 	getAllActionsOnlyAPart: (state) => {
-		axios.post('/boutique/q=actions/length')
+		axios.post('/boutique/q=actions/length', 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    })
 			.then(response => {
 				state.commit('GET_ALL_ACTIONS_ONLY_A_PART', {
 						actions: response.data.actions,
@@ -90,7 +115,7 @@ const uvar_action_a = {
 		},
 		{
 			headers: {
-    			'X-CSRF-TOKEN': data.token,
+    			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
 	        }
 		})
 		.then(response => {
@@ -133,6 +158,11 @@ const uvar_action_a = {
 			description: data.action.action.description,
 			price: data.action.action.price,
 			total: data.action.action.total,
+		}, 
+		{
+			headers: {
+    			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+	        }
 		})
 		.then(response => {
 			if (response.data.errors !== undefined) {

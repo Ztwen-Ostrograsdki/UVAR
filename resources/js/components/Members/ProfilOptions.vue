@@ -10,7 +10,7 @@
                 </a>
                   <!-- Dropdown - User Information -->
                 <div class="w-100 border p-2">
-                        <router-link style="border-radius: 30px;" v-if="connected && active_member && active_member.id" :to="{name: 'membersProfil', params: {id: active_member.id}}"   class="w-100 my-1 d-inline-block link-float" >
+                    <router-link style="border-radius: 30px;" v-if="connected && active_member && active_member.id" :to="{name: 'membersProfil', params: {id: active_member.id}}"   class="w-100 my-1 d-inline-block link-float" >
                             <!-- <i  class="fas fa-user fa-sm fa-fw mr-2"></i> -->
                             <img alt="Mon profil" width="30" v-if="connected && active_member && active_member.id !== null && active_member_photo.length > 0" class="login-photo border-official" :src="'/images/'+ getProfilPath()">
                             Mon profil
@@ -23,6 +23,14 @@
                         <a v-if="connected && active_member && active_member.id" class="w-100 my-1 d-inline-block link-float" data-toggle="modal" data-target="#affiliations" href="" style="border-radius: 30px;">
                             <i class="fa fa-line-chart fa-sm fa-fw mr-2"></i>
                             Affilier un membre
+                        </a>
+                        <a v-if="connected && active_member && active_member.id && user && user.role == 'admin'" class="w-100 my-1 d-inline-block link-float" data-toggle="modal" data-target="#createAction" href="" style="border-radius: 30px;">
+                            <i class="fa fa-line-chart fa-sm fa-fw mr-2"></i>
+                            Mettre une nouvelle action
+                        </a>
+                        <a v-if="connected && active_member && active_member.id && user && user.role == 'admin'" class="w-100 my-1 d-inline-block link-float" data-toggle="modal" data-target="#createProduct" href="" style="border-radius: 30px;">
+                            <i class="fa fa-line-chart fa-sm fa-fw mr-2"></i>
+                            Mettre un nouvel article
                         </a>
                         <a v-if="connected && active_member.id"  class="w-100 my-1 d-inline-block link-float" href="" style="border-radius: 30px;">
                             <i class="fa fa-line-chart fa-sm fa-fw mr-2"></i>

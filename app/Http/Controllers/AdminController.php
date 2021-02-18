@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\AffiliationsController;
 use App\Http\Controllers\RequestsController;
+use App\ModelsHelpers\Authenticators\IDManager;
 use App\Models\Account;
 use App\Models\Action;
 use App\Models\Affiliate;
@@ -221,6 +222,55 @@ class AdminController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function lockedUser(int $id)
+    {
+        $user = User::find($id);
+
+        if ($user && $user->role == 'admin') {
+            return response()->json(['errors' => "Cette action ne peut-être effectuée sur l'utilisateur $user->name "]);
+        }
+
+        if ($user) {
+            if ($user->confirmation_token !== null) {
+                if ($user->confirmation_token == 'locked') {
+                    return response()->json(['errors' => "L'utilisateur $user->name est déjà bloqué!"]);
+                }
+                else{
+                    return response()->json(['errors' => "L'utilisateur $user->name n'a pas encore confirmé son compte"]);
+                }
+            }
+            $locked = IDManager::__USER_LOCKER($user);
+            if ($locked) {
+                return response()->json(['success' => "L'utilisateur $user->name a bien été bloqué!"]);
+            }
+            return response()->json(['errors' => "L'utilisateur $user->name n'a pas pu être bloqué!"]);
+
+        }
+        return response()->json(['errors' => "Cet utilisateur est inconnue!"]);
+    }
+
+
+    public function dislockedUser(int $id)
+    {
+        $user = User::find($id);
+        if ($user) {
+            if ($user->confirmation_token !== null) {
+                if ($user->confirmation_token == 'locked') {
+                    $dislocked = IDManager::__USER_DISLOCKER($user);
+                    if ($dislocked) {
+                        return response()->json(['success' => "L'utilisateur $user->name a bien été débloqué!"]);
+                    }
+                }
+                else{
+                    return response()->json(['errors' => "L'utilisateur $user->name n'a pas encore confirmé son compte"]);
+                }
+            }
+            return response()->json(['errors' => "L'utilisateur $user->name n'était pas bloqué!"]);
+        }
+        return response()->json(['errors' => "Cet utilisateur est inconnue!"]);
     }
 
 

@@ -10,16 +10,29 @@ window.Vue = require('vue').default;
 import Swal from 'sweetalert2'
 import VueRouter from 'vue-router'
 import store from './stores/store.js'
-import Loading from 'vue-loading-overlay';
+// import Loading from 'vue-loading-overlay';
+
+// import Vue from 'vue/dist/vue.esm.browser';
+// import 'vue-loaders/dist/vue-loaders.css';
+// import VueLoaders from 'vue-loaders';
+
+// Vue.use(VueLoaders);
+
+
+// const template = `
+//   <vue-loaders-ball-beat color="red" scale="1"></vue-loaders-ball-beat>
+// `;
+
     // Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
+// import 'vue-loading-overlay/dist/vue-loading.css';
     // import Preloader from 'vue-ui-preloader'
 // import routes from './routes/routers.js'
 Vue.use(VueRouter)
-Vue.use(Loading)
+// Vue.use(Loading)
 
 
 Vue.component('pagination', require('laravel-vue-pagination'))
+Vue.component('typical', require('vue-typical'))
 //HOME PAGES
 let welcomes = Vue.component('welcomes', require('./components/Home/WelcomeComponent.vue').default)
 let home_page = Vue.component('acceuil', require('./components/Home/HomeComponent.vue').default)
@@ -77,7 +90,9 @@ let loginer = Vue.component('loginer', require('./components/Formulars/Connexion
 let registred = Vue.component('registred', require('./components/Formulars/Users/RegistredComponent.vue').default)
 let formulars = Vue.component('formulars', require('./components/Home/Formulars.vue').default)
 let edit_action = Vue.component('edit-action', require('./components/Formulars/Actions/EditAction.vue').default)
+let edit_product = Vue.component('edit-product', require('./components/Formulars/Products/EditProduct.vue').default)
 let create_action = Vue.component('create-action', require('./components/Formulars/Actions/CreateAction.vue').default)
+let create_product = Vue.component('create-product', require('./components/Formulars/Products/CreateProduct.vue').default)
 
 //NOTIFICATIONS
 let notifications = Vue.component('notifications', require('./components/Notifications/Listing.vue').default)
@@ -85,6 +100,7 @@ let requests = Vue.component('requests', require('./components/Notifications/Req
 
 //MARKETS
 let actions_shop = Vue.component('action-shop', require('./components/Market/Actions/Listing.vue').default)
+let products_shop = Vue.component('product-shop', require('./components/Market/Products/Listing.vue').default)
 let shop_home = Vue.component('shop-home', require('./components/Market/Home.vue').default)
 
 
@@ -123,7 +139,7 @@ const routes = [
 					name: 'shop_home',
 				},
 				{
-					path: '/boutique/q=produits',
+					path: '/boutique/q=articles',
 					component: shop_home,
 					name: 'shop_home_products',
 				},
@@ -181,6 +197,11 @@ const routes = [
 					name: 'actionsListing',
 				},
 				{
+					path: '/Uvar/administration/tag/actions/:id',
+					component: action_profil,
+					name: 'actionProfil',
+				},
+				{
 					path: '/Uvar/administration/tag/produits',
 					component: products_listing,
 					name: 'productsListing',
@@ -211,14 +232,12 @@ const routes = [
 const router = new VueRouter({mode: 'history', routes})
 new Vue({
 	store,
-	Loading,
 	file: '',
 	router: router,
 	el: ".app",
 	components: {
 		nav_bar,
-		main_admin
-		
+		main_admin,
 	}
 })
 

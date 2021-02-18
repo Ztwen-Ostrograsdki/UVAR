@@ -5,6 +5,7 @@ namespace App\ModelsHelpers\ImageStores;
 use App\Models\Action;
 use App\Models\Image;
 use App\Models\Member;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -133,6 +134,58 @@ class Storer{
             }
         }
 	}
+
+
+    /**
+     * To save a image of product in storage and in database
+     * @return [type] [description]
+     */
+    public function __PRODUCT_STORER()
+    {
+        $path = null;
+        $id = $this->id;
+        $product = Product::find($id);
+        if (!$product) {
+            return false;
+        }
+        $oldsImages = $product->images;
+
+        $this->setName();
+        $this->setDecoded();
+        $decoded = $this->getDecoded();
+        $name = $this->getName();
+
+        if (count($oldsImages) > $this->max) {
+            $targetImage = $oldsImages[count($oldsImages) - 1];
+            $product->images()->detach($targetImage->id);
+            $local = Storage::delete($targetImage->name);
+
+            if ($local) {
+                $del_db = $targetImage->delete();
+                if ($del_db) {
+                    $stored = Storage::disk('images')->put($name, $decoded);
+                    if ($stored) {
+                        $intoDB = Image::create(['name' => $name]);
+                        if ($intoDB) {
+                            $product->images()->attach($intoDB->id);
+                            return true;
+                        }
+                    }
+                }
+            }
+
+        }
+        else{
+            $stored = Storage::disk('images')->put($name, $decoded);
+            if ($stored) {
+                $intoDB = Image::create(['name' => $name]);
+                if ($intoDB) {
+                    $product->images()->attach($intoDB->id);
+                    return true;
+                }
+            }
+        }
+    }
 
 
 

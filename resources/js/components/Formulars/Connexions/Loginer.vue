@@ -40,7 +40,9 @@
         },
 		
         created(){
-           this.$store.dispatch('getToken')
+        },
+
+        updated(){
         },
 		
 
@@ -48,9 +50,9 @@
 
 		methods: {
 			login(){
-				let inputs = $('input')
+				let token = $('meta[name="csrf-token"]').attr('content')
 				this.$store.commit('RESET_LOGIN_INVALIDS', [])
-				this.$store.dispatch('login', {email: this.email, password: this.password, token: this.token})
+				this.$store.dispatch('login', {email: this.email, password: this.password, token: token})
 			}
 		},
 

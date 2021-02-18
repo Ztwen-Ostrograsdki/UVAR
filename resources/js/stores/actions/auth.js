@@ -1,13 +1,29 @@
 import Swal from 'sweetalert2'
+const Toast = Swal.mixin({
+	toast: true,
+	position: 'top-start',
+	showConfirmButton: false,
+	background: 'black',
+	timer: 3000,
+	timerProgressBar: true,
+	didOpen: (toast) => {
+		toast.addEventListener('mouseenter', Swal.stopTimer)
+		toast.addEventListener('mouseleave', Swal.resumeTimer)
+	}
+})
 const auth_actions = {
 	logout: (state) => {
-		Swal.fire({
-		  icon: 'warning',
-		  title: 'Vous serez déconnecté dans quelques secondes',
-		  showConfirmButton: false,
-		  timer: 2000
+		Toast.fire({
+		  icon: 'success',
+		  title: 'Vous serez déconnecté dans quelques secondes...',
 		})
-        axios.post('/uvar/systeme/disconnect&user/now')
+        axios.post('/uvar/systeme/disconnect&user/now', 
+        		{
+	        		headers: {
+	        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+			        }
+			    }
+        	)
 			.then(response => {
 				if (response.data.success) {
 					state.commit('LOGOUT')
@@ -30,11 +46,9 @@ const auth_actions = {
 			}
 			else if (response.data.success !== undefined) {
 
-				Swal.fire({
+				Toast.fire({
 				  icon: 'success',
 				  title: 'Connexion réussie',
-				  showConfirmButton: false,
-				  timer: 2000
 				})
 				$('#login #Registration input').val('')
 				$('#login #Registration input').removeClass('is-invalid')
@@ -50,7 +64,13 @@ const auth_actions = {
 		})     
 	},  
 	getConnected: (state) =>{
-		axios.post('/uvar/systeme/get&auth&user')
+		axios.post('/uvar/systeme/get&auth&user', 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    }
+		)
 		.then(response => {
 			if (response.data.success !== undefined) {
 				state.commit('RESET_USER', {connected: true, user: response.data.success, token: response.data.success.token})
@@ -71,7 +91,13 @@ const auth_actions = {
 		})     
 	},
 	getToken: (state) =>{
-		axios.post('/uvar/systeme/token/auth')
+		axios.post('/uvar/systeme/token/auth', 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    }
+		)
 		.then(response => {
 			if (response.data.token !== undefined) {
 				state.commit('GET_TOKEN', {token: response.data.token})
@@ -79,7 +105,13 @@ const auth_actions = {
 		})
 	},
 	getActiveMember: (state) =>{
-		axios.post('/uvar/systeme/auth&get&auth&member')
+		axios.post('/uvar/systeme/auth&get&auth&member', 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    }
+		)
 		.then(response => {
 			if (response.data.user_member !== undefined) {
 				state.commit('RESET_ACTIVE_MEMBER', 
@@ -105,7 +137,13 @@ const auth_actions = {
 		})   
 	},
 	getNotifications: (state) =>{
-		axios.post('/Uvar/systeme/notify&system')
+		axios.post('/Uvar/systeme/notify&system', 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    }
+		)
 		.then(response => {
 			if (response.data.notifications !== undefined) {
 				state.commit('GET_NOTIFICATIONS', response.data.notifications)
@@ -121,9 +159,16 @@ const auth_actions = {
 				window.location = '/'
 			}
 		})    
+		.finally(() => state.commit('RESET_NOTIFICATIONS_LOADING', true))  
 	},
 	getRequests: (state) =>{
-		axios.post('/Uvar/systeme/requests/fecth&them')
+		axios.post('/Uvar/systeme/requests/fecth&them', 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    }
+		)
 		.then(response => {
 
 			if (response.data.requests !== undefined) {
@@ -140,9 +185,16 @@ const auth_actions = {
 				window.location = '/'
 			}
 		})    
+		.finally(() => state.commit('RESET_REQUESTS_LOADING', true))
 	},
 	manageRequest: (state, data) =>{
-		axios.post('/Uvar/administration/demande/manage/type=' + data.type +'/request=' + data.request_id + '/response=' + data.response)
+		axios.post('/Uvar/administration/demande/manage/type=' + data.type +'/request=' + data.request_id + '/response=' + data.response, 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    }
+		)
 		.then(response => {
 			if (response.data.requests !== undefined || response.data.message !== undefined) {
 				Swal.fire({
@@ -173,7 +225,12 @@ const auth_actions = {
 			status: data.status,
 			referee: data.referee,
 			affiliate_id: data.affiliate_id,
-		})
+		}, 
+		{
+    		headers: {
+    			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+	        }
+	    })
 		.then(response => {
 			if (response.data.notifications !== undefined) {
 				Swal.fire({

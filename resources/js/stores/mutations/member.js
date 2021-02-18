@@ -33,7 +33,13 @@ const auth_mutations = {
     },
     RESET_MEMBER_PHOTO: (state, photo) => {
         state.memberPhoto = photo
-    }
+    },
+     RESET_MEMBER_LOADING : (state, status) => {
+        state.isLoadedMember = status
+    },
+    RESET_MEMBERS_LOADING : (state, status) => {
+        state.isLoadedMembers = status
+    },
 
     
 }

@@ -2,15 +2,25 @@
     <div class="row mx-auto w-90 mt-3 profils">
     	<div class="w-95 mx-auto">
             <h3 class="text-white">Les Demandes d'affiliations en attente</h3>
-            <div v-if="!charged">
-                <h5>Chargement en cours ....</h5>
-            </div>
-            <div class="mx-auto d-flex justify-content-center px-2 w-75" v-if="charged && notifications.length < 1">
+            <transition name="bodyfade" appear>
+                <div class="mx-auto w-100 text-white text-center my-3" v-if="!isLoadedNotifications">
+                    <div id="app" class="w-screen h-screen bg-gray-800 flex flex-col justify-center">
+                        <div class="container m-auto bg-gray-900 text-center text-white shadow-2xl h-64 flex flex-col justify-center rounded-lg text-3xl">
+                          <typical
+                            class="vt-title"
+                            :steps="['Chargement des notifications UVAR en cours...', 1000, 'Veuillez patienter....', 1000]"
+                            :wrapper="'h2'"
+                          ></typical>
+                        </div>
+                      </div>
+                </div>
+            </transition>
+            <div class="mx-auto d-flex justify-content-center px-2 w-75" v-if="isLoadedNotifications && notifications.length < 1">
                 <h5 class="fa-2x text-center text-white-50 bg-linear-official-50 p-2 w-100">
                     OOops vous n'avez aucune notification
                 </h5>
             </div>
-            <table class="table table-official text-white text-center" v-if="notifications.length > 0">
+            <table class="table table-official text-white text-center" v-if="isLoadedNotifications && notifications.length > 0">
                 <thead>
                     <th>No</th>
                     <th>Description</th>
@@ -19,7 +29,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(notif, k) in notifications">
-                        <td>{{ k + 1 > 10 ? k + 1 : '0' + (k + 1) }}</td>
+                        <td>{{ k + 1 > 9 ? k + 1 : '0' + (k + 1) }}</td>
                         <td>Le membre 
                             <i class="text-primary">
                                 <router-link :to="{name: 'membersProfilOnAdmin', params: {id: notif.referer.id}}"   class="card-link d-inline-block" >
@@ -56,15 +66,13 @@
 	export default {
         data() {
             return {
-                charged: false,
             }   
         },
 		
         created(){
-           
+            this.$store.dispatch('getNotifications')
         },
         mounted(){
-            this.charged = true
         },
         methods :{
            
@@ -84,7 +92,7 @@
         },
 
         computed: mapState([
-            'members', 'notifications', 'affiliationsNotifications', 'requests'
+            'members', 'notifications', 'affiliationsNotifications', 'requests', 'isLoadedNotifications'
         ])
 	}
 </script>

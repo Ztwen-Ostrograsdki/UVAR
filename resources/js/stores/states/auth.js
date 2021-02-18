@@ -10,6 +10,8 @@ const auth_states = {
     user: {},
     affiliationsNotifications: [],
     notifications: [],
+    isLoadedNotifications: false,
+    isLoadedRequests: false,
     requests: [],
 
 }

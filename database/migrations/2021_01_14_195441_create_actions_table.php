@@ -27,7 +27,7 @@ class CreateActionsTable extends Migration
                   ->on('members')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->float('price')->nullable();
+            $table->decimal('price', 12, 2)->nullable();
         });
     }
 

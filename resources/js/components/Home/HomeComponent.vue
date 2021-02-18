@@ -1,5 +1,5 @@
 <template>
-	<div class="w-100 p-0 m-0">
+	<div class="w-100 p-0 m-0" id="home-home-page">
         <router-view></router-view>
         <formulars></formulars>
 	</div>
@@ -7,6 +7,7 @@
 
 <script>
 	import { mapState } from 'vuex'
+     import Swal from 'sweetalert2'
 	export default {
 		
         created(){
@@ -15,6 +16,7 @@
             this.$store.dispatch('getActiveMember')
         },
 
+        
         computed: mapState([
             'login', 'user', 'connected', 'member', 'active_member', 'active_member_photo', 'allActionsOnlyAPart'
         ])

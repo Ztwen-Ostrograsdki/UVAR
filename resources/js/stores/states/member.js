@@ -14,6 +14,8 @@ const member_s = {
 	editingMember: {},
 	memberPhoto: {},
 	active_member_photo: {},
+	isLoadedMembers: false,
+	isLoadedMember: false,
 }
 
 export default member_s

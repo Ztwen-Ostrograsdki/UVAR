@@ -1,7 +1,12 @@
 import Swal from 'sweetalert2'
 const users_a = {
 	getUsers: (state) => {
-		axios.get('/Uvar/administration/users&get&data/now')
+		axios.get('/Uvar/administration/users&get&data/now', 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    })
 			.then(response => {
 				state.commit('GET_USERS', {users: response.data.users})
 			})  
@@ -15,10 +20,16 @@ const users_a = {
 					window.location = '/'
 				}
 			})     
+			.finally(() => state.commit('RESET_USERS_LOADING', true))  
 	},
 
 	getUser: (state, data) => {
-		axios.post('/Uvar/utilisateur/' + data)
+		axios.post('/Uvar/utilisateur/' + data, 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    })
 			.then(response => {
 				state.commit('GET_USERS_REQUESTS', {user: response.data.user, requests: response.data.requests})
 			})  
@@ -31,7 +42,8 @@ const users_a = {
 					})
 					window.location = '/'
 				}
-			})     
+			})
+			.finally(() => state.commit('RESET_USER_LOADING', true))       
 	},
 
 	createUser: (state, data) => {
@@ -40,7 +52,12 @@ const users_a = {
 			email: data.email,
 			password: data.password,
 			password_confirmation: data.confirm_password
-		})
+		}, 
+		{
+    		headers: {
+    			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+	        }
+	    })
 		.then(response => {
 			if (response.data.invalids !== undefined) {
 				state.commit('RESET_REGISTER_USERS_INVALIDS', response.data.invalids)
@@ -75,7 +92,12 @@ const users_a = {
 		})  
 	},
 	manageMyAffiliation: (state, data) =>{
-		axios.post('/Uvar/Je&ne&reconnais&pas&cette&demande/affiliations/manage/referer=' + data.affiliation.referer_id + '/referee=' + data.affiliation.referee_id + '/token=' + data.affiliation.token + '/r=' + data.response + '/key=' + data.affiliation.token + '/e=no')
+		axios.post('/Uvar/Je&ne&reconnais&pas&cette&demande/affiliations/manage/referer=' + data.affiliation.referer_id + '/referee=' + data.affiliation.referee_id + '/token=' + data.affiliation.token + '/r=' + data.response + '/key=' + data.affiliation.token + '/e=no', 
+		{
+    		headers: {
+    			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+	        }
+	    })
 		.then(response => {
 			if (response.data.success !== undefined) {
 				Swal.fire({

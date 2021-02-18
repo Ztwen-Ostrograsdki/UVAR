@@ -14,7 +14,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light py-1 border-official">
             <div class="container-fluid">
                 <a class="navbar-brand text-official cursive" href="/">
-                    <img src="/logos/uvar.png" class="d-inline m-0 p-0" width="" height="70">
+                    <img src="/logos/uvar.png" class="d-inline m-0 p-0 uvar-logo" width="" height="70">
                 </a>
                 <button id="collapser-button" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-host" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon-bar"></span>
@@ -91,7 +91,6 @@
         
         created(){
             this.$store.dispatch('getActiveMember')
-            this.$store.dispatch('getToken')
             if (this.connected) {
                 this.$store.dispatch('getUser', this.user.id)
             }
@@ -167,5 +166,17 @@
         border-radius: 50%;
         z-index: 3000;
 
+    }
+
+    img.uvar-logo:hover{
+        -webkit-transform: rotateZ(360deg);
+        -ms-transform: rotateZ(360deg);
+        -o-transform: rotateZ(360deg);
+        transform: rotateZ(360deg);
+        transition: transform 1s;
+    }
+
+    .w-screen.h-screen.bg-gray-800.flex.flex-col.justify-center{
+        color: white !important;
     }
 </style>

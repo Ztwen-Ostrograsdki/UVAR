@@ -55,6 +55,11 @@ class Member extends Model
     	return Member::withTrashed('deleted_at')->where('referer', $this->id)->latest()->get();
     }
 
+    public function shoppingActions()
+    {
+        return $this->hasMany(ShoppingAction::class);
+    }
+
 
     /**
      * Get the user lied to this member

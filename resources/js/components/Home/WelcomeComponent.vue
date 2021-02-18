@@ -9,16 +9,26 @@
         <div class="w-95 mx-auto oneProperty mt-2" v-if="onActions">
             <div class="w-100 d-flex justify-content-start mb-0 mt-2">
                 <h5 class="text-official fa-2x p-0 m-0 mb-1">Les Actions UVAR à la une
-                    <span v-if="allActions.length > 0" class="text-white-50 ml-2">
+                    <span v-if="isLoadedActions && allActions.length > 0" class="text-white-50 ml-2">
                         (Plus de {{ allActions.length }} actions disponibles)
                     </span>
                 </h5>
 
             </div>
-            <h4 class="text-white-50 text-center p-3 mx-auto w-100" v-if="allActions.length <= 0">
-                Chargement des données en cours...
-            </h4>
-            <div class="row w-100 mx-auto mt-2" v-if="allActions.length > 0">
+            <transition name="bodyfade" appear>
+                <div class="mx-auto w-100 text-white text-center my-3" v-if="!isLoadedActions">
+                    <div id="app" class="w-screen h-screen bg-gray-800 flex flex-col justify-center">
+                        <div class="container m-auto bg-gray-900 text-center text-white shadow-2xl h-64 flex flex-col justify-center rounded-lg text-3xl">
+                          <typical
+                            class="vt-title"
+                            :steps="['Chargement des actions en cours...', 1000, 'Veuillez patienter....', 1000]"
+                            :wrapper="'h2'"
+                          ></typical>
+                        </div>
+                      </div>
+                </div>
+            </transition>
+            <div class="row w-100 mx-auto mt-2" v-if="isLoadedActions && allActions.length > 0">
                 <div class="col-12 border my-1 row m-0 p-0" v-for="action in getApartOf(allActions, actionsLength)">
                     <div class="w-100 mx-auto d-flex justify-content-between p-0">
                         <div class="w-25 p-0 float-left" style="height: auto !important;">
@@ -69,16 +79,26 @@
         <div class="w-95 mx-auto oneProperty mt-2" v-if="onProducts">
             <div class="w-100 d-flex justify-content-start mb-0 mt-2">
                 <h5 class="text-official fa-2x p-0 m-0 mb-1">Bienvenue à la boutique UVAR
-                    <span v-if="allProducts.length > 0" class="text-white-50 ml-2">
+                    <span v-if="isLoadedProducts && allProducts.length > 0" class="text-white-50 ml-2">
                         (Plus de {{ allProducts.length }} produits disponibles)
                     </span>
                 </h5>
 
             </div>
-            <h4 class="text-white-50 text-center p-3 mx-auto w-100" v-if="allProducts.length <= 0">
-                Chargement des données en cours...
-            </h4>
-            <div class="row w-100 mx-auto mt-2" v-if="allProducts.length > 0">
+            <transition name="bodyfade" appear>
+                <div class="mx-auto w-100 text-white text-center my-3" v-if="!isLoadedProducts">
+                    <div id="app" class="w-screen h-screen bg-gray-800 flex flex-col justify-center">
+                        <div class="container m-auto bg-gray-900 text-center text-white shadow-2xl h-64 flex flex-col justify-center rounded-lg text-3xl">
+                          <typical
+                            class="vt-title"
+                            :steps="['Chargement des articles en cours...', 1000, 'Veuillez patienter....', 1000]"
+                            :wrapper="'h2'"
+                          ></typical>
+                        </div>
+                      </div>
+                </div>
+            </transition>
+            <div class="row w-100 mx-auto mt-2" v-if="isLoadedProducts && allProducts.length > 0">
                 <div class="col-12 border my-1 row m-0 p-0" v-for="product in getApartOf(allProducts, productsLength)">
                     <div class="w-100 mx-auto d-flex justify-content-between p-0">
                         <div class="w-25 p-0 float-left" style="height: auto !important;">
@@ -332,7 +352,7 @@
         },
 
         computed: mapState([
-            'member', 'connected', 'user', 'myActions', 'myAccount', 'myBonuses', 'memberReady', 'targetAction', 'allActions', 'allProducts'
+            'member', 'connected', 'user', 'myActions', 'myAccount', 'myBonuses', 'memberReady', 'targetAction', 'allActions', 'allProducts', 'active_member', 'isLoadedActions', 'isLoadedProducts'
         ])
     }
 </script>

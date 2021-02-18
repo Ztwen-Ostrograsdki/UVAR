@@ -16,6 +16,10 @@ class SelfUserMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        $user = auth()->user();
+        if ($user && $user->member && $user->id == $user->member->user_id) {
+            return $next($request);
+        }
+        return abort(403, "Vous n'etes pas autorisé");
     }
 }

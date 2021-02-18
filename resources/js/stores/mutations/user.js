@@ -28,6 +28,12 @@ const users_m = {
         state.user = data.user
         state.userRequests = data.requests
     },
+    RESET_USERS_LOADING: (state, status) =>{
+        state.isLoadedUsers = status
+    },
+    RESET_USER_LOADING: (state, status) =>{
+        state.isLoadedUser = status
+    }
     
     
 }

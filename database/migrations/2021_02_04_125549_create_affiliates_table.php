@@ -17,7 +17,7 @@ class CreateAffiliatesTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
             $table->boolean('accepted')->default(false);
-            $table->string('token');
+            $table->string('token')->nullable();
             $table->unsignedBigInteger('referer_id');
             $table->foreign('referer_id')
                   ->references('id')

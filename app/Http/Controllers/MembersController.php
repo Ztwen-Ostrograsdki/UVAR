@@ -16,6 +16,7 @@ class MembersController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('member');
     }
     /**
      * Display a listing of the resource.
@@ -32,7 +33,7 @@ class MembersController extends Controller
 
     public function getMembers()
     {
-        $members = Member::all();
+        $members = Member::withTrashed('deleted_at')->with('user')->get();
 
         return response()->json(['members' => $members]);
     }

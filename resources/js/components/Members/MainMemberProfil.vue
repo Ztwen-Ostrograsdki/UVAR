@@ -1,12 +1,25 @@
 <template>
 <div class="row mx-auto w-100 my-1 profils membersProfil">
-	<div class="col-md-12">
-        <div class="w-100 mx-auto p-1 d-flex justify-content-start">
+    <transition name="bodyfade" appear>
+        <div class="mx-auto w-100 text-white text-center my-3" v-if="!isLoadedMember">
+            <div id="app" class="w-screen h-screen bg-gray-800 flex flex-col justify-center">
+                <div class="container m-auto bg-gray-900 text-center text-white shadow-2xl h-64 flex flex-col justify-center rounded-lg text-3xl">
+                  <typical
+                    class="vt-title"
+                    :steps="['Chargement profil membre UVAR en cours...', 1000, 'Veuillez patienter....', 1000]"
+                    :wrapper="'h2'"
+                  ></typical>
+                </div>
+              </div>
+        </div>
+    </transition>
+	<div class="col-md-12 pt-3" v-if="isLoadedMember">
+        <div class="w-100 mx-auto p-1 d-inline justify-content-start">
             <span v-if="showProperties" @click="hideProperties()" class="float-left fa-2x fa fa-undo cursor text-official"></span>
         </div>
         <span class="fa fa-close cursor text-white-50 fa-2x" title="Masquer le profil" @click="resetProfil()" v-if="profil && !showProperties"></span>
         <span class="fa fa-chevron-up cursor text-white-50" title="Afficher le profil" @click="resetProfil()" v-if="!profil && !showProperties"></span>
-        <h4 class="mx-3 text-white-50 d-inline mx-auto text-center" v-if="memberReady">Profil de : <strong>{{member.name}}</strong></h4>
+        <h4 class="ml-5 text-white-50 d-inline mx-auto text-center" v-if="memberReady">Profil de : <strong>{{member.name}}</strong></h4>
         <div class="tab-content" v-if="!showProperties">
             <transition name="justefade" appear> 
                 <div class="mx-auto my-2 w-100 border-official" v-if="profil && member.name !== undefined">
@@ -128,7 +141,7 @@
                                 <div class="pricing-table-features p-0">
                                     <span class="text-center text-white-50 fa-2x">{{ myActions.totalActions ? getMyActions(myActions).totalActions : '00'}}</span>
                                     <span> Actions achetées</span>
-                                    <span title="Epingler les actions achetées" @click="displayProperties('actions')" class="float-right fa fa-tag cursor text-official"></span>
+                                    <span v-if="user.id == member.user_id" title="Epingler les actions achetées" @click="displayProperties('actions')" class="float-right fa fa-tag cursor text-official fa-2x"></span>
                                     <p><i class="fa fa-plus 2x"></i> <strong>Bonus:</strong> 25 AR</p>
                                     <p><i class="fa fa-user"></i> <strong>Récent:</strong>{{ myActions.totalActions ? "(" + myActions.lastAction.total + ") " + myActions.lastAction.action.name.substring(0, 9) : 'pas encore' }}...</p>
                                 </div>
@@ -163,7 +176,7 @@
                                     <span class="text-center text-white-50 fa-2x">{{ myProducts.totalProducts ? getMyProducts(myProducts).totalProducts : '00'}}</span>
                                     <span v-if="myProducts.totalProducts"> Produit{{ myProducts.totalProducts > 1 ? 's' : '' }} acheté{{ myProducts.totalProducts > 1 ? 's' : '' }}</span>
                                     <span v-if="!myProducts.totalProducts">Produit acheté</span>
-                                    <span title="Epingler les produits achetés" @click="displayProperties('products')" class="float-right fa fa-tag cursor text-official"></span>
+                                    <span v-if="user.id == member.user_id" title="Epingler les produits achetés" @click="displayProperties('products')" class="float-right fa-2x fa fa-tag cursor text-official"></span>
                                     <p><i class="fa fa-plus 2x"></i> <strong>Bonus Achat:</strong> 00 AR</p>
                                     <p v-if="myProducts.totalProducts"><i class="fa fa-user"></i> <strong>Récent:</strong>{{ "(" + myProducts.lastProduct.total + ") " + myProducts.lastProduct.product.name.substring(0, 9) }} ...</p>
                                     <p v-if="myProducts.length < 1"><i class="fa fa-user"></i> <strong>Récent:</strong>{{ 'pas encore' }} ...</p>
@@ -198,7 +211,7 @@
                                     <span v-if="myReferies.length > 0" class="text-center text-white-50 fa-2x">{{getReferies(myReferies).total}}</span>
                                     <span v-if="myReferies.length > 0"> Membre{{ myReferies.length > 1 ? 's' : '' }} affilié{{ myReferies.length > 1 ? 's' : '' }}</span>
                                     <span v-if="myReferies.length == 0"> Aucun membres affiliés</span>
-                                    <span title="Epingler les membres affiliés" @click="displayProperties('referies')" class="float-right fa fa-tag cursor text-official"></span>
+                                    <span v-if="user.id == member.user_id" title="Epingler les membres affiliés" @click="displayProperties('referies')" class="float-right fa-2x fa fa-tag cursor text-official"></span>
                                     <p>
                                         <i class="fa fa-user-secret 2x"></i> <strong>Affiliant:</strong>
                                         <router-link v-if="myReferer !== null && myReferer !== undefined" :to="{name: getRouteBasedOnComponent(), params: {id: myReferer.id}}"   class="card-link text-white-50 d-inline-block" >
@@ -242,6 +255,7 @@
 	export default {
         data() {
             return {
+                isLoaded : false,
                 targetTable : undefined,
                 showProperties : false,
                 options : false,
@@ -278,6 +292,13 @@
 		
         created(){
            this.$store.dispatch('getMember', this.$route.params.id)
+        },
+        mounted(){
+            document.onreadystatechange = () => {
+                if (document.readyState == 'complete') {
+                    this.isLoaded = true
+                }
+            }
         },
         methods :{
             getRouteBasedOnComponent(){
@@ -416,7 +437,7 @@
         },
 
         computed: mapState([
-            'member', 'connected', 'user', 'myActions', 'myAccount', 'myReferer', 'myReferies', 'myProducts', 'myBonuses', 'memberReady', 'editingMember', 'active_member', 'memberPhoto', 'token'
+            'member', 'connected', 'user', 'myActions', 'myAccount', 'myReferer', 'myReferies', 'myProducts', 'myBonuses', 'memberReady', 'editingMember', 'active_member', 'memberPhoto', 'isLoadedMember'
         ])
 	}
 </script>

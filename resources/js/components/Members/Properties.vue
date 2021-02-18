@@ -1,5 +1,5 @@
 <template>
-	<div class="w-100 mx-auto d-flex justify-content-center flex-column">
+	<div class="w-100 mx-auto d-flex justify-content-center flex-column" v-if="isLoadedMember" >
 		<div class="w-95 mx-auto oneProperty" v-if="active == 'referies'">
 			<div class="d-inline float-right">
 				<span data-toggle="modal" data-target="#affiliations" class="mr-4 fa fa-plus fa-2x text-official"></span>
@@ -53,7 +53,7 @@
 		</div>
 		<div class="w-95 mx-auto oneProperty" v-if="active == 'actions'">
 			<div class="w-100 d-flex justify-content-end">
-				<span class="mr-4 fa fa-plus fa-2x text-official"></span>
+			<router-link title="Acheter plus d'actions" class="mr-4 fa fa-plus fa-2x text-official" :to="{name: 'shop_home_actions'}"></router-link>
 				<h5 class="text-official fa-2x">{{ user.id == member.user_id ? 'Mes ' : ' Ses '}} Actions </h5>
 			</div>
 			<div class="row w-100 mx-auto">
@@ -100,7 +100,7 @@
 		</div>
 		<div class="w-95 mx-auto oneProperty" v-if="active == 'products'">
 			<div class="w-100 d-flex justify-content-end m-0">
-				<span class="mr-4 fa fa-plus fa-2x text-official"></span>
+				<router-link title="Acheter plus d'articles" class="mr-4 fa fa-plus fa-2x text-official" :to="{name: 'shop_home_products'}"></router-link>
 				<h5 class="text-official fa-2x">{{ user.id == member.user_id ? 'Mes ' : ' Ses '}} Achats </h5>
 			</div>
 			<div class="row w-100 mx-auto m-0">
@@ -187,6 +187,9 @@
 		
         created(){
         },
+        mounted(){
+            
+        },
         methods :{
         	getCreatedAt(created_at){
                 if (created_at !== null) {
@@ -226,7 +229,7 @@
         },
 
         computed: mapState([
-            'member', 'connected', 'user', 'myActions', 'myAccount', 'myReferer', 'myReferies', 'myProducts', 'myBonuses', 'memberReady'
+            'member', 'connected', 'user', 'myActions', 'myAccount', 'myReferer', 'myReferies', 'myProducts', 'myBonuses', 'memberReady', 'isLoadedMember'
         ])
 	}
 </script>

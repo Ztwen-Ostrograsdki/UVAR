@@ -16,10 +16,20 @@
 				</h5>
 
 			</div>
-			<h4 class="text-white-50 text-center p-3 mx-auto w-100" v-if="allActions.length <= 0">
-				Chargement des données en cours...
-			</h4>
-			<div class="row w-100 mx-auto" v-if="allActions.length > 0">
+			<transition name="bodyfade" appear>
+                <div class="mx-auto w-100 text-white text-center my-3" v-if="!isLoadedActions">
+                    <div id="app" class="w-screen h-screen bg-gray-800 flex flex-col justify-center">
+                        <div class="container m-auto bg-gray-900 text-center text-white shadow-2xl h-64 flex flex-col justify-center rounded-lg text-3xl">
+                          <typical
+                            class="vt-title"
+                            :steps="['Chargement des actions en cours...', 1000, 'Veuillez patienter....', 1000]"
+                            :wrapper="'h2'"
+                          ></typical>
+                        </div>
+                      </div>
+                </div>
+            </transition>
+			<div class="row w-100 mx-auto" v-if="isLoadedActions">
 				<div :id="'action' + action.action.id" class="col-12 border my-1 row m-0 p-0" v-for="action in allActions">
 					<div class="w-100 mx-auto d-flex justify-content-between p-0">
 						<div class="w-25 p-0 float-left" style="height: auto !important;">
@@ -77,6 +87,7 @@
 		props : [],
         data() {
             return {
+                isLoaded : false,
             	options : false,
                 actions : true,
                 shop : true,
@@ -102,7 +113,15 @@
         },
 		
         created(){
-        	this.$store.dispatch('getAllActions')
+            this.$store.dispatch('getAllActions')
+        	this.$store.dispatch('getAllProducts')
+        },
+        mounted(){
+            document.onreadystatechange = () => {
+                if (document.readyState == 'complete') {
+                    this.isLoaded = true
+                }
+            }
         },
         methods :{
 
@@ -115,7 +134,6 @@
                     })
                     return false
                 }
-                let token = this.token
                 this.total = 0
                 Swal.fire({
                     title: "Achat de l'action " + action.name,
@@ -133,7 +151,7 @@
                         return fetch('/Uvar/administration/boutique/action/q=achat/a='+ action.id + '/m=' + member.id + '/t=' + total,{
                                 method: 'PUT',
                                 headers: {
-                                    'X-CSRF-TOKEN': token,
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 },
                             })
                             .then(response => response.json())
@@ -245,7 +263,7 @@
         },
 
         computed: mapState([
-            'member', 'connected', 'user', 'myActions', 'myAccount', 'myBonuses', 'memberReady', 'targetedAction', 'allActions', 'editingAction', 'active_member', 'token'
+            'member', 'connected', 'user', 'myActions', 'myAccount', 'myBonuses', 'memberReady', 'targetedAction', 'allActions', 'editingAction', 'active_member', 'isLoadedActions'
         ])
 	}
 </script>

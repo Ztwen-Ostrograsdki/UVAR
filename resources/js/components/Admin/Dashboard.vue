@@ -162,15 +162,9 @@
 		
         created(){
             this.$store.dispatch('getActiveMember')
-            this.$store.dispatch('getToken')
            if (this.connected && this.user && this.user.role == 'admin') {
-                this.$store.dispatch('getUsers')
-                this.$store.dispatch('getMembers')
-                this.$store.dispatch('getActions')
-                this.$store.dispatch('getProducts')
                 this.$store.dispatch('getCategories')
-                this.$store.dispatch('getNotifications')
-                this.$store.dispatch('getRequests')
+                
            }
 
         },

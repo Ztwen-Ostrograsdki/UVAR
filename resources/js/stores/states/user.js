@@ -12,7 +12,9 @@ const user_s = {
     	status: false
     },
     invalidsUserRegister: {},
-    userRequests: []
+    userRequests: [],
+    isLoadedUsers: false,
+    isLoadedUser: false,
 }
 
 export default user_s

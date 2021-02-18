@@ -16,6 +16,11 @@ class Member
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        $user = auth()->user();
+        if ($user && $user->member) {
+            return $next($request);
+        }
+        return abort(403, "Vous n'etes pas autorisé");
+        
     }
 }

@@ -3,12 +3,19 @@ const uvar_action_m = {
     GET_ACTIONS: (state, data) => {
         state.actions = data.actions
         state.totalBoughtByAction = data.totalBoughtByAction
+        state.boughtedActions = data.boughtedActions
     },
-        GET_ACTION: (state, data) => {
-        state.action = data.action
+    GET_ACTION: (state, data) => {
+        state.action = data
     },
      GET_ALL_ACTIONS: (state, data) => {
         state.allActions = data.actions 
+    },
+    RESET_ACTION_LOADING : (state, status) => {
+        state.isLoadedAction = status
+    },
+    RESET_ACTIONS_LOADING : (state, status) => {
+        state.isLoadedActions = status
     },
     GET_ACTIONS_DETAILS: (state, data) => {
         state.lastAction = data.lastAction

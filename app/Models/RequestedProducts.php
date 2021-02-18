@@ -16,6 +16,6 @@ class RequestedProducts extends Model
 
     public function demander()
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(User::class);
     }
 }

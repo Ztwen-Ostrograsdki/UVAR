@@ -68,8 +68,11 @@
 				</div>
 			</div>
 			<div class="w-100 mx-auto mt-2">
-				<div class="w-100 mx-auto">
+				<div class="w-100 mx-auto" v-if="$route.name == 'shop_home_actions'">
 					<action-shop></action-shop>
+				</div>
+				<div class="w-100 mx-auto" v-if="$route.name == 'shop_home_products'">
+					<product-shop></product-shop>
 				</div>
 			</div>
 		</div>
@@ -144,10 +147,10 @@
 	}
 
 	.fa.fa:hover{
-		-webkit-transform: rotateX(360deg);
-        -ms-transform: rotateX(360deg);
-        -o-transform: rotateX(360deg);
-        transform: rotateX(360deg);
+		-webkit-transform: rotateZ(360deg);
+        -ms-transform: rotateZ(360deg);
+        -o-transform: rotateZ(360deg);
+        transform: rotateZ(360deg);
         transition: transform 1s;
 	}
 </style>

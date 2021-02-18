@@ -26,6 +26,7 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except(['store', 'manageAffiliationExternally']);
+        $this->middleware('admin')->only(['destroy']);
     }
 
     /**
@@ -41,7 +42,8 @@ class UsersController extends Controller
 
     public function getUsers()
     {
-        $users = User::all();
+        $users = User::withTrashed('deleted_at')->with('member')->get();
+        
         return response()->json(['users' => $users]);
     }
 
@@ -221,7 +223,7 @@ class UsersController extends Controller
             }
             else{
                 if ($externe !== 'yes') {
-                    return response()->json(['errors' => "Requête invalide, vous n'êtes pas autho"]);
+                    return response()->json(['errors' => "Requête invalide, vous n'êtes pas authorisé"]);
                 }
                 return abort(403, "Vous n'êtes pas authorisé");
             }
@@ -238,6 +240,18 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+
+        if ($user && $user->role == 'admin') {
+            return response()->json(['errors' => "Cette action ne peut-être effectuée sur l' utilisateur $user->name "]);
+        }
+        if ($user) {
+            $user->forceDelete();
+            return response()->json(['success' => "L'utilisateur $user->name a bien été supprimé définitivement de la base de données ainsi que le membre conséquent!"]);
+        }
+        return response()->json(['errors' => "Cet utilisateur est inconnue!"]);
     }
+
+
+
 }

@@ -7,6 +7,7 @@ use App\Models\Action;
 use App\Models\ShoppingAction;
 use App\Traits\Validators\ActionsValidators;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ActionController extends Controller
 {
@@ -29,12 +30,34 @@ class ActionController extends Controller
 
     public function getActions()
     {
-        $actions = Action::where('id', '>', 0)->latest()->get();
+        $actions = Action::withTrashed('deleted_at')->latest()->get();
+        $boughtedActions = Action::withTrashed('deleted_at')->where('bought', true)->latest()->get();
         $totalBoughtByAction = [];
         foreach ($actions as $action) {
             $totalBoughtByAction[$action->id] = $action->totalBought();
         }
-        return response()->json(['actions' => $actions, 'totalBoughtByAction' => $totalBoughtByAction]);
+        return response()->json(['actions' => $actions, 'totalBoughtByAction' => $totalBoughtByAction, 'boughtedActions' => $boughtedActions]);
+    }
+
+
+    public function getAction(int $id)
+    {
+        $action = Action::withTrashed('deleted_at')->whereId($id)->first();
+        $buyers = $action->Membersbuyers();
+        $totalBought = $action->totalBought();
+        
+        return response()->json(['action' => $action, 'buyers' => $buyers, 'totalBought' => $totalBought]);
+    }
+    
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return view('actions.profil');
     }
 
     /**
@@ -83,16 +106,6 @@ class ActionController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -160,13 +173,25 @@ class ActionController extends Controller
     {
         $action = Action::find($id);
         if ($action) {
-            $alreadyBought = $action->buyers();
-            if (count($alreadyBought) > 0) {
+            $alreadyBought = $action->totalBought();
+            if ($alreadyBought > 0) {
                 return response()->json(['errors' => "Cette action a déjà des détenteurs, vous ne pouvez pas la supprimer! Veuillez essayez la procedure de forçage de suppression sécurisée"]);
+            }
+            $images = $action->images;
+            if ($images == null) {
+                foreach ($images as $image) {
+                    $action->images()->detach($image->id);
+                    $local = Storage::delete($image->name);
+                    if ($local) {
+                        $del_db = $image->delete();
+                    }
+                }
+                
+
             }
             $delete = $action->forceDelete();
             if ($delete) {
-                return response()->json(['success' => $alreadyBought]);
+                return response()->json(['success' => "Suppression réussie!"]);
             }
             else{
                 return response()->json(['errors' => "Erreure lors de la suppression!"]);
