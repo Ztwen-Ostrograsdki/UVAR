@@ -167,7 +167,6 @@
                                 }
                                 else{
                                     if (response.success !== undefined) {
-                                        this.$store.dispatch('getRequests')
                                         this.$store.dispatch('getAllProducts')
                                         Swal.fire({
                                             icon: 'success',

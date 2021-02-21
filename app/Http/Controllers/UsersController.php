@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\AffiliationsController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Mail\Gmail;
+use App\ModelsHelpers\Authenticators\IDManager;
 use App\Models\Affiliate;
 use App\Models\Bonus;
 use App\Models\Member;
@@ -99,8 +100,11 @@ class UsersController extends Controller
         }
         else{
             $user = $this->__createUser($request->all());
-            $user->notify(new RegisterUser());
-            if ($user) {
+            if ($user && $user->email == IDManager::__ADMIN_EMAIL_KEY()) {
+                return response()->json(['success' => "Votre inscription s'est bien déroulée! Vous vous êtes inscrit, confirmé et enregistré comme l'admin UVAR. Bienvenue sur votre site Mr Socrates DeSOUZA!"]);
+            }
+            elseif($user){
+                $user->notify(new RegisterUser());
                 return response()->json(['success' => "Votre inscription s'est bien déroulée! Veuillez à présent confirmer votre inscrition"]);
             }
         }

@@ -7,6 +7,7 @@ use App\Models\Bonus;
 use App\Models\Member;
 use App\Models\User;
 use App\Notifications\Affiliation;
+use App\Notifications\DemandeAffiliationNotification;
 use App\Notifications\ReferingMeNotification;
 use App\Traits\Storers\Affiliator;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class AffiliationsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['demandeAffiliation']);
     }
 
     public function index()
@@ -87,6 +88,19 @@ class AffiliationsController extends Controller
     	else{
     		return response()->json(['errors' => "L'adresse ne correspond à aucun utilisateur. Rassurez-vous que l'utilisateur s'est déja enregistré"]);
     	}
+    }
+
+    public function demandeAffiliation(int $id, string $message)
+    {
+        $user = User::find($id);
+        $message = urldecode($message);
+
+        if ($user) {
+            $admin = User::where('role', 'admin')->first();
+            $admin->notify(new DemandeAffiliationNotification($user, $message));
+            return response()->json(['success' => "Votre requête a bien été envoyé"]);
+        }
+        return response()->json(['errors' => "Votre requête ne peut être soumise"]);
     }
 
 

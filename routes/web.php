@@ -101,6 +101,7 @@ Route::post('/Uvar/membre/affiliation/ID={id}', [AffiliationsController::class, 
 
 Route::get('/mail', [App\Http\Controllers\MailController::class, 'index']);
 Route::get('/UVAR/confirmation/id={id}/token={token}', [LoginController::class, 'confirm']);
+Route::post('/Uvar/send/demande=affiliation/id={id}/message={message}', [AffiliationsController::class, 'demandeAffiliation']);
 
 Auth::routes(['verify' => true]);
 

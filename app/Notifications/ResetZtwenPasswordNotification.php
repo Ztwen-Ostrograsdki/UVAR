@@ -7,25 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ManageRequested extends Notification
+class ResetZtwenPasswordNotification extends Notification
 {
     use Queueable;
 
-    public $request;
-    public $type;
-    public $target;
-    public $demander;
+    public $token;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($request, $type, $target, $demander)
+    public function __construct($token)
     {
-        $this->type = $type;
-        $this->request = $request;
-        $this->target = $target;
-        $this->demander = $demander;
+        $this->token = $token;
     }
 
     /**
@@ -48,10 +43,11 @@ class ManageRequested extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject("Demande d'achat de {$this->type} sur UVAR ")
-                    ->line("{$this->demander->name} vient de faire une demande d'achat de {$this->request->total} {$this->type}s de {$this->type} {$this->target->name}")
-                    ->action('Confirmé cette demande', url("/"))
-                    ->line('UVAR, la qualité du service, fait la différence');
+                    ->subject('Réinitialisation de mot de passe sur UVAR')
+                    ->line("Monsieur/Madame, $notifiable->name vous avez lancer un processus de Réinitialisation de votre mot de passe!")
+                    ->line("Uvar, vous envoi ce mail afin d'être sur que cette action vient de vous, si vous reconnaissez cette action veuillez donc cliquer sur ce lien pour finaliser la réinitialisation de votre mot de passe!")
+                    ->action('Réinitialiser maintenant', url('/password/reset/'. urlencode($this->token) . '?email=' . urlencode($notifiable->email)))
+                    ->line('UVAR vous remercie et vous promet une meilleure expérience utilisateur');
     }
 
     /**

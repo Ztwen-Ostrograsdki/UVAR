@@ -71,28 +71,25 @@
                     showLoaderOnConfirm: true,
                     preConfirm: (email) => {
                     	this.forgot.email = email
-                        axios.post('/password/email',{email: this.forgot.email}, {
+                        return axios.post('/password/email',{email: this.forgot.email}, {
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 },
                             })
-                            .then(response => response.json())
-                            console.log(response)
                             .then(response => {
-                            	console.log(response)
-                                if (response.errors !== undefined) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: response.errors,
-                                        showConfirmButton: false,
-                                    })
+                                console.log(response)
+                                if (response.data.errors !== undefined) {
+                                    Swal.showValidationMessage(
+                                        'Echec:'+ response.data.errors,
+                                    )
                                 }
                                 else{
-                                    if (response.success !== undefined) {
+                                    if (response.data.success !== undefined) {
                                         Swal.fire({
                                             icon: 'success',
-                                            text: "Nous vous avons envoyé un code de réinitialisation de mot de passe. veuiller vérifier votre boite de reception mail!",
+                                            text: "Nous vous avons envoyé un courriel de confirmation de la réinitialisation. veuiller vérifier votre boite de reception mail!",
                                             showConfirmButton: true,
+                                            confirmButtonText: 'Terminer',
                                         })
                                     }
                                 }

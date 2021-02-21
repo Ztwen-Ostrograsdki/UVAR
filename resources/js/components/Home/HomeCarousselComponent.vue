@@ -16,17 +16,17 @@
                                 <div class="col-md-12 col-sm-12 text-right">
                                     <div class="big-tagline">
                                         <h2><strong>Université Virtuelle Académique</strong> <span class="text-lowercase">de la</span> Réussite</h2>
-                                        <p class="lead">With Landigoo responsive landing page template, you can promote your all hosting, domain and email services. </p>
+                                        <p class="lead">Nous construisons l'Afrique de demain </p>
                                             <a href="#" class="hover-btn-new">
                                                 <span>
                                                     <span class="fa fa-user mx-1"></span>
-                                                    <span>Devenir membre</span>
+                                                    <span @click="becomeMember()">Devenir membre</span>
                                                 </span>
                                             </a>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <a href="#" class="hover-btn-new ">
                                                 <span>
-                                                    <router-link v-if="connected && user" class="p-0" :to="{name: 'shop_home'}">
+                                                    <router-link v-if="connected && user" class="p-0" :to="{name: 'shop_home_actions'}">
                                                         <span class="fa fa-shopping-bag mx-1"></span>
                                                         <span>A la boutique</span>
                                                     </router-link>
@@ -50,25 +50,33 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 text-left">
                                     <div class="big-tagline">
-                                        <h2><strong>Université Virtuelle Académique</strong> de la Réussite</h2>
-                                        <p class="lead" data-animation="animated fadeInLeft">With Landigoo responsive landing page template, you can promote your all hosting, domain and email services. </p>
+                                        <h2><strong>Université Virtuelle Académique</strong> <span class="text-lowercase">de la</span> Réussite</h2>
+                                        <p class="lead" data-animation="animated fadeInLeft">Nous construisons l'Afrique de demain </p>
                                             <a href="#" class="hover-btn-new">
                                                 <span>
-                                                    <span class="fa fa-object-group mx-1"></span>
-                                                    <span>Les Actions</span>
-                                                </span>
-                                            </a>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <span>
-                                                <router-link v-if="connected && user" class="p-0" :to="{name: 'shop_home'}">
-                                                    <span class="fa fa-shopping-bag mx-1"></span>
-                                                    <span>A la boutique</span>
-                                                </router-link>
-                                                <a href="#" v-if="!connected || !user" class="p-0">
+                                                    <router-link v-if="connected && user" class="p-0" :to="{name: 'shop_home_products'}">
+                                                        <span class="fa fa-shopping-bag mx-1"></span>
+                                                        <span>A la boutique</span>
+                                                    </router-link>
+                                                    <a href="#" v-if="!connected || !user" class="p-0">
                                                     <span class="fa fa-shopping-bag mx-1"></span>
                                                     <span>A la boutique</span>
                                                 </a href="#">
-                                            </span>
+                                                </span>
+                                            </a>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a href="#" class="hover-btn-new">
+                                                <span>
+                                                    <router-link v-if="connected && user" class="p-0" :to="{name: 'shop_home_actions'}">
+                                                        <span class="fa fa-home mx-1"></span>
+                                                        <span>Et les actions</span>
+                                                    </router-link>
+                                                    <a href="#" v-if="!connected || !user" class="p-0">
+                                                    <span class="fa fa-home mx-1"></span>
+                                                    <span>Et les actions</span>
+                                                </a href="#">
+                                                </span>
+                                            </a>
                                     </div>
                                 </div>
                             </div><!-- end row -->            
@@ -83,26 +91,30 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 text-center">
                                     <div class="big-tagline">
-                                        <h2><strong>Université Virtuelle Académique</strong> de la Réussite</h2>
-                                        <p class="lead" data-animation="animated fadeInLeft">1 IP included with each server 
-                                            Your Choice of any OS (CentOS, Windows, Debian, Fedora)
-                                            FREE Reboots</p>
+                                        <h2><strong>Université Virtuelle Académique</strong> <span class="text-lowercase">de la</span> Réussite</h2>
+                                        <p class="lead" data-animation="animated fadeInLeft">Nous construisons l'Afrique de demain</p>
                                             <a href="#" class="hover-btn-new">
                                                 <span>
-                                                    <span class="fa fa-object-group mx-1"></span>
-                                                    <span>Les Actions</span>
+                                                    <router-link v-if="connected && user" class="p-0" :to="{name: 'shop_home_products'}">
+                                                        <span class="fa fa-phone mx-1"></span>
+                                                        <span>A la boutique</span>
+                                                    </router-link>
+                                                    <a href="#" v-if="!connected || !user" class="p-0">
+                                                        <span class="fa fa-phone mx-1"></span>
+                                                        <span>A la boutique</span>
+                                                    </a href="#">
                                                 </span>
                                             </a>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <a href="#" class="hover-btn-new ">
                                                 <span>
-                                                    <router-link v-if="connected && user" class="p-0" :to="{name: 'shop_home'}">
-                                                        <span class="fa fa-shopping-bag mx-1"></span>
-                                                        <span>A la boutique</span>
+                                                    <router-link v-if="connected && user" class="p-0" :to="{name: 'shop_home_actions'}">
+                                                        <span class="fa fa-bank mx-1"></span>
+                                                        <span>Et les actions</span>
                                                     </router-link>
                                                     <a href="#" v-if="!connected || !user" class="p-0">
-                                                        <span class="fa fa-shopping-bag mx-1"></span>
-                                                        <span>A la boutique</span>
+                                                        <span class="fa fa-bank mx-1"></span>
+                                                        <span>Et les actions</span>
                                                     </a href="#">
                                                 </span>
                                             </a>
@@ -130,9 +142,82 @@
 
 <script>
 	import { mapState } from 'vuex'
+    import Swal from 'sweetalert2'
 	export default {
 		
         created(){
+
+        },
+        methods: {
+            becomeMember(){
+                if (!this.connected || !this.user) {
+                    Swal.fire({
+                        title: "Devenir membre UVAR",
+                        text: "Pour devenir un membre UVAR, vous devrez vous faire affilier par un membre UVAR du site. Pour cela, veuillez entrer en contact avec un membre UVAR, ou bien veuillez envoyer une demande d'affiliation à l'administrateur UVAR.", 
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        cancelButtonText: 'Veuillez vous connecter',
+                    })
+                    return false
+                }
+                Swal.fire({
+                    title: "Devenir membre UVAR",
+                    text: "Pour devenir un membre UVAR, vous devrez vous faire affilier par un membre UVAR du site. Pour cela, veuillez entrer en contact avec un membre UVAR, ou bien veuillez envoyer une demande d'affiliation à l'administrateur UVAR.", 
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Lancer une demande',
+                    cancelButtonText: 'Avorter',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Envoie de demande",
+                            input: 'text',
+                            inputAttributes: {
+                                autocapitalize: 'off',
+                                required: true,
+                                placeholder: "Veuillez renseiller la quantité d'actions"
+                            },
+                            showLoaderOnConfirm: true,
+                            showConfirmButton: true,
+                            confirmButtonText: 'Envoyer',
+                            preConfirm: (message) => {
+                                return axios.post('/Uvar/send/demande=affiliation/id=' + this.user.id + '/message=' + message,{
+                                        headers: {
+                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                    })
+                                    .then(response => {
+                                        if (response.data.errors !== undefined) {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                text: response.data.errors,
+                                                showConfirmButton: false,
+                                            })
+                                        }
+                                        else{
+                                            if (response.data.success !== undefined) {
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    showConfirmButton: true,
+                                                    text: response.data.success
+                                                })
+                                            }
+                                        }
+                                    })
+                                    .catch(error => {
+                                        Swal.showValidationMessage(
+                                            "Erreure serveur"
+                                        )
+                                    })
+                            },
+                            allowOutsideClick: () => !Swal.isLoading()
+                        })
+                    }
+                })
+            },
 
         },
         computed: mapState([

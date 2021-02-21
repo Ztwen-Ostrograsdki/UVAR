@@ -54,6 +54,11 @@ class IDManager{
 		return false;
 	}
 
+	public static function __ADMIN_EMAIL_KEY()
+	{
+		return 'uvaracademie@gmail.com';
+	}
+
 
 
 

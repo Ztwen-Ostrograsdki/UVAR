@@ -168,7 +168,6 @@
                                 else{
                                     if (response.success !== undefined) {
                                         this.$store.dispatch('getMember', member.id)
-                                        this.$store.dispatch('getRequests')
                                         this.$store.dispatch('getAllActions')
                                         Swal.fire({
                                             icon: 'success',
@@ -189,7 +188,6 @@
                 .then((response) => {
                     if (response.isConfirmed) {
                         this.$store.dispatch('getMember', member.id)
-                        this.$store.dispatch('getRequests')
                         this.$store.dispatch('getAllActions')
                         Swal.fire({
                             icon: 'success',

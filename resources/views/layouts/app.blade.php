@@ -58,7 +58,7 @@
             <div class="section-title text-center">
             </div><!-- end title -->
 
-            <div class="row">
+            {{-- <div class="row"> 
                 <div class="col-md-12 col-sm-12">
                     <div class="testi-carousel owl-carousel owl-theme">
                         <div class="testimonial clearfix">
@@ -70,9 +70,7 @@
                                 <img src="{{ asset('master/images/testi_01.png') }}" alt="" class="img-fluid">
                                 <h4>James Fernando </h4>
                             </div>
-                            <!-- end testi-meta -->
                         </div>
-                        <!-- end testimonial -->
 
                         <div class="testimonial clearfix">
                             <div class="desc">
@@ -83,10 +81,7 @@
                                 <img src="{{ asset('master/images/testi_02.png') }}" alt="" class="img-fluid">
                                 <h4>Jacques Philips </h4>
                             </div>
-                            <!-- end testi-meta -->
                         </div>
-                        <!-- end testimonial -->
-
                         <div class="testimonial clearfix">
                             <div class="desc">
                                 <h3><i class="fa fa-quote-left"></i> Great & Talented Team!</h3>
@@ -96,9 +91,7 @@
                                 <img src="{{ asset('master/images/testi_03.png') }}" alt="" class="img-fluid ">
                                 <h4>Venanda Mercy </h4>
                             </div>
-                            <!-- end testi-meta -->
                         </div>
-                        <!-- end testimonial -->
                         <div class="testimonial clearfix">
                             <div class="desc">
                                 <h3><i class="fa fa-quote-left"></i> Wonderful Support!</h3>
@@ -108,9 +101,7 @@
                                 <img src="{{ asset('master/images/testi_01.png') }}" alt="" class="img-fluid">
                                 <h4>James Fernando </h4>
                             </div>
-                            <!-- end testi-meta -->
                         </div>
-                        <!-- end testimonial -->
 
                         <div class="testimonial clearfix">
                             <div class="desc">
@@ -121,9 +112,7 @@
                                 <img src="{{ asset('master/images/testi_01.png') }}" alt="" class="img-fluid">
                                 <h4>Jacques Philips </h4>
                             </div>
-                            <!-- end testi-meta -->
                         </div>
-                        <!-- end testimonial -->
 
                         <div class="testimonial clearfix">
                             <div class="desc">
@@ -134,38 +123,14 @@
                                 <img src="{{ asset('master/images/testi_03.png') }}" alt="" class="img-fluid">
                                 <h4>Venanda Mercy </h4>
                             </div>
-                            <!-- end testi-meta -->
-                        </div><!-- end testimonial -->
-                    </div><!-- end carousel -->
-                </div><!-- end col -->
-            </div><!-- end row -->
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>      --}}
         </div><!-- end container -->
     </div><!-- end section -->
 
-    <div class="parallax section dbcolor">
-        <div class="container">
-            <div class="row logos">
-                <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
-                    <a href="#"><img src="{{ asset('/master/images/logo_01.png') }}" alt="" class="img-repsonsive"></a>
-                </div>
-                <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
-                    <a href="#"><img src="{{ asset('master/images/logo_02.png') }}" alt="" class="img-repsonsive"></a>
-                </div>
-                <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
-                    <a href="#"><img src="{{ asset('master/images/logo_03.png') }}" alt="" class="img-repsonsive"></a>
-                </div>
-                <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
-                    <a href="#"><img src="{{ asset('master/images/logo_04.png') }}" alt="" class="img-repsonsive"></a>
-                </div>
-                <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
-                    <a href="#"><img src="{{ asset('/master/images/logo_05.png') }}" alt="" class="img-repsonsive"></a>
-                </div>
-                <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
-                    <a href="#"><img src="{{ asset('master/images/logo_06.png') }}" alt="" class="img-repsonsive"></a>
-                </div>
-            </div><!-- end row -->
-        </div><!-- end container -->
-    </div><!-- end section -->
 
     <footer class="footer">
         <home-footer></home-footer>
@@ -178,7 +143,7 @@
                     <a class="navbar-brand d-inline text-official cursive cursor" href="/">
                         <img src="{{asset('logos/uvar.png')}}" class="d-inline m-0 p-0" width="" height="70">
                     </a>                   
-                    <p class="footer-company-name">All Rights Reserved. &copy; 2018 <a href="#">QuickCloud</a> Design By : <a href="https://html.design/">html design</a></p>
+                    <p class="footer-company-name">Tous droits reservés. &copy; 2021 <a href="#">UVAR</a> Design By : <a href="https://html.design/">html design</a></p>
                 </div>
 
                 <div class="footer-right">
