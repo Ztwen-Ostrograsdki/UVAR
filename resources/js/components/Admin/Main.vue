@@ -1,5 +1,10 @@
 <template>
 <div class="w-100 p-0 m-0 mx-auto">
+  <transition name='justefade' appear>
+    <div class="w-100 mx-auto text-white-50" v-if="isLoadedVisitors">
+      <h5 class="text-info p-2 text-center w-100">UVAR compte aujourd'hui {{visitors.length}} visiteurs</h5>
+    </div>
+  </transition>
 	<div class="w-100 p-0 m-0">
         <admin-dashboard></admin-dashboard>
 
@@ -26,6 +31,7 @@
 
 <script>
 	import { mapState } from 'vuex'
+  import Swal from 'sweetalert2'
 	export default {
         data() {
             return {
@@ -34,21 +40,14 @@
         },
 		
         created(){
-            // this.$store.dispatch('getActiveMember')
-            // this.$store.dispatch('getUsers')
-            // this.$store.dispatch('getMembers')
-            // this.$store.dispatch('getActions')
-            // this.$store.dispatch('getProducts')
-            // this.$store.dispatch('getCategories')
-            // this.$store.dispatch('getNotifications')
-            // this.$store.dispatch('getRequests')
+           this.$store.dispatch('getVisitors');
         },
         methods :{
             
         },
 
         computed: mapState([
-            'users', 'user', 'members', 'notifications', 'actions', 'products', 'categories', 'totalBoughtByAction', 'active_member', 'active_member_photo', 'requests', 'token', 'connected'
+            'users', 'admin_auth', 'user', 'members', 'notifications', 'actions', 'products', 'categories', 'visitors', 'totalBoughtByAction', 'active_member', 'active_member_photo', 'connected', 'isLoadedVisitors'
         ])
 	}
 </script>

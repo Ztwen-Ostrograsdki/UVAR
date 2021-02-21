@@ -75,8 +75,11 @@
                 </div>
             </div>
         </transition>
+        <transition name="scalefade" appear>
             <div class="w-100 mx-auto mt-2">
                 <div class="w-100 mx-auto">
+                    <h4 class="m-0 p-0 mx-auto pl-2 py-2 w-95 border border-white my-1 bg-dark text-white-50"  v-if="isLoadedAction && action.buyers.length > 0"><span class="fa fa-user fa-2x"></span> Les Acheteurs de l'action <i>{{action.action.name}}</i> <strong class="text-secondary">({{action.buyers.length}})</strong> </h4>
+                    <h4 class="m-0 p-0 mx-auto py-2 w-95 border border-white my-1 bg-dark text-white-50"  v-if="isLoadedAction && action.buyers.length < 1">Pas encore d'acheteur de l'action <i>{{action.action.name}}</i></h4>
                     <div class="w-95 mx-auto">
                         <table class="table table-official text-white" v-if="isLoadedAction && action.buyers.length > 0">
                             <thead class="text-center">
@@ -114,6 +117,7 @@
                     </div>
                 </div>
             </div>
+            </transition>
         </div>
     </div>
 </template>

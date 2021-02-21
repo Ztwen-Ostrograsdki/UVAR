@@ -19,6 +19,8 @@ const product_s = {
 	invalidsNewProduct: {},
 	totalBoughtByProduct: [],
 	isLoadedProducts: false,
+	isLoadedSelectedProducts: false,
+	selectedProducts: [],
 	isLoadedProduct: false,
 }
 

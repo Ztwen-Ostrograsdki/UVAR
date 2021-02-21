@@ -50,9 +50,11 @@ Route::group(['prefix' => 'Uvar'], function() {
     Route::get('administration/get&a&member/profil/id={id}', [MembersController::class, 'getMember']);
     Route::post('administration/actions&get&data/now', [ActionController::class, 'getActions']);
     Route::post('administration/get&action&data&/target/id={id}', [ActionController::class, 'getAction']);
+    Route::post('administration/get&product&data&/target/id={id}', [ProductController::class, 'getProduct']);
     Route::get('administration/products&get&data/now', [ProductController::class, 'getProducts']);
     Route::get('administration/categories&get&data/now', [CategoryController::class, 'getCategories']);
     Route::post('/systeme/notify&system', [AffiliationsController::class, 'getNotifications']);
+    Route::post('/administration/visitors', [AdminController::class, 'getVisitors']);
 
 
 
@@ -72,16 +74,16 @@ Route::group(['prefix' => 'Uvar'], function() {
     Route::get('/administration/tag/notifications', [AffiliationsController::class, 'index']);
     Route::put('/administration/update/images/membres/{id}', [ImagesController::class, 'forMember']);
     Route::put('/administration/boutique/action/q=achat/a={action}/m={member}/t={total}', [MarketController::class, 'buyAction']);
+    Route::put('/administration/boutique/product/q=achat/p={product}/u={user}/t={total}', [MarketController::class, 'buyProduct']);
 });
 
     Route::group(['prefix' => 'boutique'], function(){
         Route::get('q=actions', [MarketController::class, 'index']);
         Route::post('q=actions', [MarketController::class, 'getAllActions']);
-        Route::post('q=actions/length', [MarketController::class, 'getAllActionsOnlyAPart']);
+        Route::post('/getseleted/actions&products/size={size}', [MarketController::class, 'getSelected']);
 
         Route::get('q=articles', [MarketController::class, 'index']);
         Route::post('q=articles', [MarketController::class, 'getAllProducts']);
-        // Route::post('q=articles/length', [MarketController::class, 'getAllActionsOnlyAPart']);
 
     });
 

@@ -41,14 +41,23 @@
                             <div class="w-100 mx-auto">
                                 <div class="w-100 d-flex justify-content-between flex-column">
                                     <div class="w-100 p-2">
-                                        <h4 class="text-official p-0 m-0 mb-1">{{ product.product.name }}</h4> 
+                                        <h4 class="text-official p-0 m-0 mb-1">
+                                            <router-link v-if="user && member && active_member && user.role =='admin'" :to="{name: 'productProfil', params: {id: product.product.id}}"   class="card-link d-inline-block w-100 text-official" >
+                                                <span  class="w-100 d-inline-block link-profiler">
+                                                    {{product.product.name}}
+                                                </span>
+                                            </router-link>
+                                            <span v-if="user && user.role !== 'admin'">
+                                                {{product.product.name}}
+                                            </span>
+                                        </h4>  
                                         <h4 class="fa-1x p-0 m-0">
                                             <span class="text-secondary">{{ getPrice(product.product.price).toFrancs }}</span>
                                             <span class="text-official">||</span>
                                             <span class="text-warning">{{ getPrice(product.product.price).toAr }}</span>
                                             <i class="ml-2 text-white-50">({{product.totalBought}}) achétés</i>
                                             <i class="ml-2 text-danger">({{ product.product.total - product.totalBought}}) restants</i>
-                                            <span @click="buyProduct(product.product, active_member)" class="m-0 float-right mr-2 btn btn-primary border-official">Acheter cet article</span>
+                                            <span @click="buyProduct(product.product, user)" class="m-0 float-right mr-2 btn btn-primary border-official">Acheter cet article</span>
                                         </h4>
                                         <p class="m-0 p-0 mt-1 w-100 float-right text-warning">
                                             Cet article est disponible sur le marché
@@ -118,7 +127,7 @@
         
         methods :{
 
-            buyProduct(action, member){
+            buyProduct(product, user){
                 if (!navigator.onLine) {
                     Swal.fire({
                         icon: 'warning',
@@ -127,14 +136,13 @@
                     })
                     return false
                 }
-                let token = this.token
                 this.total = 0
                 Swal.fire({
-                    title: "Achat de l'action " + action.name,
+                    title: "Achat de l'article " + product.name,
                     input: 'text',
                     inputAttributes: {
                         autocapitalize: 'off',
-                        placeholder: "Veuillez renseiller la quantité d'actions"
+                        placeholder: "Veuillez renseiller la quantité de cet article à acheter"
                     },
                     showCancelButton: true,
                     confirmButtonText: 'Acheter',
@@ -142,10 +150,10 @@
                     showLoaderOnConfirm: true,
                     preConfirm: (total) => {
                         this.total = total
-                        return fetch('/Uvar/administration/boutique/action/q=achat/a='+ action.id + '/m=' + member.id + '/t=' + total,{
+                        return fetch('/Uvar/administration/boutique/product/q=achat/p='+ product.id + '/u=' + user.id + '/t=' + total,{
                                 method: 'PUT',
                                 headers: {
-                                    'X-CSRF-TOKEN': token,
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                                 },
                             })
                             .then(response => response.json())
@@ -159,12 +167,11 @@
                                 }
                                 else{
                                     if (response.success !== undefined) {
-                                        this.$store.dispatch('getMember', member.id)
                                         this.$store.dispatch('getRequests')
-                                        this.$store.dispatch('getAllActions')
+                                        this.$store.dispatch('getAllProducts')
                                         Swal.fire({
                                             icon: 'success',
-                                            text: "Opération réussie! Pour entrer en Possession des actions veuillez faire un dépot de " + (Number(this.total) * action.price) + " FCFA sur le numero de la plateforme.",
+                                            text: "Opération réussie! Pour entrer en Possession des articles veuillez faire un dépot de " + (Number(this.total) * product.price) + " FCFA sur le numero de la plateforme.",
                                             showConfirmButton: true,
                                         })
                                     }
@@ -172,23 +179,11 @@
                             })
                             .catch(error => {
                                 Swal.showValidationMessage(
-                                    `Echec: ${error}`
+                                    `Echec: Ohhh, une erreure est survenue`
                                 )
                             })
                     },
                     allowOutsideClick: () => !Swal.isLoading()
-                })
-                .then((response) => {
-                    if (response.isConfirmed) {
-                        this.$store.dispatch('getMember', member.id)
-                        this.$store.dispatch('getRequests')
-                        this.$store.dispatch('getAllActions')
-                        Swal.fire({
-                            icon: 'success',
-                            text: "Opération réussie! Pour entrer en Possession des actions veuillez faire un dépot de " + (Number(this.total) * action.price) + " FCFA sur le numero de la plateforme.",
-                            showConfirmButton: true,
-                        })
-                    }
                 })
             },
         	getCreatedAt(created_at){

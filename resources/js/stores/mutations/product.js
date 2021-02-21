@@ -10,6 +10,16 @@ const product_m = {
 
         }
     },
+    GET_PRODUCT: (state, data) => {
+        state.product = data
+    },
+    GET_SELECTED_PRODUCTS: (state, data) => {
+        state.selectedProducts = data.selectedProducts
+    },
+    GET_PRODUCTS_DETAILS: (state, data) => {
+        state.lastProduct = data.lastProduct
+        state.bestProduct = data.bestProduct
+    },
     RESET_NEW_PRODUCT_INVALIDS: (state, data) =>{
         state.invalidsNewProduct = data
     },

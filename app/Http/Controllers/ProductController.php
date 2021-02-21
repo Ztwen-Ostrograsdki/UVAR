@@ -13,6 +13,7 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('admin');
     }
     /**
      * Display a listing of the resource.
@@ -33,6 +34,15 @@ class ProductController extends Controller
             $totalBoughtByProduct[$product->id] = $product->totalBought();
         }
         return response()->json(['products' => $products, 'totalBoughtByProduct' => $totalBoughtByProduct, 'boughtedProducts' => $boughtedProducts]);
+    }
+
+     public function getProduct(int $id)
+    {
+        $product = Product::withTrashed('deleted_at')->whereId($id)->first();
+        $buyers = $product->Usersbuyers();
+        $totalBought = $product->totalBought();
+        
+        return response()->json(['product' => $product, 'buyers' => $buyers, 'totalBought' => $totalBought]);
     }
 
     /**
@@ -88,7 +98,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('products.profil');
     }
 
     /**
@@ -154,6 +164,33 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        if ($product) {
+            $alreadyBought = $product->totalBought();
+            if ($alreadyBought > 0) {
+                return response()->json(['errors' => "Cette article a déjà des détenteurs, vous ne pouvez pas la supprimer! Veuillez essayez la procedure de forçage de suppression sécurisée"]);
+            }
+            $images = $product->images;
+            if ($images == null) {
+                foreach ($images as $image) {
+                    $product->images()->detach($image->id);
+                    $local = Storage::delete($image->name);
+                    if ($local) {
+                        $del_db = $image->delete();
+                    }
+                }
+                
+
+            }
+            $delete = $product->forceDelete();
+            if ($delete) {
+                return response()->json(['success' => "Suppression réussie!"]);
+            }
+            else{
+                return response()->json(['errors' => "Erreure lors de la suppression!"]);
+            }
+        }
+        return response()->json(['errors' => "Requête inconnue, veuillez vérifier votre requête!"]);
+        
     }
 }

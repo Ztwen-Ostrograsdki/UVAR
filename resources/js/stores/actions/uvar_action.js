@@ -80,16 +80,19 @@ const uvar_action_a = {
 			})   
 			.finally(() => state.commit('RESET_ACTIONS_LOADING', true))  
 	},
-	getAllActionsOnlyAPart: (state) => {
-		axios.post('/boutique/q=actions/length', 
+	getSelected: (state, size = 3) => {
+		axios.post('/boutique/getseleted/actions&products/size=' + size, 
 			{
         		headers: {
         			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
 		        }
 		    })
 			.then(response => {
-				state.commit('GET_ALL_ACTIONS_ONLY_A_PART', {
-						actions: response.data.actions,
+				state.commit('GET_SELECTED_PRODUCTS', {
+					selectedProducts: response.data.selectedProducts,
+				})
+				state.commit('GET_SELECTED_ACTIONS', {
+					selectedActions: response.data.selectedActions,
 				})
 			})
 			.catch(err =>{
@@ -101,7 +104,8 @@ const uvar_action_a = {
 					})
 					window.location = '/'
 				}
-			})   
+			})  
+			.finally(() => state.commit('RESET_SELECTED_LOADING', true))   
 	},
 
 	createAction: (state, data) => {

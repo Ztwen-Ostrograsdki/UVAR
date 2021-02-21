@@ -18,11 +18,15 @@ const auth_mutations = {
     GET_TOKEN: (state, data) =>{
         state.token = data.token
     },
+    GET_VISITORS: (state, data) =>{
+        state.visitors = data.visitors
+    },
     GET_NOTIFICATIONS: (state, data) =>{
         state.notifications = data
     },
     GET_REQUESTS: (state, data) =>{
-        state.requests = data 
+        state.actionsRequests = data.actionsRequests
+        state.productsRequests = data.productsRequests 
     },
     LOGOUT: (state) => {
         state.user = {}
@@ -35,6 +39,13 @@ const auth_mutations = {
     RESET_REQUESTS_LOADING : (state, status) => {
         state.isLoadedRequests = status
     },
+    RESET_VISITORS_LOADING : (state, status) => {
+        state.isLoadedVisitors = status
+    },
+
+    RESET_ADMIN_AUTH: (state, data) => {
+        state.admin_auth = data
+    }
 }
 
 export default auth_mutations

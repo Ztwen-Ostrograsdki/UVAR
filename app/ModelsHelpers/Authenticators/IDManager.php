@@ -4,6 +4,8 @@ namespace App\ModelsHelpers\Authenticators;
 
 use App\Models\Member;
 use App\Models\User;
+use App\Models\Visitors;
+use App\Notifications\NewVisitorNotification;
 
 class IDManager{
 
@@ -17,6 +19,20 @@ class IDManager{
 	public static function __GENERATOR($member)
 	{
 		
+	}
+
+	public static function __INCREMENT_VISITORS()
+	{
+		$admin = User::where('role', 'admin')->first();
+        $ip = request()->ip();
+        $existed = Visitors::where('ip_address', $ip)->first();
+
+        if (!$existed) {
+            $new_visitor = Visitors::create(['ip_address' => $ip]);
+            if ($new_visitor) {
+                $admin->notify(new NewVisitorNotification(count(Visitors::all())));
+            }
+        }
 	}
 
 

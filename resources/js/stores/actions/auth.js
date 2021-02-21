@@ -35,7 +35,7 @@ const auth_actions = {
         axios.post('/login/uvar&user&get&auth', user, 
         	{
         		headers: {
-        			'X-CSRF-TOKEN': user.token,
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
 		        }
 		    }
 		)
@@ -161,6 +161,31 @@ const auth_actions = {
 		})    
 		.finally(() => state.commit('RESET_NOTIFICATIONS_LOADING', true))  
 	},
+	getVisitors: (state) =>{
+		axios.post('/Uvar/administration/visitors', 
+			{
+        		headers: {
+        			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+		        }
+		    }
+		)
+		.then(response => {
+			if (response.data.visitors !== undefined) {
+				state.commit('GET_VISITORS', {visitors: response.data.visitors})
+			}
+		})
+		.catch(err =>{
+			if (err.response.status == 401) {
+				Swal.fire({
+				  icon: 'warning',
+				  title: "Erreure connexion: Vous n'êtes pas authorisé",
+				  showConfirmButton: false,
+				})
+				window.location = '/'
+			}
+		})    
+		.finally(() => state.commit('RESET_VISITORS_LOADING', true))  
+	},
 	getRequests: (state) =>{
 		axios.post('/Uvar/systeme/requests/fecth&them', 
 			{
@@ -171,8 +196,11 @@ const auth_actions = {
 		)
 		.then(response => {
 
-			if (response.data.requests !== undefined) {
-				state.commit('GET_REQUESTS', response.data.requests)
+			if (response.data.actionsRequests !== undefined || response.data.productsRequests !== undefined) {
+				state.commit('GET_REQUESTS', {
+					actionsRequests: response.data.actionsRequests,
+					productsRequests: response.data.productsRequests,
+				})
 			}
 		})
 		.catch(err =>{
@@ -203,8 +231,11 @@ const auth_actions = {
 				  showConfirmButton: false,
 				  timer: 2000
 				})
-				if (response.data.requests !== undefined) {
-					state.commit('GET_REQUESTS', response.data.requests)
+				if (response.data.actionsRequests !== undefined && response.data.productsRequests !== undefined) {
+					state.commit('GET_REQUESTS', {
+						actionsRequests: response.data.actionsRequests,
+						productsRequests: response.data.productsRequests,
+					})
 				}
 				state.dispatch('getMembers')
 			}

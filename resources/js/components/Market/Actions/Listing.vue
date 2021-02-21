@@ -42,7 +42,16 @@
 							<div class="w-100 mx-auto">
 								<div class="w-100 d-flex justify-content-between flex-column">
 									<div class="w-100 p-2">
-										<h4 class="text-official p-0 m-0 mb-1">{{ action.action.name }}</h4> 
+										<h4 class="text-official p-0 m-0 mb-1">
+                                            <router-link v-if="user && member && active_member && user.role =='admin'" :to="{name: 'actionProfil', params: {id: action.action.id}}"   class="card-link d-inline-block w-100 text-official" >
+                                                <span  class="w-100 d-inline-block link-profiler">
+                                                    {{action.action.name}}
+                                                </span>
+                                            </router-link>
+                                            <span v-if="user && user.role !== 'admin'">
+                                                {{action.action.name}}
+                                            </span>
+                                        </h4> 
 										<h4 class="fa-1x p-0 m-0">
 											<span class="text-secondary">{{ getPrice(action.action.price).toFrancs }}</span>
 											<span class="text-official">||</span>
@@ -116,13 +125,6 @@
             this.$store.dispatch('getAllActions')
         	this.$store.dispatch('getAllProducts')
         },
-        mounted(){
-            document.onreadystatechange = () => {
-                if (document.readyState == 'complete') {
-                    this.isLoaded = true
-                }
-            }
-        },
         methods :{
 
             buyAction(action, member){
@@ -178,7 +180,7 @@
                             })
                             .catch(error => {
                                 Swal.showValidationMessage(
-                                    `Echec: ${error}`
+                                    `Echec: Ohhh Une erreure est survenue!!!`
                                 )
                             })
                     },

@@ -35,7 +35,6 @@ class Action extends Model
                 $tables[] = ['member' => $shop->member, 'shop' => $shop, 'images' => $shop->member->images];
             }
         }
-
         return $tables;
     }
 

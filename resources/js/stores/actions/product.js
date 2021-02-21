@@ -39,6 +39,10 @@ const product_a = {
 				state.commit('GET_ALL_PRODUCTS', {
 						products: response.data.products,
 				})
+				state.commit('GET_PRODUCTS_DETAILS', {
+						lastProduct: {product: response.data.productsDetails.lastProduct, totalBought: response.data.productsDetails.lastTotalBought},
+						bestProduct: {product: response.data.productsDetails.bestProduct, totalBought: response.data.productsDetails.bestTotalBought},
+				})
 			})
 			.catch(err =>{
 				if (err.response.status == 401) {
@@ -76,55 +80,8 @@ const product_a = {
 			})   
 	},
 
-	createProduct: (state, data) => {
-		axios.post('/Uvar/administration/tag/produits/', 
-		{
-			image: data.product.image,
-			name: data.product.product.name,
-			description: data.product.product.description,
-			price: data.product.product.price,
-			total: data.product.product.total,
-		}, 
-		{
-    		headers: {
-    			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-	        }
-	    })
-		.then(response => {
-			if (response.data.errors !== undefined) {
-				state.commit('RESET_NEW_PRODUCT_INVALIDS', response.data.errors)
-			}
-			else if (response.data.success !== undefined) {
-				$('#createProduct').modal('hide')
-				$('body').removeClass('modal-open')
-				$('.modal-backdrop').remove()
-				Swal.fire({
-				  icon: 'success',
-				  title: "Créaction d'un nouvel article",
-				  text: response.data.success,
-				  showConfirmButton: false,
-				})
-				state.dispatch('getProducts')
-				state.dispatch('getAllProducts')
-			}
-		})    
-		.catch(err =>{
-			if (err.response.status == 403) {
-				$('#createProduct').modal('hide')
-				$('body').removeClass('modal-open')
-				$('.modal-backdrop').remove()
-				Swal.fire({
-				  icon: 'warning',
-				  title: "Vous n'êtes pas authorisé",
-				  showConfirmButton: false,
-				})
-				
-			}
-		})     
-	},
-
 	getProduct: (state, id) => {
-		axios.post('/Uvar/administration/get&products&data&/target/id=' + id, 
+		axios.post('/Uvar/administration/get&product&data&/target/id=' + id, 
 			{
 				headers: {
 	    			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),

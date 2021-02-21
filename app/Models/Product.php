@@ -48,7 +48,12 @@ class Product extends Model
     {
         $tables = [];
         $shops = $this->buyers()->with('user')->get();
-        return $shops;
+        if (count($shops) > 0) {
+            foreach ($shops as $shop) {
+                $tables[] = ['user' => $shop->user, 'shop' => $shop, 'member' => $shop->user->member, 'images' => $shop->user->images()];
+            }
+        }
+        return $tables;
     }
 
 

@@ -8,11 +8,18 @@ const uvar_action_m = {
     GET_ACTION: (state, data) => {
         state.action = data
     },
+    GET_SELECTED_ACTIONS: (state, data) => {
+        state.selectedActions = data.selectedActions
+    },
      GET_ALL_ACTIONS: (state, data) => {
         state.allActions = data.actions 
     },
     RESET_ACTION_LOADING : (state, status) => {
         state.isLoadedAction = status
+    },
+    RESET_SELECTED_LOADING : (state, status) => {
+        state.isLoadedSelectedProducts = status
+        state.isLoadedSelectedActions = status
     },
     RESET_ACTIONS_LOADING : (state, status) => {
         state.isLoadedActions = status

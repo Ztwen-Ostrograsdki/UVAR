@@ -46,8 +46,8 @@
                                 <router-link class="dropdown-item" to="/Uvar/administration">Acceuil</router-link>
                                 <a class="dropdown-item" href="#">Les formations </a>
                                 <router-link class="dropdown-item" :to="{name: 'notifications'}"> Les affiliations en attente</router-link>
-                                <router-link class="dropdown-item" :to="{name: 'notifications'}"> Les achats en attente</router-link>
-                                <router-link class="dropdown-item" :to="{name: 'productsListing'}"> Gestion des produits</router-link>
+                                <router-link class="dropdown-item" :to="{name: 'requests'}"> Les achats en attente</router-link>
+                                <router-link class="dropdown-item" :to="{name: 'productsListing'}"> Gestion des articles</router-link>
                                 <router-link class="dropdown-item" :to="{name: 'actionsListing'}"> Gestions des actions</router-link>
                                 <router-link class="dropdown-item" :to="{name: 'usersListing'}">Les utilisateurs</router-link>
                                 <router-link class="dropdown-item" :to="{name: 'membersListing'}">Les membres</router-link>

@@ -7,25 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ManageRequested extends Notification
+class NewVisitorNotification extends Notification
 {
     use Queueable;
 
-    public $request;
-    public $type;
-    public $target;
-    public $demander;
+    public $totalVisitor;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($request, $type, $target, $demander)
+    public function __construct($totalVisitor)
     {
-        $this->type = $type;
-        $this->request = $request;
-        $this->target = $target;
-        $this->demander = $demander;
+        $this->totalVisitor = $totalVisitor;
     }
 
     /**
@@ -48,10 +43,10 @@ class ManageRequested extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject("Demande d'achat de {$this->type} sur UVAR ")
-                    ->line("{$this->demander->name} vient de faire une demande d'achat de {$this->request->total} {$this->type}s de {$this->type} {$this->target->name}")
-                    ->action('Confirmé cette demande', url("UVAR/confirmation/{$this->demander->id}/achat/{$this->type}/req={$this->request->id}"))
-                    ->line('UVAR, la qualité du service, fait la différence');
+                ->subject("Un nouveau visiteur sur le site UVAR")
+                ->line("UVAR vient d'être visité par un nouvel utilisateur")
+                ->action("UVAR compte aujourd'hui {$this->totalVisitor} visiteurs!", url('/'))
+                ->line('UVAR, le meilleur au rendez-vous!');
     }
 
     /**

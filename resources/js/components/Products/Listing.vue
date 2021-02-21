@@ -37,7 +37,7 @@
                     <tr v-for="(product, k) in products">
                         <td class="text-center">{{ k + 1 > 9 ? k + 1 : '0' + (k + 1) }}</td>
                         <td>
-                            <router-link :to="{name: 'actionProfil', params: {id: product.id}}"   class="card-link d-inline-block text-white" >
+                            <router-link :to="{name: 'productProfil', params: {id: product.id}}"   class="card-link d-inline-block text-white" >
                                 <span  class="w-100 d-inline-block link-profiler">
                                     {{product.name}}
                                 </span>
@@ -145,7 +145,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         Swal.fire({
-                            title: "Suppression de l'action " + this.deletingProduct.name,
+                            title: "Suppression de l'article " + this.deletingProduct.name,
                             text: 'Opération en cours veuillez patienter...',
                             showCancelButton: true,
                             cancelButtonText: 'Annuler',

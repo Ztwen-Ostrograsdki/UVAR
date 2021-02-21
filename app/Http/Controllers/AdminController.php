@@ -10,9 +10,13 @@ use App\Models\Action;
 use App\Models\Affiliate;
 use App\Models\Bonus;
 use App\Models\Member;
+use App\Models\Product;
 use App\Models\RequestedAction;
+use App\Models\RequestedProducts;
+use App\Models\Shopping;
 use App\Models\ShoppingAction;
 use App\Models\User;
+use App\Models\Visitors;
 use App\Notifications\AffiliationRequestedNotification;
 use App\Notifications\Requested;
 use Illuminate\Http\Request;
@@ -76,7 +80,42 @@ class AdminController extends Controller
                 return response()->json(['errors' => "Votre achat est ambiguë"]);
             }
         }
+        elseif ($type == 'product') {
+            $request = RequestedProducts::find($request);
+            if ($request) {
+                $product = Product::find($request->product_id);
+                $user = User::find($request->user_id);
+                if ($response == 1) {
+                    DB::transaction(function() use ($product, $user, $request){
+                        $accepted = Shopping::create(['product_id' => $product->id, 'user_id' => $request->user_id, 'total' => $request->total]);
+                        $refresh = $request->delete();
+                    });
+                    $user->notify(new Requested('article', $product, $request, true));
+                    if (auth()->user()->role == "admin") {
+                        return (new RequestsController())->getRequests("Demande d'achat approuvé avec succès");
+                    }
+                    else{
+                        return response()->json(['message' => "Demande d'achat approuvé avec succès"]);
+                    }
+                }
+                else{
+                    $rejected = $request->delete();
+                    if ($rejected) {
+                        $user->notify(new Requested('product', $product, $request, false));
+                        if (auth()->user()->role == "admin") {
+                            return (new RequestsController())->getRequests("Demande d'achat rejeté avec succès");
+                        }
+                        else{
+                            return response()->json(['message' => "Demande d'achat rejeté avec succès"]);
+                        }
+                    }
+                }
+            }
+
+        }
     }
+
+
 
     public function manageAffiliation(Request $request)
     {
@@ -155,6 +194,13 @@ class AdminController extends Controller
             $referer->user->notify(new AffiliationRequestedNotification($referer, $referee, false));
             return (new AffiliationsController())->getNotifications();
         }
+    }
+
+
+    public function getVisitors()
+    {
+        $visitors = Visitors::all();
+        return response()->json(['visitors' => $visitors]);
     }
 
 

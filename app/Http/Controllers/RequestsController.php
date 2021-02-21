@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\Product;
 use App\Models\RequestedAction;
 use App\Models\RequestedProducts;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RequestsController extends Controller
@@ -33,16 +34,16 @@ class RequestsController extends Controller
 
     public function getRequests($message = null)
     {
-        $actionsRequests = RequestedAction::all();
-        $productsRequests = RequestedProducts::all();
+        $actionsTables = RequestedAction::all();
+        $productsTables = RequestedProducts::all();
 
-        $requests = [];
+        $actionsRequests = [];
+        $productsRequests = [];
 
-        foreach ($actionsRequests as $act_req) {
+        foreach ($actionsTables as $act_req) {
             $member = Member::find($act_req->member_id);
             $action = Action::find($act_req->action_id);
-
-            $requests[] = 
+            $actionsRequests[] = 
                 [
                     'member' => $member,
                     'action' => $action,
@@ -51,21 +52,21 @@ class RequestsController extends Controller
                 ];
         }
 
-        foreach ($productsRequests as $pr_req) {
-            $member = Member::find($pr_req->member_id);
+        foreach ($productsTables as $pr_req) {
+            $user = User::find($pr_req->user_id);
             $product = Product::find($pr_req->product_id);
-            $requests[] = 
+            $productsRequests[] = 
                 [
-                    'member' => $member,
+                    'user' => $user,
                     'product' => $product,
                     'request' => $pr_req,
                     'type' => 'product',
                 ];
         }
         if ($message !== null) {
-            return response()->json(['requests' => $requests, 'message' => $message]);
+            return response()->json(['actionsRequests' => $actionsRequests, 'productsRequests' => $productsRequests,  'message' => $message]);
         }
-        return response()->json(['requests' => $requests]);
+        return response()->json(['actionsRequests' => $actionsRequests, 'productsRequests' => $productsRequests]);
     }
 
     /**

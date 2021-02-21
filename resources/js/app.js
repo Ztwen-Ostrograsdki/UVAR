@@ -10,6 +10,7 @@ window.Vue = require('vue').default;
 import Swal from 'sweetalert2'
 import VueRouter from 'vue-router'
 import store from './stores/store.js'
+import ZtweN from 'sweetalert2'
 // import Loading from 'vue-loading-overlay';
 
 // import Vue from 'vue/dist/vue.esm.browser';
@@ -107,6 +108,7 @@ let shop_home = Vue.component('shop-home', require('./components/Market/Home.vue
 //CONFIRMATIONS
 
 let confirm_registration = Vue.component('confirm-registration', require('./components/confirmations/ConfirmationRegistration.vue').default)
+let new_password = Vue.component('new-password', require('./components/Users/passwords/NewPassword.vue').default)
 
 
 //SUCCESS
@@ -127,6 +129,11 @@ const routes = [
 					path: '/',
 					component: welcomes,
 					name: 'welcomes',
+				},
+				{
+					path: '/password/reset/:token',
+					component: new_password,
+					name: 'newPassword',
 				},
 				{
 					path: '/boutique/q=actions',
@@ -207,6 +214,11 @@ const routes = [
 					name: 'productsListing',
 				},
 				{
+					path: '/Uvar/administration/tag/produits/:id',
+					component: product_profil,
+					name: 'productProfil',
+				},
+				{
 					path: '/Uvar/administration/tag/categories',
 					component: categories_listing,
 					name: 'categoriesListing',
@@ -217,7 +229,7 @@ const routes = [
 					name: 'notifications',
 				},
 				{
-					path: '/Uvar/administration/tag/demandes',
+					path: '/Uvar/administration/tag/demandes/',
 					component: requests,
 					name: 'requests',
 				},

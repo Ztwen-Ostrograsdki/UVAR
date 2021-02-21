@@ -2,6 +2,7 @@ const auth_states = {
     invalidsLogin: {},
     token: '',
     user: {},
+    visitors: [],
     active_member: {id: null},
     user_member: {id: ''},
     connected: false,
@@ -10,9 +11,12 @@ const auth_states = {
     user: {},
     affiliationsNotifications: [],
     notifications: [],
+    isLoadedVisitors: false,
     isLoadedNotifications: false,
     isLoadedRequests: false,
-    requests: [],
+    actionsRequests: [],
+    productsRequests: [],
+    admin_auth: {status: false, key: ''},
 
 }
 

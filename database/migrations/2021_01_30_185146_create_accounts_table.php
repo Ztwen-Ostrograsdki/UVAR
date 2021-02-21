@@ -15,7 +15,7 @@ class CreateAccountsTable extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->float('solde')->nullable()->default(0,000);
+            $table->decimal('solde', 12, 2)->nullable()->default(0,000);
             $table->timestamps();
             $table->unsignedBigInteger('author');
             $table->foreign('author')

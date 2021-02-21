@@ -57,7 +57,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function images()
     {
-        return $this->morphToMany(Image::class, 'imageables'); 
+        $member = $this->member;
+        if ($member) {
+            return $this->member->images;
+        }
+        return [];
     }
 
     public function products()
