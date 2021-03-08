@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+   
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+     <!-- Site Metas -->
+    <title>Université Virtuelle UVAR</title>  
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="vendor/fontawesome-free/css/v4-shims.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
+    <link href="css/bg.css" rel="stylesheet">
+    <link rel="shortcut icon" href="logos/uvar.png" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="master/images/apple-touch-icon.png">
+
+    <!-- Bootstrap CSS -->
+    <link href="master/css/bootstrap.min.css" rel="stylesheet">
+    <link href="master/style.css" rel="stylesheet">
+    <link href="master/css/versions.css" rel="stylesheet">
+    <link href="master/css/responsive.css" rel="stylesheet">
+    <link href="master/css/custom.css" rel="stylesheet">
+    <link href="master/css/app.css" rel="stylesheet">
+
+    <style>
+    	@keyframes rotation{
+		   	from {
+				-webkit-transform: rotate(0deg);
+				-o-transform: rotate(0deg);
+				-moz-transform: rotate(0deg);
+				transform: rotate(0deg);
+			}
+			to {
+				-webkit-transform: rotate(359deg);
+				-o-transform: rotate(359deg);
+				-moz-transform: rotate(359deg);
+				transform: rotate(359deg);
+			}
+		    
+		}
+
+		.fa.fa-spinner, .fa.fa-wrench{
+			-webkit-animation: rotation 2s infinite linear;
+			-o-animation: rotation 2s infinite linear;
+			-moz-animation: rotation 2s infinite linear;
+			animation: rotation 2s infinite linear
+		}
+
+		@keyframes move{
+		   	from {
+				opacity: 1;
+				transform: scale(1.2);
+			}
+			to {
+				opacity: 0.2;
+				transform: scale(1);
+			}
+		    
+		}
+
+		.title-maintenance{
+			transition: opacity 1000s linear;
+			transition: transform 1000s linear;
+			-webkit-animation: move 2s infinite linear;
+			-o-animation: move 2s infinite linear;
+			-moz-animation: move 2s infinite linear;
+			animation: move 2s infinite linear
+		}
+
+		.title-maintenance{
+			text-shadow: 1px 1px 0px white;
+		}
+
+
+    </style>
+
+</head>
+<body class="w-100 bg-official-opacity p-2">
+	<div class="w-100 h-100 position-absolute" style="position: absolute; top: 0; left: 0; background-image:url('master/images/uvar-font.jpg'); opacity: 0.07; background-repeat: no-repeat; background-size: 100% 100%">
+		
+	</div>
+	<div class="w-100 h-100 pt-4">
+		<div class="mx-auto w-100 d-flex justify-content-start">
+			<a class="cursive cursor m-1" href="#">
+                <img src="logos/uvar.png" class="d-inline m-0 p-0" width="100" height="70">
+                <small class="d-block text-secondary">Université Virtuelle de la Réussite </small>
+            </a>     
+		</div>
+		<div class="m-0 p-0 mx-auto d-flex justify-content-center my-2">
+			<h3 class="title-maintenance w-75 m-0 p-0 text-center py-3" style="font-family: impact;">
+				<span class="fa fa-wrench"></span>
+				<span class="fa fa-wrench"></span>
+				<span class="d-block d-sm-inline mx-1">LE SITE <span class="text-secondary">"UVAR"</span> EST EN MAINTENANCE</span>
+				<span class="fa fa-wrench"></span>
+				<span class="fa fa-wrench"></span>
+			</h3>
+		</div>
+		<div class="w-100 mx-auto my-4 border bg-linear-official">
+			<h4 class=" text-center m-0 p-2 py-4">
+				UVAR vous remercie pour la visite, et vous promet que le site sera prêt très bientôt 
+			</h4>
+		</div>
+		<div class="w-100 mx-auto my-4">
+			<h4 class=" text-center m-0 p-2 py-4">
+				<span class="fa fa-spinner"></span>
+				<span class="fa fa-spinner"></span>
+				<span class="fa fa-spinner"></span>
+				<span class="fa fa-spinner"></span>
+				<span class="fa fa-spinner"></span>
+				<span class="fa fa-spinner"></span>
+				<span class="fa fa-spinner"></span>
+				<span class="fa fa-spinner"></span>
+				<span class="fa fa-spinner"></span>
+				<span class="fa fa-spinner"></span>
+			</h4>
+		</div>
+		<div class="w-100 mx-auto my-4 mt-5 bg-linear-official  shadow">
+			<h4 class=" text-center m-0 font-italic p-2 py-4">
+				UVAR, Nous construisons l'Afrique de demain
+			</h4>
+		</div>
+
+		<div class="mx-auto mt-5 float-right d-flex justify-content-end mover">
+			<a class="cursive cursor" href="#">
+                <img src="logos/uvar.png" class="d-inline m-0 p-0" width="100" height="70">
+                <small class="d-block text-secondary">Université Virtuelle de la Réussite </small>
+            </a>     
+		</div>
+
+	</div>
+</body>
+</html>
